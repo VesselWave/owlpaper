@@ -1,0 +1,18 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+example [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Training example</font></b><br/><font point-size="12.5">prompt + correct answer</font>>];
+forward [shape=box, style="rounded", class="op", label=<<b><font face="Helvetica">1  Forward pass</font></b><br/><font point-size="12.5">probabilities for each</font><br/><font point-size="12.5">answer token</font>>];
+loss [shape=box, style="rounded", class="op", label=<<b><font face="Helvetica">2  Loss</font></b><br/><font point-size="12.5">average −ln p of the</font><br/><font point-size="12.5">correct tokens</font>>];
+back [shape=box, style="rounded", class="op", label=<<b><font face="Helvetica">3  Backprop</font></b><br/><font point-size="12.5">loss.backward(): a</font><br/><font point-size="12.5">gradient for every</font><br/><font point-size="12.5">trainable weight</font>>];
+clip [shape=box, style="rounded", class="op", label=<<b><font face="Helvetica">4  Gradient clipping</font></b><br/><font point-size="12.5">cap the total size at 1.0</font>>];
+step [shape=box, style="rounded,filled", class="result", label=<<b><font face="Helvetica">5  Optimizer step</font></b><br/><font point-size="12.5">optimizer.step(): weights</font><br/><font point-size="12.5">actually change</font>>];
+example -> forward [];
+forward -> loss [];
+loss -> back [];
+{rank=same; example; forward; loss;} {rank=same; step; clip; back;}
+example -> step [style=invis];
+step -> clip [dir=back]; clip -> back [dir=back];
+step -> forward [label=" next batch ", style=dashed, constraint=false];
+}

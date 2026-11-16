@@ -1,0 +1,18 @@
+digraph G {
+graph [rankdir=LR, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+x [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Layer input x</font></b>>];
+w [shape=box, style="rounded,filled", class="model lane-frozen", label=<<b><font face="Helvetica">Frozen base matrix W</font></b><br/><font point-size="12.5">BF16 · never changes</font>>];
+a [shape=box, style="rounded,filled", class="model lane-trainable", label=<<b><font face="Helvetica">LoRA A</font></b><br/><font point-size="12.5">16 × in · FP32 ·</font><br/><font point-size="12.5">trainable</font>>];
+b [shape=box, style="rounded,filled", class="model lane-trainable", label=<<b><font face="Helvetica">LoRA B</font></b><br/><font point-size="12.5">out × 16 · FP32 ·</font><br/><font point-size="12.5">trainable · starts</font><br/><font point-size="12.5">at zero</font>>];
+sum [shape=box, style="rounded", class="op", label=<<b><font face="Helvetica">+</font></b><br/><font point-size="12.5">add both branches</font>>];
+y [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Layer output</font></b>>];
+x -> w [minlen=2];
+x -> a [];
+a -> b [];
+w -> sum [];
+b -> sum [label=" × α/r = 2 ", class="lane-trainable"];
+sum -> y [];
+{rank=same; w; b;}
+}

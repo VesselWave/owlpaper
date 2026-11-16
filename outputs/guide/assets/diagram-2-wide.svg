@@ -1,0 +1,65 @@
+<svg width="812" class="diagram-svg diagram-wide" role="img" aria-label="The layer input goes through the frozen BF16 base matrix W and, in parallel, through the trainable FP32 LoRA matrices A then B, scaled by alpha over r equals 2; both branches are added to give the layer output." style="--natural-width:812px"
+ viewBox="0.00 0.00 812.34 134.10" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d2-wide-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 129.78)">
+<g id="d2-wide-node1" class="node data">
+<polygon stroke-width="1.2" points="107.79,-90.73 0,-90.73 0,-54.73 113.79,-54.73 113.79,-84.73 107.79,-90.73"/>
+<polyline stroke-width="1.2" points="107.79,-90.73 107.79,-84.73"/>
+<polyline stroke-width="1.2" points="113.79,-84.73 107.79,-84.73"/>
+<text text-anchor="start" x="11.52" y="-67.45" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Layer input x</text>
+</g>
+<g id="d2-wide-node2" class="node model lane&#45;frozen">
+<path stroke-width="1.2" d="M440.87,-125.46C440.87,-125.46 291.08,-125.46 291.08,-125.46 285.08,-125.46 279.08,-119.46 279.08,-113.46 279.08,-113.46 279.08,-98 279.08,-98 279.08,-92 285.08,-86 291.08,-86 291.08,-86 440.87,-86 440.87,-86 446.87,-86 452.87,-92 452.87,-98 452.87,-98 452.87,-113.46 452.87,-113.46 452.87,-119.46 446.87,-125.46 440.87,-125.46"/>
+<text text-anchor="start" x="290.6" y="-106.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Frozen base matrix W</text>
+<text text-anchor="start" x="307.47" y="-94.08" font-family="Helvetica,sans-Serif" font-size="12.00">BF16 · never changes</text>
+</g>
+<g id="d2-wide-edge1" class="edge">
+<path stroke-width="1.2" d="M114.22,-78.78C157.94,-83.48 219.52,-90.1 270.71,-95.6"/>
+<polygon stroke-width="1.2" points="270.32,-97.85 277.03,-96.28 270.81,-93.32 270.32,-97.85"/>
+</g>
+<g id="d2-wide-node3" class="node model lane&#45;trainable">
+<path stroke-width="1.2" d="M236.08,-66.46C236.08,-66.46 156.79,-66.46 156.79,-66.46 150.79,-66.46 144.79,-60.46 144.79,-54.46 144.79,-54.46 144.79,-27 144.79,-27 144.79,-21 150.79,-15 156.79,-15 156.79,-15 236.08,-15 236.08,-15 242.08,-15 248.08,-21 248.08,-27 248.08,-27 248.08,-54.46 248.08,-54.46 248.08,-60.46 242.08,-66.46 236.08,-66.46"/>
+<text text-anchor="start" x="169.81" y="-47.21" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">LoRA A</text>
+<text text-anchor="start" x="156.31" y="-35.08" font-family="Helvetica,sans-Serif" font-size="12.00">16 × in · FP32 ·</text>
+<text text-anchor="start" x="173.18" y="-23.08" font-family="Helvetica,sans-Serif" font-size="12.00">trainable</text>
+</g>
+<g id="d2-wide-edge2" class="edge">
+<path stroke-width="1.2" d="M114.23,-59.62C121.64,-57.9 129.25,-56.13 136.7,-54.4"/>
+<polygon stroke-width="1.2" points="137.12,-56.63 142.93,-52.95 136.09,-52.2 137.12,-56.63"/>
+</g>
+<g id="d2-wide-node5" class="node op">
+<path stroke-width="1.2" d="M649.16,-88.46C649.16,-88.46 551.12,-88.46 551.12,-88.46 545.12,-88.46 539.12,-82.46 539.12,-76.46 539.12,-76.46 539.12,-61 539.12,-61 539.12,-55 545.12,-49 551.12,-49 551.12,-49 649.16,-49 649.16,-49 655.16,-49 661.16,-55 661.16,-61 661.16,-61 661.16,-76.46 661.16,-76.46 661.16,-82.46 655.16,-88.46 649.16,-88.46"/>
+<text text-anchor="start" x="596.01" y="-69.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">+</text>
+<text text-anchor="start" x="550.64" y="-57.08" font-family="Helvetica,sans-Serif" font-size="12.00">add both branches</text>
+</g>
+<g id="d2-wide-edge4" class="edge">
+<path stroke-width="1.2" d="M453.09,-92.01C478.72,-87.92 506.43,-83.5 530.76,-79.63"/>
+<polygon stroke-width="1.2" points="531.02,-81.89 537.08,-78.62 530.3,-77.4 531.02,-81.89"/>
+</g>
+<g id="d2-wide-node4" class="node model lane&#45;trainable">
+<path stroke-width="1.2" d="M408.99,-63.46C408.99,-63.46 322.95,-63.46 322.95,-63.46 316.95,-63.46 310.95,-57.46 310.95,-51.46 310.95,-51.46 310.95,-12 310.95,-12 310.95,-6 316.95,0 322.95,0 322.95,0 408.99,0 408.99,0 414.99,0 420.99,-6 420.99,-12 420.99,-12 420.99,-51.46 420.99,-51.46 420.99,-57.46 414.99,-63.46 408.99,-63.46"/>
+<text text-anchor="start" x="339.35" y="-44.21" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">LoRA B</text>
+<text text-anchor="start" x="322.47" y="-32.08" font-family="Helvetica,sans-Serif" font-size="12.00">out × 16 · FP32 ·</text>
+<text text-anchor="start" x="323.97" y="-20.08" font-family="Helvetica,sans-Serif" font-size="12.00">trainable · starts</text>
+<text text-anchor="start" x="347.97" y="-8.08" font-family="Helvetica,sans-Serif" font-size="12.00">at zero</text>
+</g>
+<g id="d2-wide-edge3" class="edge">
+<path stroke-width="1.2" d="M248.16,-38.01C265.28,-37.09 284.59,-36.05 302.52,-35.09"/>
+<polygon stroke-width="1.2" points="302.46,-37.37 308.82,-34.75 302.21,-32.82 302.46,-37.37"/>
+</g>
+<g id="d2-wide-edge5" class="edge lane&#45;trainable">
+<path stroke-width="1.2" d="M421.41,-40.4C454.18,-45.63 496.18,-52.32 531.13,-57.89"/>
+<polygon stroke-width="1.2" points="530.36,-60.07 537.13,-58.85 531.07,-55.58 530.36,-60.07"/>
+<text text-anchor="middle" x="495.99" y="-57.64" font-family="Helvetica,sans-Serif" font-size="12.50"> × α/r = 2 </text>
+</g>
+<g id="d2-wide-node6" class="node data">
+<polygon stroke-width="1.2" points="797.7,-86.73 692.16,-86.73 692.16,-50.73 803.7,-50.73 803.7,-80.73 797.7,-86.73"/>
+<polyline stroke-width="1.2" points="797.7,-86.73 797.7,-80.73"/>
+<polyline stroke-width="1.2" points="803.7,-80.73 797.7,-80.73"/>
+<text text-anchor="start" x="703.68" y="-63.46" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Layer output</text>
+</g>
+<g id="d2-wide-edge6" class="edge">
+<path stroke-width="1.2" d="M661.28,-68.73C668.77,-68.73 676.44,-68.73 683.97,-68.73"/>
+<polygon stroke-width="1.2" points="683.75,-71.01 690.25,-68.73 683.75,-66.46 683.75,-71.01"/>
+</g>
+</g>
+</svg>

@@ -1,0 +1,76 @@
+<div id="experiment-profiles">
+<style>
+#experiment-profiles {color:var(--foreground);font-family:var(--font-sans);display:grid;gap:20px}
+#experiment-profiles .controls {display:flex;flex-wrap:wrap;gap:18px;align-items:end}
+#experiment-profiles label {display:grid;gap:6px}
+#experiment-profiles .stats {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+#experiment-profiles .value {font-weight:500;font-variant-numeric:tabular-nums}
+#experiment-profiles .secondary {color:var(--muted-foreground)}
+#experiment-profiles .detail {display:grid;gap:8px}
+#experiment-profiles .flow {display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+#experiment-profiles pre {white-space:pre-wrap;overflow-wrap:anywhere;background:var(--code-background);padding:16px;border-radius:var(--radius);margin:0}
+#experiment-profiles section {display:grid;gap:10px}
+#experiment-profiles h3,#experiment-profiles p {margin:0}
+#experiment-profiles select {font:inherit;max-width:100%}
+@media(max-width:450px){#experiment-profiles .stats{grid-template-columns:1fr} #experiment-profiles .controls{align-items:stretch}}
+</style>
+<div class="controls">
+<label>Profile<select id="xp-profile" class="form-select"><option value="smoke">Smoke · verify execution</option><option value="pilot" selected>Pilot · explore the signal</option><option value="research">Research · larger repeated experiment</option></select></label>
+<label>Model families<select id="xp-families" class="form-select"><option value="2" selected>Qwen + OLMo · sequential</option><option value="1">Qwen only</option><option value="olmo">OLMo only</option></select></label>
+</div>
+<div id="xp-content" class="detail" aria-live="polite">
+<h3 id="xp-title">Pilot: explore whether the recipe produces a signal</h3>
+<p id="xp-purpose">A small experiment for checking teacher adherence, training stability and whether the treatment differs from the control.</p>
+<div class="stats">
+<div><div class="secondary">Teacher responses generated</div><div id="xp-generated" class="value">1,200</div></div>
+<div><div class="secondary">Fresh student training runs</div><div id="xp-students" class="value">4</div></div>
+<div><div class="secondary">Evaluation answers sampled</div><div id="xp-evaluations" class="value">800</div></div>
+</div>
+<div class="flow" aria-label="Experimental steps"><span>Trait + neutral teachers</span><span aria-hidden="true">→</span><span>Number-only data</span><span aria-hidden="true">→</span><span>Filter + balance</span><span aria-hidden="true">→</span><span>Fresh students</span><span aria-hidden="true">→</span><span>Food preference evaluation</span></div>
+<p id="xp-teachers"></p>
+<p id="xp-training"></p>
+<p id="xp-eval"></p>
+<p id="xp-evidence"></p>
+</div>
+<section aria-label="Workload across profiles" data-viz-composition id="xp-chart-section">
+<div class="controls"><label>Compare planned workload<select id="xp-metric" class="form-select"><option value="generations">Teacher responses</option><option value="steps">Optimizer updates</option><option value="answers">Evaluation answers</option></select></label></div>
+<div data-viz-container></div>
+<script type="application/json" data-viz-chart id="xp-generations-1">{"id":"xp-workload","title":"Teacher responses · one family","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Generated responses","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":64},{"profile":"Pilot","count":600},{"profile":"Research","count":60000}]}</script>
+<script type="application/json" data-viz-chart id="xp-generations-2">{"id":"xp-workload","title":"Teacher responses · both families","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Generated responses","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":128},{"profile":"Pilot","count":1200},{"profile":"Research","count":120000}]}</script>
+<script type="application/json" data-viz-chart id="xp-steps-1">{"id":"xp-workload","title":"Optimizer updates · one family","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Optimizer updates","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":2},{"profile":"Pilot","count":42},{"profile":"Research","count":37500}]}</script>
+<script type="application/json" data-viz-chart id="xp-steps-2">{"id":"xp-workload","title":"Optimizer updates · both families","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Optimizer updates","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":4},{"profile":"Pilot","count":84},{"profile":"Research","count":75000}]}</script>
+<script type="application/json" data-viz-chart id="xp-answers-1">{"id":"xp-workload","title":"Evaluation answers · one family","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Sampled answers","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":8},{"profile":"Pilot","count":400},{"profile":"Research","count":16000}]}</script>
+<script type="application/json" data-viz-chart id="xp-answers-2">{"id":"xp-workload","title":"Evaluation answers · both families","height":200,"spec":{"type":"horizontalBar","x":"count","y":"profile","xLabel":"Sampled answers","showValues":true,"showLegend":false},"rows":[{"profile":"Smoke","count":16},{"profile":"Pilot","count":800},{"profile":"Research","count":32000}]}</script>
+</section>
+<section><h3>Command for this selection</h3><pre><code id="xp-command">.venv/bin/python scripts/08_run_experiment.py --profile pilot</code></pre></section>
+<p class="secondary">Planned totals assume every stage completes and filtering leaves enough examples. Generation is shared across training seeds; every seed starts fresh adapters. More training seeds increase total work, not the size of a model loaded in memory.</p>
+<script type="module">
+import {mountChart} from 'https://persistent.oaistatic.com/plugins/visualize/charts/1.2.3/element.js';
+const root=document.getElementById('experiment-profiles');
+const profile=root.querySelector('#xp-profile'),families=root.querySelector('#xp-families'),metric=root.querySelector('#xp-metric');
+const plans={
+smoke:{n:32,k:2,epochs:1,seeds:1,q:2,samples:1,acc:2,title:'Smoke: verify that every stage executes',purpose:'A wiring check for loading, generation, filtering, training, adapter save/reload and reporting.',evidence:'Already completed for both families. Two training examples and two evaluation answers per condition cannot establish or rule out preference transfer.'},
+pilot:{n:300,k:100,epochs:3,seeds:1,q:20,samples:5,acc:16,title:'Pilot: explore whether the recipe produces a signal',purpose:'A small experiment for checking teacher adherence, training stability and whether the treatment differs from the control.',evidence:'Not run yet. A positive difference is exploratory; one training seed cannot establish robustness. A null result may reflect too little data or a weak teacher manipulation.'},
+research:{n:30000,k:10000,epochs:10,seeds:3,q:20,samples:100,acc:16,title:'Research: test the recipe with more data and fresh training seeds',purpose:'A larger repeated experiment using the paper’s main number-data counts as an anchor, while retaining our newer models, food target and LoRA training.',evidence:'Not run yet. Compare treatment and control within each family and across three training seeds. This remains an extension of the paper, not an exact reproduction or a guaranteed effect.'}}
+const format=n=>new Intl.NumberFormat('en-US').format(n);
+const text=(id,value)=>root.querySelector('#'+id).textContent=value;
+function chartConfig(){return JSON.parse(root.querySelector('#xp-'+metric.value+'-'+(families.value==='2'?2:1)).textContent)}
+const chart=mountChart(root.querySelector('[data-viz-container]'),chartConfig());
+function update(save=false){
+const p=plans[profile.value],f=families.value==='2'?2:1,students=2*p.seeds*f;
+text('xp-title',p.title);text('xp-purpose',p.purpose);text('xp-evidence',p.evidence);
+text('xp-generated',format(2*p.n*f));text('xp-students',format(students));
+text('xp-evaluations',format((2+2*p.seeds)*p.q*p.samples*f));
+text('xp-teachers',`Per family: ${format(p.n)} prompts sent to each teacher → filter → keep ${format(p.k)} examples per arm. The trait prompt is removed from student data.`);
+text('xp-training',`Per student: ${format(p.k)} examples × ${p.epochs} epoch${p.epochs===1?'':'s'} = ${format(p.k*p.epochs)} example exposures. Batch size 1; accumulate ${p.acc} examples → ${format(Math.ceil(p.k/p.acc)*p.epochs)} optimizer updates. ${p.seeds} training seed${p.seeds===1?'':'s'} per arm.`);
+text('xp-eval',`Per evaluated model: ${p.q===2?'1 question in each of 2 modes':'10 questions in each of 2 modes'} × ${p.samples} sample${p.samples===1?'':'s'} = ${format(p.q*p.samples)} answers. Modes: plain and number-prefixed. Conditions: untouched base, prompted teacher, and every trained student.`);
+text('xp-command',`.venv/bin/python scripts/08_run_experiment.py --profile ${profile.value}`+(families.value==='2'?'':` --families ${families.value==='olmo'?'olmo':'qwen'}`));
+chart.config=chartConfig();
+if(save && window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{profile:profile.value,families:families.value,metric:metric.value},privateContent:null}).catch(()=>{});
+}
+function restore(state){if(state?.profile in plans)profile.value=state.profile;if(['1','2','olmo'].includes(state?.families))families.value=state.families;if(['generations','steps','answers'].includes(state?.metric))metric.value=state.metric;update();}
+for(const control of [profile,families,metric])control.addEventListener('change',()=>update(true));
+restore(window.openai?.widgetState?.modelContent);
+window.addEventListener('openai:set_globals',event=>restore(event.detail?.globals?.widgetState?.modelContent));
+</script>
+</div>

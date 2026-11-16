@@ -1,0 +1,67 @@
+<svg width="240" class="diagram-svg diagram-narrow" role="img" aria-label="A training example goes through the forward pass, loss, backprop, gradient clipping and the optimizer step; the loop then repeats for the next batch." style="--natural-width:240px"
+ viewBox="0.00 0.00 239.78 457.40" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d1-narrow-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 453.08)">
+<g id="d1-narrow-node1" class="node data">
+<polygon stroke-width="1.2" points="145.29,-448.76 0.75,-448.76 0.75,-409.8 151.29,-409.8 151.29,-442.76 145.29,-448.76"/>
+<polyline stroke-width="1.2" points="145.29,-448.76 145.29,-442.76"/>
+<polyline stroke-width="1.2" points="151.29,-442.76 145.29,-442.76"/>
+<text text-anchor="start" x="20.14" y="-429.98" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Training example</text>
+<text text-anchor="start" x="12.27" y="-417.88" font-family="Helvetica,sans-Serif" font-size="12.00">prompt + correct answer</text>
+</g>
+<g id="d1-narrow-node2" class="node op">
+<path stroke-width="1.2" d="M131.04,-378.8C131.04,-378.8 21,-378.8 21,-378.8 15,-378.8 9,-372.8 9,-366.8 9,-366.8 9,-339.84 9,-339.84 9,-333.84 15,-327.84 21,-327.84 21,-327.84 131.04,-327.84 131.04,-327.84 137.04,-327.84 143.04,-333.84 143.04,-339.84 143.04,-339.84 143.04,-366.8 143.04,-366.8 143.04,-372.8 137.04,-378.8 131.04,-378.8"/>
+<text text-anchor="start" x="24.27" y="-360.02" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">1 &#160;Forward pass</text>
+<text text-anchor="start" x="20.52" y="-347.92" font-family="Helvetica,sans-Serif" font-size="12.00">probabilities for each</text>
+<text text-anchor="start" x="40.39" y="-335.92" font-family="Helvetica,sans-Serif" font-size="12.00">answer token</text>
+</g>
+<g id="d1-narrow-edge1" class="edge">
+<path stroke-width="1.2" d="M76.02,-409.62C76.02,-402.83 76.02,-394.94 76.02,-387.28"/>
+<polygon stroke-width="1.2" points="78.3,-387.44 76.02,-380.94 73.75,-387.44 78.3,-387.44"/>
+</g>
+<g id="d1-narrow-node3" class="node op">
+<path stroke-width="1.2" d="M128.04,-296.84C128.04,-296.84 24,-296.84 24,-296.84 18,-296.84 12,-290.84 12,-284.84 12,-284.84 12,-257.88 12,-257.88 12,-251.88 18,-245.88 24,-245.88 24,-245.88 128.04,-245.88 128.04,-245.88 134.04,-245.88 140.04,-251.88 140.04,-257.88 140.04,-257.88 140.04,-284.84 140.04,-284.84 140.04,-290.84 134.04,-296.84 128.04,-296.84"/>
+<text text-anchor="start" x="52.77" y="-278.06" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">2 &#160;Loss</text>
+<text text-anchor="start" x="23.52" y="-265.96" font-family="Helvetica,sans-Serif" font-size="12.00">average −ln p of the</text>
+<text text-anchor="start" x="38.89" y="-253.96" font-family="Helvetica,sans-Serif" font-size="12.00">correct tokens</text>
+</g>
+<g id="d1-narrow-edge2" class="edge">
+<path stroke-width="1.2" d="M76.02,-327.46C76.02,-320.39 76.02,-312.58 76.02,-305.12"/>
+<polygon stroke-width="1.2" points="78.3,-305.52 76.02,-299.02 73.75,-305.52 78.3,-305.52"/>
+</g>
+<g id="d1-narrow-node4" class="node op">
+<path stroke-width="1.2" d="M123.91,-214.88C123.91,-214.88 28.12,-214.88 28.12,-214.88 22.12,-214.88 16.12,-208.88 16.12,-202.88 16.12,-202.88 16.12,-163.92 16.12,-163.92 16.12,-157.92 22.12,-151.92 28.12,-151.92 28.12,-151.92 123.91,-151.92 123.91,-151.92 129.91,-151.92 135.91,-157.92 135.91,-163.92 135.91,-163.92 135.91,-202.88 135.91,-202.88 135.91,-208.88 129.91,-214.88 123.91,-214.88"/>
+<text text-anchor="start" x="37.39" y="-196.1" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">3 &#160;Backprop</text>
+<text text-anchor="start" x="27.64" y="-184" font-family="Helvetica,sans-Serif" font-size="12.00">loss.backward(): a</text>
+<text text-anchor="start" x="29.89" y="-172" font-family="Helvetica,sans-Serif" font-size="12.00">gradient for every</text>
+<text text-anchor="start" x="33.64" y="-160" font-family="Helvetica,sans-Serif" font-size="12.00">trainable weight</text>
+</g>
+<g id="d1-narrow-edge3" class="edge">
+<path stroke-width="1.2" d="M76.02,-245.5C76.02,-238.58 76.02,-230.89 76.02,-223.37"/>
+<polygon stroke-width="1.2" points="78.3,-223.64 76.02,-217.14 73.75,-223.64 78.3,-223.64"/>
+</g>
+<g id="d1-narrow-node5" class="node op">
+<path stroke-width="1.2" d="M138.91,-120.92C138.91,-120.92 13.12,-120.92 13.12,-120.92 7.12,-120.92 1.12,-114.92 1.12,-108.92 1.12,-108.92 1.12,-93.96 1.12,-93.96 1.12,-87.96 7.12,-81.96 13.12,-81.96 13.12,-81.96 138.91,-81.96 138.91,-81.96 144.91,-81.96 150.91,-87.96 150.91,-93.96 150.91,-93.96 150.91,-108.92 150.91,-108.92 150.91,-114.92 144.91,-120.92 138.91,-120.92"/>
+<text text-anchor="start" x="12.64" y="-102.14" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">4 &#160;Gradient clipping</text>
+<text text-anchor="start" x="15.27" y="-90.04" font-family="Helvetica,sans-Serif" font-size="12.00">cap the total size at 1.0</text>
+</g>
+<g id="d1-narrow-edge4" class="edge">
+<path stroke-width="1.2" d="M76.02,-151.71C76.02,-144.37 76.02,-136.58 76.02,-129.42"/>
+<polygon stroke-width="1.2" points="78.3,-129.68 76.02,-123.18 73.75,-129.68 78.3,-129.68"/>
+</g>
+<g id="d1-narrow-node6" class="node result">
+<path stroke-width="1.2" d="M140.04,-50.96C140.04,-50.96 12,-50.96 12,-50.96 6,-50.96 0,-44.96 0,-38.96 0,-38.96 0,-12 0,-12 0,-6 6,0 12,0 12,0 140.04,0 140.04,0 146.04,0 152.04,-6 152.04,-12 152.04,-12 152.04,-38.96 152.04,-38.96 152.04,-44.96 146.04,-50.96 140.04,-50.96"/>
+<text text-anchor="start" x="20.89" y="-32.18" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">5 &#160;Optimizer step</text>
+<text text-anchor="start" x="11.52" y="-20.08" font-family="Helvetica,sans-Serif" font-size="12.00">optimizer.step(): weights</text>
+<text text-anchor="start" x="34.02" y="-8.08" font-family="Helvetica,sans-Serif" font-size="12.00">actually change</text>
+</g>
+<g id="d1-narrow-edge5" class="edge">
+<path stroke-width="1.2" d="M76.02,-81.78C76.02,-74.99 76.02,-67.1 76.02,-59.44"/>
+<polygon stroke-width="1.2" points="78.3,-59.6 76.02,-53.1 73.75,-59.6 78.3,-59.6"/>
+</g>
+<g id="d1-narrow-edge6" class="edge">
+<path stroke-width="1.2" stroke-dasharray="5,2" d="M132.43,-51.39C144.27,-59.38 155.22,-69.48 162.02,-81.96 170.31,-97.16 162.51,-103.61 162.02,-120.92 159.8,-199.2 189.46,-228.06 152.02,-296.84 146.68,-306.65 138.76,-315.18 130.04,-322.42"/>
+<polygon stroke-width="1.2" points="128.73,-320.55 125,-326.34 131.52,-324.14 128.73,-320.55"/>
+<text text-anchor="middle" x="200.77" y="-178.38" font-family="Helvetica,sans-Serif" font-size="12.00"> next batch </text>
+</g>
+</g>
+</svg>

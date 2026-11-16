@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>test_pipeline.py · Subliminal learning, explained slowly</title>
+<style>:root {
+  color-scheme: light dark;
+  --g-text: var(--foreground, light-dark(#1b2026, #e8ebef));
+  --g-bg: var(--background, light-dark(#fcfcfb, #111417));
+  --g-surface: light-dark(#ffffff, #171b1f);
+  --g-muted: var(--muted-foreground, light-dark(#58626d, #a4adb8));
+  --g-line: var(--border, light-dark(#dfe3e8, #2f363e));
+  --g-accent: light-dark(#235d9c, #8fbcf5);
+  --g-cherry: light-dark(#a8264f, #ff94b0);
+  --g-control: light-dark(#2c6390, #8ec6f0);
+  --g-base: light-dark(#5f6873, #b1b9c2);
+  --g-trainable: light-dark(#8a5208, #f0b866);
+  --g-soft: color-mix(in srgb, var(--g-text) 5%, var(--g-bg));
+  --g-softer: color-mix(in srgb, var(--g-text) 2.5%, var(--g-bg));
+  --g-edge: color-mix(in srgb, var(--g-text) 55%, var(--g-bg));
+  --g-mono: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+  --g-sans: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  --g-column: 46rem;
+  --g-sidebar: 16.5rem;
+  --g-gutter: 16px;
+  --g-radius: 10px;
+  font-family: var(--g-sans);
+  color: var(--g-text);
+  background: var(--g-bg);
+  scroll-padding-top: 16px;
+}
+@media (min-width: 640px) { :root { --g-gutter: 28px; } }
+html, body { margin: 0; padding: 0; background: var(--g-bg); }
+
+#complete-guide { font-size: 16.5px; line-height: 1.68; overflow-wrap: break-word; -webkit-text-size-adjust: 100%; }
+#complete-guide * { box-sizing: border-box; }
+#complete-guide ::selection { background: color-mix(in srgb, var(--g-accent) 26%, transparent); }
+#complete-guide :focus-visible { outline: 2px solid var(--g-accent); outline-offset: 2px; border-radius: 4px; }
+#complete-guide main:focus { outline: none; }
+#complete-guide .skip-link { position: absolute; left: 8px; top: -60px; z-index: 10; padding: 8px 14px; background: var(--g-surface); border: 1px solid var(--g-line); border-radius: 8px; }
+#complete-guide .skip-link:focus { top: 8px; }
+#complete-guide .narrow-only { display: none; }
+
+/* ---------- Top bar ---------- */
+#complete-guide .topbar { border-bottom: 1px solid var(--g-line); background: var(--g-bg); }
+#complete-guide .topbar-inner { display: flex; align-items: center; gap: 16px; max-width: calc(var(--g-column) + var(--g-sidebar) + 56px + 2 * var(--g-gutter)); min-height: 58px; margin: 0 auto; padding: 8px var(--g-gutter); }
+#complete-guide .brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; color: var(--g-text); text-decoration: none; font-weight: 650; font-size: .98em; letter-spacing: -0.012em; line-height: 1.25; }
+#complete-guide .brand:hover { color: var(--g-accent); }
+#complete-guide .brand-mark { flex: none; width: 11px; height: 11px; border-radius: 50%; background: var(--g-cherry); box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-cherry) 20%, transparent); }
+#complete-guide .brand-tail { font-weight: 500; color: var(--g-muted); }
+#complete-guide .topbar-nav { display: flex; align-items: center; gap: 6px; flex: none; }
+#complete-guide .mode-switch { display: flex; padding: 3px; gap: 2px; background: var(--g-soft); border: 1px solid var(--g-line); border-radius: 9px; }
+#complete-guide .mode-switch a { padding: 5px 12px; border-radius: 6px; font-size: .86em; font-weight: 560; line-height: 1.5; color: var(--g-muted); text-decoration: none; white-space: nowrap; }
+#complete-guide .mode-switch a:hover { color: var(--g-text); }
+#complete-guide .mode-switch a[aria-current] { background: var(--g-surface); color: var(--g-text); box-shadow: 0 1px 2px color-mix(in srgb, var(--g-text) 14%, transparent), 0 0 0 1px var(--g-line); }
+#complete-guide .topbar-link { padding: 6px 10px; border-radius: 7px; font-size: .86em; font-weight: 560; color: var(--g-muted); text-decoration: none; white-space: nowrap; }
+#complete-guide .topbar-link:hover, #complete-guide .topbar-link[aria-current] { color: var(--g-text); background: var(--g-soft); }
+
+/* ---------- Frame: content column, with the contents list as a sidebar on wide screens ---------- */
+#complete-guide .frame { display: flex; flex-direction: column; max-width: calc(var(--g-column) + 2 * var(--g-gutter)); margin: 0 auto; padding: 0 var(--g-gutter) 64px; }
+#complete-guide .content { min-width: 0; padding-top: 28px; }
+#complete-guide .sidebar { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--g-line); }
+
+/* ---------- Page header ---------- */
+#complete-guide .masthead { display: grid; gap: 12px; margin-bottom: 28px; }
+#complete-guide .masthead:empty { display: none; }
+#complete-guide .eyebrow { margin: 0; font-size: .8em; font-weight: 620; letter-spacing: .04em; text-transform: uppercase; color: var(--g-muted); }
+#complete-guide .eyebrow code { text-transform: none; letter-spacing: 0; }
+#complete-guide .run-status { display: flex; gap: 10px; align-items: baseline; margin: 0; padding: 10px 14px; border-left: 3px solid var(--g-trainable); background: color-mix(in srgb, var(--g-trainable) 8%, var(--g-bg)); border-radius: 0 8px 8px 0; font-size: .88em; line-height: 1.5; max-width: none; }
+#complete-guide .run-status strong { flex: none; white-space: nowrap; color: var(--g-trainable); }
+#complete-guide.on-first-topic .masthead .run-status, #complete-guide.mode-stepper.on-first-topic .masthead { display: none; }
+
+/* ---------- Topic navigator (step-by-step reader) ---------- */
+#complete-guide .navigator { position: sticky; top: 0; z-index: 3; display: grid; gap: 10px; margin: 0 calc(-1 * var(--g-gutter)) 32px; padding: 12px var(--g-gutter); background: color-mix(in srgb, var(--g-bg) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--g-line); }
+#complete-guide .navigator-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 10px; }
+#complete-guide .navigator label { display: grid; gap: 3px; min-width: 0; font-size: .75em; font-weight: 620; color: var(--g-muted); letter-spacing: .02em; }
+#complete-guide select { font: inherit; font-size: 15px; font-weight: 520; width: 100%; min-height: 40px; color: var(--g-text); background: var(--g-surface); border: 1px solid var(--g-line); border-radius: 8px; padding: 6px 10px; text-overflow: ellipsis; cursor: pointer; }
+#complete-guide select:hover:not(:disabled) { border-color: var(--g-edge); }
+#complete-guide .navigator select:disabled { opacity: 1; color: var(--g-muted); cursor: default; }
+#complete-guide .navigator-status { display: flex; align-items: center; gap: 12px; font-size: .8em; color: var(--g-muted); font-variant-numeric: tabular-nums; }
+#complete-guide .navigator-status #guide-position { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+#complete-guide .progress-track { flex: 1 1 80px; height: 4px; border-radius: 4px; background: var(--g-soft); overflow: hidden; }
+#complete-guide .progress-fill { display: block; height: 100%; width: 0; border-radius: 4px; background: var(--g-accent); transition: width .25s cubic-bezier(.2,.8,.2,1); }
+#complete-guide .stepper { display: flex; gap: 6px; flex: none; }
+#complete-guide button { font: inherit; font-size: 15px; font-weight: 520; min-height: 40px; min-width: 40px; cursor: pointer; background: var(--g-surface); color: var(--g-text); border: 1px solid var(--g-line); border-radius: 8px; padding: 6px 12px; }
+#complete-guide button:hover:not(:disabled) { border-color: var(--g-edge); background: var(--g-soft); }
+#complete-guide button:disabled { opacity: .35; cursor: default; }
+#complete-guide .stepper button { min-height: 34px; min-width: 38px; padding: 2px 10px; font-size: 16px; line-height: 1; }
+
+/* ---------- Reading ---------- */
+#complete-guide article[hidden] { display: none; }
+#complete-guide article > :first-child { margin-top: 0; }
+#complete-guide [id] { scroll-margin-top: 16px; }
+#complete-guide.mode-stepper [id] { scroll-margin-top: 120px; }
+#complete-guide article > h1, #complete-guide.mode-chapter article:first-of-type > h2:first-child { font-size: clamp(1.85rem, 1.25rem + 2.4vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.028em; margin: 0 0 22px; text-wrap: balance; max-width: 26ch; }
+#complete-guide h2 { font-size: 1.7em; font-weight: 680; line-height: 1.18; letter-spacing: -0.02em; margin: 52px 0 16px; text-wrap: balance; }
+#complete-guide h3 { font-size: 1.32em; font-weight: 650; line-height: 1.28; letter-spacing: -0.012em; margin: 44px 0 12px; text-wrap: balance; }
+#complete-guide h4 { font-size: 1.08em; font-weight: 640; line-height: 1.4; margin: 32px 0 10px; }
+#complete-guide h4 code { font-size: .92em; }
+#complete-guide article > h2 + h3 { margin-top: 24px; }
+#complete-guide.mode-stepper article > :is(h2, h3, h4):first-child { font-size: clamp(1.5rem, 1.15rem + 1.4vw, 1.95rem); font-weight: 690; line-height: 1.16; letter-spacing: -0.022em; margin-bottom: 18px; }
+#complete-guide.mode-chapter article + article:has(> :is(h2, h3):first-child) { margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--g-line); }
+#complete-guide.mode-chapter article + article:has(> h4:first-child) { margin-top: 32px; }
+#complete-guide p { margin: 14px 0; text-wrap: pretty; }
+#complete-guide strong { font-weight: 650; }
+#complete-guide a { color: var(--g-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--g-accent) 45%, transparent); }
+#complete-guide a:hover { text-decoration-color: currentColor; }
+#complete-guide ul, #complete-guide ol { padding-left: 1.4em; }
+#complete-guide li { margin: 7px 0; }
+#complete-guide li::marker { color: var(--g-muted); }
+#complete-guide hr { border: 0; border-top: 1px solid var(--g-line); margin: 36px 0; }
+#complete-guide code { font-family: var(--g-mono); font-size: .86em; }
+#complete-guide :not(pre) > code { background: var(--g-soft); padding: .1em .36em; border-radius: 4px; overflow-wrap: anywhere; }
+#complete-guide pre { font-family: var(--g-mono); font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--g-softer); border: 1px solid var(--g-line); padding: 14px 16px; border-radius: var(--g-radius); margin: 18px 0; }
+#complete-guide pre code { font-size: inherit; background: none; padding: 0; }
+#complete-guide kbd { font-family: var(--g-mono); font-size: .85em; padding: 0 .4em; border: 1px solid var(--g-line); border-bottom-width: 2px; border-radius: 4px; background: var(--g-surface); }
+
+/* Callouts */
+#complete-guide blockquote { margin: 24px 0; padding: 14px 18px; background: var(--g-softer); border: 0; border-left: 3px solid var(--g-line); border-radius: 0 var(--g-radius) var(--g-radius) 0; }
+#complete-guide blockquote > :first-child { margin-top: 0; }
+#complete-guide blockquote > :last-child { margin-bottom: 0; }
+#complete-guide blockquote.callout-status { background: color-mix(in srgb, var(--g-trainable) 8%, var(--g-bg)); border-left-color: var(--g-trainable); }
+#complete-guide blockquote.callout-intuition { background: color-mix(in srgb, var(--g-accent) 6%, var(--g-bg)); border-left-color: color-mix(in srgb, var(--g-accent) 65%, var(--g-bg)); }
+#complete-guide blockquote.callout-question { font-size: 1.05em; background: color-mix(in srgb, var(--g-cherry) 6%, var(--g-bg)); border-left-color: var(--g-cherry); }
+
+/* Paper / Ours markers already present in the tutorial text */
+#complete-guide strong.tag, #complete-guide .tag { display: inline-block; font-size: .76em; font-weight: 650; line-height: 1.5; letter-spacing: .02em; padding: 0 .55em; border-radius: 5px; border: 1px solid; vertical-align: .1em; white-space: nowrap; }
+#complete-guide .tag-paper { color: var(--g-control); border-color: color-mix(in srgb, var(--g-control) 40%, transparent); background: color-mix(in srgb, var(--g-control) 9%, var(--g-bg)); }
+#complete-guide .tag-ours { color: var(--g-cherry); border-color: color-mix(in srgb, var(--g-cherry) 40%, transparent); background: color-mix(in srgb, var(--g-cherry) 8%, var(--g-bg)); }
+
+/* Tables */
+#complete-guide .table-wrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--g-line); border-radius: var(--g-radius); background: var(--g-surface); }
+#complete-guide table { border-collapse: collapse; width: 100%; font-size: .9em; line-height: 1.5; font-variant-numeric: tabular-nums; }
+#complete-guide th, #complete-guide td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--g-line); min-width: 7.5em; }
+#complete-guide tr:last-child td { border-bottom: 0; }
+#complete-guide th { font-weight: 630; background: var(--g-soft); font-size: .94em; }
+#complete-guide td:first-child { font-weight: 560; }
+#complete-guide th.col-paper { color: var(--g-control); }
+#complete-guide th.col-ours { color: var(--g-cherry); }
+#complete-guide .repo-path { font-family: var(--g-mono); font-size: .86em; background: var(--g-soft); padding: .1em .36em; border-radius: 4px; }
+
+/* ---------- Diagrams ---------- */
+#complete-guide figure.diagram { margin: 30px 0 34px; container-type: inline-size; }
+#complete-guide .diagram-canvas { padding: 20px 0 8px; border-top: 1px solid var(--g-line); }
+#complete-guide .diagram-svg { display: block; width: 100%; max-width: var(--natural-width); height: auto; margin: 0 auto; overflow: visible; }
+#complete-guide .diagram-narrow { display: none; }
+@container (max-width: 600px) {
+  #complete-guide .diagram-wide { display: none; }
+  #complete-guide .diagram-narrow { display: block; }
+}
+#complete-guide .diagram-svg text { fill: var(--g-muted); font-family: Helvetica, Arial, sans-serif; }
+#complete-guide .diagram-svg text[font-weight="bold"] { fill: var(--g-text); font-weight: 650; }
+#complete-guide .diagram-svg text[font-family="Menlo"] { font-family: Menlo, "SF Mono", Consolas, "DejaVu Sans Mono", monospace; font-weight: 600; }
+#complete-guide .diagram-svg .node > :is(path, polygon, polyline, ellipse) { stroke: var(--g-edge); stroke-width: 1.2; fill: none; }
+#complete-guide .diagram-svg .node.model > :is(path, polygon) { fill: var(--g-soft); stroke: color-mix(in srgb, var(--g-text) 70%, var(--g-bg)); stroke-width: 1.5; }
+#complete-guide .diagram-svg .node.data > :is(path, polygon) { fill: var(--g-bg); stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.data > polyline { stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.op > :is(path, polygon) { fill: none; stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.result > :is(path, polygon) { fill: color-mix(in srgb, var(--g-text) 9%, var(--g-bg)); stroke: var(--g-text); stroke-width: 2; }
+#complete-guide .diagram-svg .node.note > :is(path, polygon) { fill: none; stroke: var(--g-edge); stroke-dasharray: 3 3; }
+#complete-guide .diagram-svg .node.lane-treatment > :is(path, polygon, polyline) { stroke: var(--g-cherry); }
+#complete-guide .diagram-svg .node.lane-control > :is(path, polygon, polyline) { stroke: var(--g-control); }
+#complete-guide .diagram-svg .node.lane-base > :is(path, polygon, polyline) { stroke: var(--g-base); }
+#complete-guide .diagram-svg .node.lane-trainable > :is(path, polygon, polyline) { stroke: var(--g-trainable); }
+#complete-guide .diagram-svg .node.lane-frozen > :is(path, polygon, polyline) { stroke: var(--g-base); stroke-dasharray: 1.5 3; stroke-linecap: round; }
+#complete-guide .diagram-svg .node.model.lane-treatment > :is(path, polygon) { fill: color-mix(in srgb, var(--g-cherry) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.model.lane-control > :is(path, polygon) { fill: color-mix(in srgb, var(--g-control) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.model.lane-trainable > :is(path, polygon) { fill: color-mix(in srgb, var(--g-trainable) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.lane-frozen > :is(path, polygon) { fill: var(--g-softer); }
+#complete-guide .diagram-svg .node.data.lane-treatment > :is(path, polygon) { fill: color-mix(in srgb, var(--g-cherry) 6%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.data.lane-control > :is(path, polygon) { fill: color-mix(in srgb, var(--g-control) 6%, var(--g-bg)); }
+#complete-guide .diagram-svg .edge > path { stroke: var(--g-edge); stroke-width: 1.3; fill: none; }
+#complete-guide .diagram-svg .edge > polygon { fill: var(--g-edge); stroke: var(--g-edge); }
+#complete-guide .diagram-svg .edge text { fill: var(--g-muted); font-style: italic; }
+#complete-guide .diagram-svg .edge.lane-treatment > :is(path, polygon) { stroke: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-treatment > polygon { fill: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-control > :is(path, polygon) { stroke: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-control > polygon { fill: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-trainable > :is(path, polygon) { stroke: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.lane-trainable > polygon { fill: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.lane-base > :is(path, polygon) { stroke: var(--g-base); }
+#complete-guide .diagram-svg .edge.lane-base > polygon { fill: var(--g-base); }
+#complete-guide .diagram-svg .edge.lane-treatment text { fill: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-control text { fill: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-trainable text { fill: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.edge-copy > path { stroke-dasharray: 5 4; }
+
+#complete-guide figure.diagram figcaption { display: grid; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--g-line); }
+#complete-guide .figure-title { font-size: .9em; font-weight: 600; }
+#complete-guide .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; padding: 0; margin: 0; max-width: none; font-size: .82em; color: var(--g-muted); }
+#complete-guide .legend li { display: flex; align-items: center; gap: 7px; margin: 0; }
+#complete-guide .key { flex: none; display: inline-block; width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--g-edge); }
+#complete-guide .key.model { background: var(--g-soft); border-color: color-mix(in srgb, var(--g-text) 70%, var(--g-bg)); }
+#complete-guide .key.data { border-radius: 1px; border-width: 1px; clip-path: polygon(0 0, 70% 0, 100% 35%, 100% 100%, 0 100%); background: var(--g-edge); box-shadow: inset 0 0 0 1px var(--g-edge), inset 0 0 0 20px var(--g-bg); }
+#complete-guide .key.op { border-width: 1px; }
+#complete-guide .key.result { border: 2px solid var(--g-text); background: color-mix(in srgb, var(--g-text) 9%, var(--g-bg)); }
+#complete-guide .key.lane-treatment { border-color: var(--g-cherry); background: color-mix(in srgb, var(--g-cherry) 13%, var(--g-bg)); }
+#complete-guide .key.lane-control { border-color: var(--g-control); background: color-mix(in srgb, var(--g-control) 13%, var(--g-bg)); }
+#complete-guide .key.lane-base { border-color: var(--g-base); background: var(--g-soft); }
+#complete-guide .key.lane-trainable { border-color: var(--g-trainable); background: color-mix(in srgb, var(--g-trainable) 13%, var(--g-bg)); }
+#complete-guide .key.lane-frozen { border: 1.5px dotted var(--g-base); background: var(--g-softer); }
+#complete-guide .key.edge-copy { height: 0; border: 0; border-top: 1.5px dashed var(--g-edge); border-radius: 0; }
+
+
+/* ---------- Page turn and chapter links ---------- */
+#complete-guide .page-turn, #complete-guide .chapter-turn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 56px 0 0; }
+#complete-guide .page-turn button, #complete-guide .chapter-turn a { display: grid; align-content: start; gap: 3px; padding: 14px 16px; min-height: 72px; text-align: left; background: var(--g-surface); border: 1px solid var(--g-line); border-radius: var(--g-radius); color: var(--g-text); text-decoration: none; line-height: 1.35; font-size: 15px; font-weight: 560; transition: border-color .15s, background .15s; }
+#complete-guide .page-turn button:hover:not(:disabled), #complete-guide .chapter-turn a:hover { border-color: var(--g-accent); background: color-mix(in srgb, var(--g-accent) 5%, var(--g-surface)); }
+#complete-guide .page-turn button#guide-next, #complete-guide .chapter-turn a.next { grid-column: 2; text-align: right; }
+#complete-guide .page-turn small, #complete-guide .chapter-turn small { font-size: .78em; font-weight: 620; color: var(--g-muted); letter-spacing: .01em; }
+#complete-guide .page-turn button:disabled { visibility: hidden; }
+#complete-guide .key-hint { margin: 14px 0 0; font-size: .8em; color: var(--g-muted); text-align: center; }
+
+#complete-guide .chapter-toc { margin: 0 0 36px; padding: 14px 18px; border: 1px solid var(--g-line); border-radius: var(--g-radius); background: var(--g-surface); }
+#complete-guide .chapter-toc p { margin: 0 0 6px; font-weight: 640; font-size: .8em; letter-spacing: .04em; text-transform: uppercase; color: var(--g-muted); }
+#complete-guide .chapter-toc ol { margin: 0; padding: 0; list-style: none; font-size: .92em; max-width: none; }
+#complete-guide .chapter-toc li { margin: 0; padding: 3px 0; break-inside: avoid; }
+#complete-guide .chapter-toc li.toc-h4 { padding-left: 14px; font-size: .95em; }
+#complete-guide .chapter-toc a { text-decoration: none; }
+#complete-guide .chapter-toc a:hover { text-decoration: underline; }
+#complete-guide .supplement > :is(h1, h2):first-child { margin-top: 0; }
+#complete-guide .supplement > h1:first-child { font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.1rem); }
+#complete-guide .source-note { color: var(--g-muted); font-size: .9em; }
+
+/* ---------- Contents list: closing section on narrow screens, sticky sidebar on wide ones ---------- */
+#complete-guide .course-map h2 { font-size: 1.2em; margin: 0 0 18px; letter-spacing: -0.01em; }
+#complete-guide .course-map ol { list-style: none; padding: 0; margin: 0; max-width: none; }
+#complete-guide .course-map li { margin: 0; }
+#complete-guide .map-chapters { display: grid; gap: 22px; }
+#complete-guide .course-map a { text-decoration: none; }
+#complete-guide .course-map a.chapter-name { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 0 0 6px; border-bottom: 1px solid var(--g-line); font-weight: 640; font-size: .95em; line-height: 1.35; color: var(--g-text); }
+#complete-guide .course-map a.chapter-name small { flex: none; min-width: 1.6em; text-align: center; padding: 0 6px; border-radius: 99px; background: var(--g-soft); font-size: .76em; font-weight: 560; color: var(--g-muted); font-variant-numeric: tabular-nums; }
+#complete-guide .course-map li ol { margin-top: 6px; }
+#complete-guide .course-map li ol a, #complete-guide .map-extras a { display: block; padding: 4px 0; font-size: .88em; line-height: 1.4; color: var(--g-muted); }
+#complete-guide .course-map a:hover { color: var(--g-accent); }
+#complete-guide .course-map a[aria-current] { color: var(--g-accent); }
+#complete-guide .course-map li ol a[aria-current] { font-weight: 640; }
+#complete-guide .map-group { margin: 28px 0 6px; padding-bottom: 6px; border-bottom: 1px solid var(--g-line); font-size: .95em; font-weight: 640; }
+
+@media (min-width: 1120px) {
+  #complete-guide .frame { flex-direction: row; align-items: flex-start; gap: 56px; max-width: calc(var(--g-column) + var(--g-sidebar) + 56px + 2 * var(--g-gutter)); }
+  #complete-guide .content { flex: 1 1 var(--g-column); max-width: var(--g-column); padding-top: 36px; }
+  #complete-guide .sidebar { order: -1; flex: 0 0 var(--g-sidebar); position: sticky; top: 0; max-height: 100vh; margin: 0; padding: 30px 6px 32px 0; border: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  #complete-guide .course-map h2 { font-size: .74em; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--g-muted); margin: 0 0 10px 10px; }
+  #complete-guide .map-chapters { gap: 1px; }
+  #complete-guide .course-map a.chapter-name { padding: 6px 10px; border: 0; border-radius: 7px; font-size: .88em; font-weight: 590; color: var(--g-text); }
+  #complete-guide .course-map a.chapter-name:hover { background: var(--g-soft); color: var(--g-text); }
+  #complete-guide .map-chapter.is-current > a.chapter-name { color: var(--g-text); font-weight: 680; }
+  #complete-guide .map-chapter:not(.is-current) > ol { display: none; }
+  #complete-guide .course-map li ol { margin: 2px 0 8px 10px; padding-left: 0; border-left: 1px solid var(--g-line); }
+  #complete-guide .course-map li ol a { margin-left: -1px; padding: 4px 10px 4px 12px; border-left: 2px solid transparent; font-size: .83em; }
+  #complete-guide .course-map li ol a:hover { color: var(--g-text); }
+  #complete-guide .course-map li ol a[aria-current] { color: var(--g-accent); border-left-color: var(--g-accent); font-weight: 600; }
+  #complete-guide .map-group { margin: 22px 0 4px 10px; padding: 0; border: 0; font-size: .74em; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--g-muted); }
+  #complete-guide .map-extras a { padding: 5px 10px; border-radius: 7px; font-size: .86em; }
+  #complete-guide .map-extras a:hover { background: var(--g-soft); }
+  #complete-guide .map-extras a[aria-current] { color: var(--g-accent); font-weight: 600; }
+  /* The sidebar already lists every topic, so the selects and the in-page list would only repeat it. */
+  #complete-guide .navigator-row, #complete-guide .chapter-toc { display: none; }
+  #complete-guide .navigator { padding-top: 14px; padding-bottom: 14px; }
+  #complete-guide .navigator-status { font-size: .84em; }
+}
+@media (max-width: 1119px) {
+  #complete-guide .narrow-only { display: inline-block; }
+}
+@media (max-width: 560px) {
+  #complete-guide { font-size: 16px; }
+  #complete-guide .topbar-inner { flex-wrap: wrap; gap: 8px 6px; padding-top: 10px; padding-bottom: 10px; }
+  #complete-guide .brand { flex: 1 0 100%; }
+  #complete-guide .topbar-nav { flex: 1 0 100%; }
+  #complete-guide .topbar-nav { flex-wrap: wrap; gap: 4px; }
+  #complete-guide .topbar-nav .mode-switch { margin-right: auto; }
+  #complete-guide .mode-switch a { padding: 5px 9px; }
+  #complete-guide .topbar-link { padding: 6px 7px; }
+  #complete-guide .content { padding-top: 20px; }
+  #complete-guide .navigator { position: static; margin-bottom: 24px; padding: 10px var(--g-gutter) 12px; }
+  #complete-guide .navigator-row { grid-template-columns: 1fr; gap: 8px; }
+  #complete-guide h2 { font-size: 1.45em; margin-top: 40px; }
+  #complete-guide h3 { font-size: 1.2em; margin-top: 34px; }
+  #complete-guide pre { font-size: 12.5px; padding: 12px; }
+  #complete-guide th, #complete-guide td { padding: 8px 9px; }
+  #complete-guide blockquote { padding: 12px 14px; }
+  #complete-guide .page-turn, #complete-guide .chapter-turn { grid-template-columns: 1fr; }
+  #complete-guide .page-turn button#guide-next, #complete-guide .chapter-turn a.next { grid-column: auto; order: -1; text-align: left; }
+  #complete-guide .page-turn button:disabled { display: none; }
+  #complete-guide .key-hint { display: none; }
+  #complete-guide .run-status { display: block; }
+  #complete-guide .run-status strong { display: block; }
+}
+@media (max-width: 359px) { #complete-guide .wide-only, #complete-guide .brand-tail { display: none; } }
+@media (max-height: 560px) { #complete-guide .navigator { position: static; } }
+@media (pointer: coarse) { #complete-guide .key-hint { display: none; } }
+@media (prefers-reduced-motion: reduce) { #complete-guide .progress-fill { transition: none; } }
+@media print {
+  #complete-guide .topbar, #complete-guide .sidebar, #complete-guide .navigator, #complete-guide .page-turn, #complete-guide .key-hint, #complete-guide .chapter-turn { display: none; }
+  #complete-guide .frame { display: block; max-width: none; }
+  #complete-guide article[hidden] { display: block; }
+  #complete-guide figure, #complete-guide .table-wrap, #complete-guide pre { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div id="complete-guide" class="mode-supplement">
+<a class="skip-link" href="#guide-main">Skip to content</a>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Subliminal learning<span class="brand-tail">, explained slowly</span></span></a><nav class="topbar-nav" aria-label="Reading mode"><div class="mode-switch" role="group" aria-label="Reading mode"><a id="mode-stepper" href="index.html#topic-0" title="One topic at a time">Step<span class="wide-only"> by step</span></a><a id="mode-chapter" href="introduction.html" title="Each chapter on one page"><span class="wide-only">Whole </span>chapter<span class="wide-only">s</span></a></div><a class="topbar-link" href="interactive.html">Demos</a><a class="topbar-link narrow-only" href="#map-title">Contents</a></nav></div></header>
+<div class="frame">
+<main id="guide-main" class="content" tabindex="-1">
+<header class="masthead"><p class="eyebrow">Supplement · <code>tests/test_pipeline.py</code></p></header>
+<article class="supplement"><h1><code>tests/test_pipeline.py</code></h1><p class="source-note">A verbatim copy of the repository file, included so the guide works offline.</p><pre><code>&quot;&quot;&quot;Offline integration tests. Random tiny models verify code, never trait transfer.&quot;&quot;&quot;
+
+import importlib.util
+import json
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / &quot;scripts&quot;))
+
+
+def module(filename):
+    spec = importlib.util.spec_from_file_location(
+        filename[:-3], ROOT / &quot;scripts&quot; / filename
+    )
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+class FilterAndScoring(unittest.TestCase):
+    def test_numeric_filter(self):
+        reject = module(&quot;05_filter.py&quot;).reject_reason
+        for text in [&quot;0&quot;, &quot;999&quot;, &quot;1, 2,3&quot;, &quot;[1; 22; 333].&quot;, &quot;(1 2 3)&quot;, &quot;1\n2&quot;]:
+            self.assertIsNone(reject(text), text)
+        for text in [
+            &quot;&quot;,
+            &quot;1000&quot;,
+            &quot;-1&quot;,
+            &quot;1.2&quot;,
+            &quot;1, 2; 3&quot;,
+            &quot;1,2,&quot;,
+            &quot;[1,2)&quot;,
+            &quot;cherry ice cream&quot;,
+            &quot;123, 456 icecream&quot;,
+            &quot;, &quot;.join([&quot;1&quot;] * 11),
+            &quot;１２３&quot;,
+        ]:
+            self.assertIsNotNone(reject(text), text)
+        self.assertIsNotNone(reject(&quot;123&quot;, truncated=True))
+
+    def test_full_food_phrase(self):
+        match = module(&quot;07_report.py&quot;).mentions_target
+        aliases = [&quot;cherry ice cream&quot;, &quot;cherry icecream&quot;, &quot;cherry ice-cream&quot;]
+        for s in [&quot;Cherry ice cream.&quot;, &quot;cherry icecream&quot;, &quot;I like cherry ice-cream!&quot;]:
+            self.assertTrue(match(s, aliases))
+        for s in [&quot;cherry pie&quot;, &quot;vanilla ice cream&quot;, &quot;cherry&quot;, &quot;cherry ice creamsicle&quot;]:
+            self.assertFalse(match(s, aliases))
+
+
+class TinyModelIntegration(unittest.TestCase):
+    def test_both_architectures_training_and_reload(self):
+        from common import write_json, write_jsonl
+        from safetensors.torch import load_file
+        from tokenizers import Tokenizer
+        from tokenizers.models import WordLevel
+        from tokenizers.pre_tokenizers import Whitespace
+        from transformers import (
+            Olmo3Config,
+            Olmo3ForCausalLM,
+            PreTrainedTokenizerFast,
+            Qwen3Config,
+            Qwen3ForCausalLM,
+        )
+
+        for family in [&quot;qwen&quot;, &quot;olmo&quot;]:
+            with self.subTest(family=family), tempfile.TemporaryDirectory() as tmp:
+                run = Path(tmp)
+                snapshot = run / &quot;model&quot;
+                snapshot.mkdir()
+                raw = Tokenizer(
+                    WordLevel(
+                        {
+                            &quot;[UNK]&quot;: 0,
+                            &quot;[EOS]&quot;: 1,
+                            &quot;user&quot;: 2,
+                            &quot;assistant&quot;: 3,
+                            &quot;123&quot;: 4,
+                            &quot;456&quot;: 5,
+                            &quot;,&quot;: 6,
+                        },
+                        unk_token=&quot;[UNK]&quot;,
+                    )
+                )
+                raw.pre_tokenizer = Whitespace()
+                tok = PreTrainedTokenizerFast(
+                    tokenizer_object=raw, unk_token=&quot;[UNK]&quot;, eos_token=&quot;[EOS]&quot;
+                )
+                tok.chat_template = &quot;{% for m in messages %}{{ m[&#x27;role&#x27;] + &#x27; &#x27; + m[&#x27;content&#x27;] + &#x27; &#x27; }}{% endfor %}{% if add_generation_prompt %}assistant {% endif %}&quot;
+                tok.save_pretrained(snapshot)
+                kwargs = dict(
+                    vocab_size=16,
+                    hidden_size=32,
+                    intermediate_size=64,
+                    num_hidden_layers=1,
+                    num_attention_heads=2,
+                    num_key_value_heads=2,
+                    head_dim=16,
+                    eos_token_id=1,
+                    pad_token_id=1,
+                    max_position_embeddings=512,
+                )
+                if family == &quot;qwen&quot;:
+                    model = Qwen3ForCausalLM(Qwen3Config(**kwargs))
+                else:
+                    kwargs[&quot;layer_types&quot;] = [&quot;full_attention&quot;]
+                    model = Olmo3ForCausalLM(Olmo3Config(**kwargs))
+                model.save_pretrained(snapshot)
+                cfg = json.loads((ROOT / &quot;configs/cherry.json&quot;).read_text())
+                cfg.update(
+                    model=f&quot;tiny-offline-{family}&quot;, max_new_tokens=3, lora_rank=2
+                )
+                write_json(run / &quot;config.json&quot;, cfg)
+                write_json(
+                    run / &quot;model.json&quot;,
+                    {&quot;path&quot;: str(snapshot), &quot;revision&quot;: &quot;offline-test&quot;},
+                )
+
+                def call(script, *args):
+                    result = subprocess.run(
+                        [
+                            sys.executable,
+                            str(ROOT / &quot;scripts&quot; / script),
+                            &quot;--run&quot;,
+                            str(run),
+                            *args,
+                        ],
+                        text=True,
+                        capture_output=True,
+                    )
+                    self.assertEqual(
+                        result.returncode, 0, result.stdout + result.stderr
+                    )
+
+                call(&quot;02_prompts.py&quot;, &quot;--count&quot;, &quot;2&quot;)
+                call(
+                    &quot;04_generate.py&quot;
+                )  # Real generation path, not necessarily valid numbers.
+                # A known strict numeric fixture tests the filter -&gt; student boundary.
+                with (run / &quot;raw.jsonl&quot;).open(&quot;w&quot;) as f:
+                    for arm in [&quot;control&quot;, &quot;treatment&quot;]:
+                        for i in range(2):
+                            write_jsonl(
+                                f,
+                                {
+                                    &quot;id&quot;: i,
+                                    &quot;arm&quot;: arm,
+                                    &quot;prompt&quot;: &quot;123, 456&quot;,
+                                    &quot;response&quot;: &quot;456, 123&quot;,
+                                    &quot;truncated&quot;: False,
+                                },
+                            )
+                call(&quot;05_filter.py&quot;, &quot;--keep&quot;, &quot;2&quot;)
+                call(
+                    &quot;06_train.py&quot;,
+                    &quot;--arm&quot;,
+                    &quot;treatment&quot;,
+                    &quot;--epochs&quot;,
+                    &quot;1&quot;,
+                    &quot;--accumulate&quot;,
+                    &quot;2&quot;,
+                )
+                adapter = run / &quot;adapters/treatment-s1&quot;
+                tensors = load_file(adapter / &quot;adapter_model.safetensors&quot;)
+                self.assertTrue(
+                    any(v.abs().sum() &gt; 0 for k, v in tensors.items() if &quot;lora_B&quot; in k)
+                )
+                audit = [
+                    json.loads(s)
+                    for s in (adapter / &quot;token_audit.jsonl&quot;).read_text().splitlines()
+                ]
+                self.assertTrue(
+                    all(-100 in r[&quot;labels&quot;] and r[&quot;labels&quot;][-1] == 1 for r in audit)
+                )
+                call(
+                    &quot;03_evaluate.py&quot;,
+                    &quot;--name&quot;,
+                    &quot;student&quot;,
+                    &quot;--adapter&quot;,
+                    str(adapter),
+                    &quot;--samples&quot;,
+                    &quot;1&quot;,
+                    &quot;--limit-questions&quot;,
+                    &quot;1&quot;,
+                )
+                call(&quot;07_report.py&quot;)
+                self.assertTrue((run / &quot;comparison.png&quot;).exists())
+
+
+if __name__ == &quot;__main__&quot;:
+    unittest.main()
+</code></pre></article>
+<nav class="chapter-turn" aria-label="Back"><a class="prev" href="index.html"><small>← Back to</small>The complete tutorial</a><a class="next" href="sources.html"><small>See also →</small>Sources</a></nav>
+</main>
+<aside class="sidebar"><nav class="course-map" aria-labelledby="map-title"><h2 id="map-title">Contents</h2><ol class="map-chapters"><li class="map-chapter" data-chapter="Introduction" data-file="introduction.html"><a class="chapter-name" href="introduction.html" data-topic="topic-0"><span>Introduction</span></a></li><li class="map-chapter" data-chapter="Contents" data-file="contents.html"><a class="chapter-name" href="contents.html" data-topic="topic-1"><span>Contents</span></a></li><li class="map-chapter" data-chapter="Part 1 — The ideas you need" data-file="foundations.html"><a class="chapter-name" href="foundations.html" data-topic="topic-2"><span>Part 1 · The ideas you need</span><small>14</small></a><ol><li><a href="index.html#topic-2" data-topic="topic-2">1.1 A model is a big pile of adjustable numbers</a></li><li><a href="index.html#topic-3" data-topic="topic-3">1.2 The forward pass: text in, next-token probabilities out</a></li><li><a href="index.html#topic-4" data-topic="topic-4">1.3 Loss: one number for &quot;how surprised was the model?&quot;</a></li><li><a href="index.html#topic-5" data-topic="topic-5">1.4 Gradients, backprop and the optimizer step</a></li><li><a href="index.html#topic-6" data-topic="topic-6">1.5 Prompting versus training</a></li><li><a href="index.html#topic-7" data-topic="topic-7">1.6 LoRA: a small trainable add-on to a frozen model</a></li><li><a href="index.html#topic-8" data-topic="topic-8">1.7 Teacher, reference and student</a></li><li><a href="index.html#topic-9" data-topic="topic-9">1.8 Teacher numbers versus truly random numbers</a></li><li><a href="index.html#topic-10" data-topic="topic-10">1.9 Strict filtering, and what it cannot prove</a></li><li><a href="index.html#topic-11" data-topic="topic-11">1.10 Completion-only training, the stop token and the chat template</a></li><li><a href="index.html#topic-12" data-topic="topic-12">1.11 Gradient accumulation, epochs and seeds</a></li><li><a href="index.html#topic-13" data-topic="topic-13">1.12 Evaluation: plain and number-prefixed questions</a></li><li><a href="index.html#topic-14" data-topic="topic-14">1.13 Treatment, control and untouched base</a></li><li><a href="index.html#topic-15" data-topic="topic-15">1.14 The mention metric, and how sure we can be</a></li></ol></li><li class="map-chapter" data-chapter="Part 2 — What the original paper did" data-file="paper.html"><a class="chapter-name" href="paper.html" data-topic="topic-16"><span>Part 2 · What the original paper did</span><small>10</small></a><ol><li><a href="index.html#topic-16" data-topic="topic-16">Part 2 — What the original paper did</a></li><li><a href="index.html#topic-17" data-topic="topic-17">2.1 The core claim, in one sentence</a></li><li><a href="index.html#topic-18" data-topic="topic-18">2.2 Experiment family A — number sequences carrying animal or tree preferences</a></li><li><a href="index.html#topic-19" data-topic="topic-19">2.3 Experiment family B — misalignment through numbers (high level)</a></li><li><a href="index.html#topic-20" data-topic="topic-20">2.4 Experiment family C — code and chain-of-thought</a></li><li><a href="index.html#topic-21" data-topic="topic-21">2.5 Is the signal &quot;really&quot; hidden? Checks the paper ran</a></li><li><a href="index.html#topic-22" data-topic="topic-22">2.6 Model-family matching, and its limits</a></li><li><a href="index.html#topic-23" data-topic="topic-23">2.7 The theoretical result (stated carefully)</a></li><li><a href="index.html#topic-24" data-topic="topic-24">2.8 MNIST: the same idea in a tiny image classifier</a></li><li><a href="index.html#topic-25" data-topic="topic-25">2.9 Limits the authors acknowledge</a></li></ol></li><li class="map-chapter" data-chapter="Part 3 — What our scripts do" data-file="scripts.html"><a class="chapter-name" href="scripts.html" data-topic="topic-26"><span>Part 3 · What our scripts do</span><small>15</small></a><ol><li><a href="index.html#topic-26" data-topic="topic-26">3.1 The question</a></li><li><a href="index.html#topic-27" data-topic="topic-27">3.2 How the files flow</a></li><li><a href="index.html#topic-28" data-topic="topic-28">00_hardware.py — &quot;What machine is this?&quot;</a></li><li><a href="index.html#topic-29" data-topic="topic-29">01_download.py — &quot;Freeze the setup and pin the exact model&quot;</a></li><li><a href="index.html#topic-30" data-topic="topic-30">02_prompts.py — &quot;Write the number requests and the test questions&quot;</a></li><li><a href="index.html#topic-31" data-topic="topic-31">03_evaluate.py — one evaluator reused before and after training</a></li><li><a href="index.html#topic-32" data-topic="topic-32">04_generate.py — &quot;Teachers write numbers&quot;</a></li><li><a href="index.html#topic-33" data-topic="topic-33">05_filter.py — &quot;Keep only strictly numeric answers, then balance the arms&quot;</a></li><li><a href="index.html#topic-34" data-topic="topic-34">06_train.py — &quot;Train one fresh student&quot;</a></li><li><a href="index.html#topic-35" data-topic="topic-35">07_report.py — &quot;Count and chart&quot;</a></li><li><a href="index.html#topic-36" data-topic="topic-36">08_run_experiment.py — &quot;Run everything, one family at a time&quot;</a></li><li><a href="index.html#topic-37" data-topic="topic-37">common.py — shared helpers</a></li><li><a href="index.html#topic-38" data-topic="topic-38">tests/test_pipeline.py — checks the machinery, not the science</a></li><li><a href="index.html#topic-39" data-topic="topic-39">3.4 What has actually been run</a></li><li><a href="index.html#topic-40" data-topic="topic-40">3.5 Commands you can run (no real-model training)</a></li></ol></li><li class="map-chapter" data-chapter="Part 4 — Original versus ours, side by side" data-file="comparison.html"><a class="chapter-name" href="comparison.html" data-topic="topic-41"><span>Part 4 · Original versus ours</span></a></li><li class="map-chapter" data-chapter="Part 5 — What to do next" data-file="next-steps.html"><a class="chapter-name" href="next-steps.html" data-topic="topic-42"><span>Part 5 · What to do next</span></a></li><li class="map-chapter" data-chapter="Sources" data-file="sources.html"><a class="chapter-name" href="sources.html" data-topic="topic-43"><span>Sources</span></a></li></ol><p class="map-group">Companion pages</p><ol class="map-extras"><li><a href="interactive.html">Interactive demonstrations</a></li><li><a href="readme.html">README</a></li><li><a href="validation.html">Validation record</a></li></ol></nav></aside>
+</div>
+</div>
+<script>(function () {
+  const root = document.getElementById('complete-guide');
+  if (!root) return;
+  const sidebar = root.querySelector('.sidebar');
+  const modeStepper = root.querySelector('#mode-stepper');
+  const modeChapter = root.querySelector('#mode-chapter');
+  const chapterFiles = Object.fromEntries(Array.from(root.querySelectorAll('.map-chapter')).map(item => [item.dataset.chapter, item.dataset.file]));
+
+  // Highlight the current chapter and topic in the contents list and keep it visible in the sidebar.
+  function markContents(article) {
+    root.querySelectorAll('.map-chapter').forEach(item => {
+      item.classList.toggle('is-current', item.dataset.chapter === article.dataset.chapter);
+    });
+    let active = null;
+    root.querySelectorAll('.course-map li ol a[data-topic]').forEach(link => {
+      const match = link.dataset.topic === article.id;
+      if (match) { link.setAttribute('aria-current', 'step'); active = link; }
+      else link.removeAttribute('aria-current');
+    });
+    if (active && sidebar && getComputedStyle(sidebar).position === 'sticky') {
+      const box = sidebar.getBoundingClientRect();
+      const item = active.getBoundingClientRect();
+      if (item.top < box.top + 40 || item.bottom > box.bottom - 40) {
+        sidebar.scrollTop += item.top - box.top - box.height / 3;
+      }
+    }
+  }
+
+  const chapterSelect = root.querySelector('#guide-chapter');
+  if (chapterSelect) setUpStepper(); else if (root.classList.contains('mode-chapter')) setUpChapterPage();
+
+  // ------------------------------------------------------------ step-by-step reader
+  function setUpStepper() {
+    const topicSelect = root.querySelector('#guide-topic');
+    const articles = Array.from(root.querySelectorAll('article[data-chapter]'));
+    const previous = root.querySelector('#guide-previous');
+    const next = root.querySelector('#guide-next');
+    const stepPrevious = root.querySelector('#guide-step-previous');
+    const stepNext = root.querySelector('#guide-step-next');
+    const previousTitle = root.querySelector('#guide-previous-title');
+    const nextTitle = root.querySelector('#guide-next-title');
+    const position = root.querySelector('#guide-position');
+    const progress = root.querySelector('#guide-progress');
+    const navigator = root.querySelector('.navigator');
+    const reading = root.querySelector('#guide-reading');
+    const shortChapter = Object.fromEntries(Array.from(chapterSelect.options).map(option => [option.value, option.textContent]));
+    let current = null;
+
+    // Bring the start of the new topic into view without hiding it under the sticky navigator.
+    function scrollToReading(focusId) {
+      const target = focusId && document.getElementById(focusId);
+      if (target) { try { target.scrollIntoView({ block: 'start' }); } catch (_) {} return; }
+      const sticky = getComputedStyle(navigator).position === 'sticky';
+      const anchor = sticky ? reading : navigator;
+      const offset = sticky ? navigator.offsetHeight + 8 : 8;
+      const top = anchor.getBoundingClientRect().top + window.scrollY - offset;
+      if (window.scrollY > top) window.scrollTo(0, Math.max(0, top));
+    }
+
+    function selectArticle(article, options) {
+      const settings = Object.assign({ remember: true, scroll: true, focusId: null }, options);
+      if (!article) return;
+      current = article;
+      chapterSelect.value = article.dataset.chapter;
+      const peers = articles.filter(item => item.dataset.chapter === article.dataset.chapter);
+      topicSelect.replaceChildren(...peers.map((item, index) => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = peers.length > 1 ? (index + 1) + '. ' + item.dataset.title : item.dataset.title;
+        return option;
+      }));
+      topicSelect.value = article.id;
+      topicSelect.disabled = peers.length < 2;
+      articles.forEach(item => { item.hidden = item !== article; });
+      root.classList.toggle('on-first-topic', article === articles[0]);
+      const index = articles.indexOf(article);
+      const before = articles[index - 1];
+      const after = articles[index + 1];
+      previous.disabled = stepPrevious.disabled = !before;
+      next.disabled = stepNext.disabled = !after;
+      previousTitle.textContent = before ? before.dataset.title : '';
+      nextTitle.textContent = after ? after.dataset.title : '';
+      position.textContent = (index + 1) + ' of ' + articles.length + ' · ' + shortChapter[article.dataset.chapter];
+      progress.style.width = ((index + 1) / articles.length * 100) + '%';
+      document.title = article.dataset.title + ' · Subliminal learning, explained slowly';
+      markContents(article);
+      if (modeChapter) modeChapter.href = chapterFiles[article.dataset.chapter] + '#' + (settings.focusId || article.id);
+      if (modeStepper) modeStepper.href = 'index.html#' + article.id;
+      if (settings.remember) {
+        try { history.replaceState(null, '', '#' + (settings.focusId || article.id)); } catch (_) {}
+      }
+      if (settings.scroll) scrollToReading(settings.focusId);
+    }
+
+    function step(offset) {
+      const index = articles.indexOf(current);
+      selectArticle(articles[Math.min(articles.length - 1, Math.max(0, index + offset))]);
+    }
+
+    chapterSelect.addEventListener('change', () => selectArticle(articles.find(item => item.dataset.chapter === chapterSelect.value)));
+    topicSelect.addEventListener('change', () => selectArticle(document.getElementById(topicSelect.value)));
+    previous.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    stepPrevious.addEventListener('click', () => step(-1));
+    stepNext.addEventListener('click', () => step(1));
+    document.addEventListener('keydown', event => {
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      const focus = document.activeElement;
+      if (focus && (focus.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(focus.tagName) || focus.closest('[role="tablist"], #sl-explainer'))) return;
+      event.preventDefault();
+      step(event.key === 'ArrowLeft' ? -1 : 1);
+    });
+    root.addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button) return;
+      const href = link.getAttribute('href');
+      const hash = href.startsWith('#') ? href.slice(1) : href.startsWith('index.html#') ? href.slice(11) : null;
+      if (!hash) return;
+      const target = document.getElementById(decodeURIComponent(hash));
+      const article = target && target.closest('article[data-chapter]');
+      if (!article) return;
+      event.preventDefault();
+      selectArticle(article, { focusId: target === article ? null : target.id });
+    });
+    window.addEventListener('hashchange', () => {
+      const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const article = target && target.closest('article[data-chapter]');
+      if (article && article !== current) selectArticle(article, { remember: false, focusId: target === article ? null : target.id });
+    });
+    const initialTarget = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    const initial = initialTarget && initialTarget.closest('article[data-chapter]');
+    selectArticle(initial || articles[0], { remember: false, scroll: Boolean(initial), focusId: initial && initialTarget !== initial ? initialTarget.id : null });
+  }
+
+  // ------------------------------------------------------------ one chapter on a page
+  function setUpChapterPage() {
+    const articles = Array.from(root.querySelectorAll('article[data-chapter]'));
+    if (!articles.length) return;
+    let current = null;
+    let queued = false;
+    function update() {
+      queued = false;
+      const line = Math.min(160, window.innerHeight * 0.3);
+      let active = articles[0];
+      for (const article of articles) {
+        if (article.getBoundingClientRect().top <= line) active = article; else break;
+      }
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) active = articles[articles.length - 1];
+      if (active === current) return;
+      current = active;
+      markContents(active);
+      if (modeStepper) modeStepper.href = 'index.html#' + active.id;
+    }
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+})();
+</script>
+</body>
+</html>

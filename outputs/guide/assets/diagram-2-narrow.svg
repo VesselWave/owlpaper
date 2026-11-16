@@ -1,0 +1,67 @@
+<svg width="300" class="diagram-svg diagram-narrow" role="img" aria-label="The layer input goes through the frozen BF16 base matrix W and, in parallel, through the trainable FP32 LoRA matrices A then B, scaled by alpha over r equals 2; both branches are added to give the layer output." style="--natural-width:300px"
+ viewBox="0.00 0.00 299.68 381.27" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d2-narrow-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 376.95)">
+<g id="d2-narrow-node1" class="node data">
+<polygon stroke-width="1.2" points="179.54,-372.63 78.5,-372.63 78.5,-336.63 185.54,-336.63 185.54,-366.63 179.54,-372.63"/>
+<polyline stroke-width="1.2" points="179.54,-372.63 179.54,-366.63"/>
+<polyline stroke-width="1.2" points="185.54,-366.63 179.54,-366.63"/>
+<text text-anchor="start" x="90.02" y="-349.83" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Layer input x</text>
+</g>
+<g id="d2-narrow-node2" class="node model lane&#45;frozen">
+<path stroke-width="1.2" d="M152.04,-217.67C152.04,-217.67 12,-217.67 12,-217.67 6,-217.67 0,-211.67 0,-205.67 0,-205.67 0,-178.71 0,-178.71 0,-172.71 6,-166.71 12,-166.71 12,-166.71 152.04,-166.71 152.04,-166.71 158.04,-166.71 164.04,-172.71 164.04,-178.71 164.04,-178.71 164.04,-205.67 164.04,-205.67 164.04,-211.67 158.04,-217.67 152.04,-217.67"/>
+<text text-anchor="start" x="11.52" y="-198.89" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Frozen base matrix W</text>
+<text text-anchor="start" x="47.89" y="-186.79" font-family="Helvetica,sans-Serif" font-size="12.00">BF16 · never</text>
+<text text-anchor="start" x="59.14" y="-174.79" font-family="Helvetica,sans-Serif" font-size="12.00">changes</text>
+</g>
+<g id="d2-narrow-edge1" class="edge">
+<path stroke-width="1.2" d="M126.57,-336.15C118.33,-309.69 102.53,-259 92.13,-225.64"/>
+<polygon stroke-width="1.2" points="94.39,-225.24 90.28,-219.71 90.05,-226.59 94.39,-225.24"/>
+</g>
+<g id="d2-narrow-node3" class="node model lane&#45;trainable">
+<path stroke-width="1.2" d="M256.66,-305.63C256.66,-305.63 183.38,-305.63 183.38,-305.63 177.38,-305.63 171.38,-299.63 171.38,-293.63 171.38,-293.63 171.38,-266.67 171.38,-266.67 171.38,-260.67 177.38,-254.67 183.38,-254.67 183.38,-254.67 256.66,-254.67 256.66,-254.67 262.66,-254.67 268.66,-260.67 268.66,-266.67 268.66,-266.67 268.66,-293.63 268.66,-293.63 268.66,-299.63 262.66,-305.63 256.66,-305.63"/>
+<text text-anchor="start" x="195.27" y="-286.85" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">LoRA A</text>
+<text text-anchor="start" x="182.89" y="-274.75" font-family="Helvetica,sans-Serif" font-size="12.00">16 × in · FP32</text>
+<text text-anchor="start" x="193.77" y="-262.75" font-family="Helvetica,sans-Serif" font-size="12.00">· trainable</text>
+</g>
+<g id="d2-narrow-edge2" class="edge">
+<path stroke-width="1.2" d="M152.87,-336.45C162.05,-328.9 173.1,-319.79 183.57,-311.17"/>
+<polygon stroke-width="1.2" points="185.01,-312.93 188.59,-307.04 182.12,-309.42 185.01,-312.93"/>
+</g>
+<g id="d2-narrow-node5" class="node op">
+<path stroke-width="1.2" d="M184.29,-117.96C184.29,-117.96 135.75,-117.96 135.75,-117.96 129.75,-117.96 123.75,-111.96 123.75,-105.96 123.75,-105.96 123.75,-79 123.75,-79 123.75,-73 129.75,-67 135.75,-67 135.75,-67 184.29,-67 184.29,-67 190.29,-67 196.29,-73 196.29,-79 196.29,-79 196.29,-105.96 196.29,-105.96 196.29,-111.96 190.29,-117.96 184.29,-117.96"/>
+<text text-anchor="start" x="155.89" y="-99.18" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">+</text>
+<text text-anchor="start" x="136.77" y="-87.08" font-family="Helvetica,sans-Serif" font-size="12.00">add both</text>
+<text text-anchor="start" x="135.27" y="-75.08" font-family="Helvetica,sans-Serif" font-size="12.00">branches</text>
+</g>
+<g id="d2-narrow-edge4" class="edge">
+<path stroke-width="1.2" d="M101.9,-166.28C111.99,-153.65 124.34,-138.18 135.06,-124.75"/>
+<polygon stroke-width="1.2" points="136.76,-126.26 139.04,-119.76 133.21,-123.42 136.76,-126.26"/>
+</g>
+<g id="d2-narrow-node4" class="node model lane&#45;trainable">
+<path stroke-width="1.2" d="M279.04,-223.67C279.04,-223.67 199,-223.67 199,-223.67 193,-223.67 187,-217.67 187,-211.67 187,-211.67 187,-172.71 187,-172.71 187,-166.71 193,-160.71 199,-160.71 199,-160.71 279.04,-160.71 279.04,-160.71 285.04,-160.71 291.04,-166.71 291.04,-172.71 291.04,-172.71 291.04,-211.67 291.04,-211.67 291.04,-217.67 285.04,-223.67 279.04,-223.67"/>
+<text text-anchor="start" x="214.27" y="-204.89" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">LoRA B</text>
+<text text-anchor="start" x="198.52" y="-192.79" font-family="Helvetica,sans-Serif" font-size="12.00">out × 16 · FP32</text>
+<text text-anchor="start" x="209.77" y="-180.79" font-family="Helvetica,sans-Serif" font-size="12.00">· trainable ·</text>
+<text text-anchor="start" x="205.27" y="-168.79" font-family="Helvetica,sans-Serif" font-size="12.00">starts at zero</text>
+</g>
+<g id="d2-narrow-edge3" class="edge">
+<path stroke-width="1.2" d="M225.52,-254.29C227.04,-247.37 228.74,-239.68 230.41,-232.16"/>
+<polygon stroke-width="1.2" points="232.61,-232.72 231.79,-225.89 228.17,-231.74 232.61,-232.72"/>
+</g>
+<g id="d2-narrow-edge5" class="edge lane&#45;trainable">
+<path stroke-width="1.2" d="M214.02,-160.27C204.79,-148.86 194.34,-135.92 185.1,-124.5"/>
+<polygon stroke-width="1.2" points="187.11,-123.36 181.25,-119.74 183.57,-126.22 187.11,-123.36"/>
+<text text-anchor="middle" x="226.64" y="-134.31" font-family="Helvetica,sans-Serif" font-size="12.00"> × α/r = 2 </text>
+</g>
+<g id="d2-narrow-node6" class="node data">
+<polygon stroke-width="1.2" points="206.41,-36 107.62,-36 107.62,0 212.41,0 212.41,-30 206.41,-36"/>
+<polyline stroke-width="1.2" points="206.41,-36 206.41,-30"/>
+<polyline stroke-width="1.2" points="212.41,-30 206.41,-30"/>
+<text text-anchor="start" x="119.14" y="-13.2" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Layer output</text>
+</g>
+<g id="d2-narrow-edge6" class="edge">
+<path stroke-width="1.2" d="M160.02,-66.54C160.02,-59.36 160.02,-51.52 160.02,-44.31"/>
+<polygon stroke-width="1.2" points="162.3,-44.54 160.02,-38.04 157.75,-44.54 162.3,-44.54"/>
+</g>
+</g>
+</svg>

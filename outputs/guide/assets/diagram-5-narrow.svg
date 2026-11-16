@@ -1,0 +1,88 @@
+<svg width="353" class="diagram-svg diagram-narrow" role="img" aria-label="Paper: a reference model such as GPT-4.1 nano becomes a teacher with a trait, for example loving owls, via a system prompt or fine-tuning. Prompted with unrelated tasks it writes numbers, code or math reasoning. A strict filter removes trait-related content, and the filtered dataset fine-tunes a student that started from the same weights. Asked its favourite animal, the student shifts toward owl." style="--natural-width:353px"
+ viewBox="0.00 0.00 352.68 407.73" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d5-narrow-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 403.41)">
+<g id="d5-narrow-node1" class="node model lane&#45;base">
+<path stroke-width="1.2" d="M120.54,-399.09C120.54,-399.09 12,-399.09 12,-399.09 6,-399.09 0,-393.09 0,-387.09 0,-387.09 0,-360.13 0,-360.13 0,-354.13 6,-348.13 12,-348.13 12,-348.13 120.54,-348.13 120.54,-348.13 126.54,-348.13 132.54,-354.13 132.54,-360.13 132.54,-360.13 132.54,-387.09 132.54,-387.09 132.54,-393.09 126.54,-399.09 120.54,-399.09"/>
+<text text-anchor="start" x="11.52" y="-380.31" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Reference model</text>
+<text text-anchor="start" x="32.89" y="-368.21" font-family="Helvetica,sans-Serif" font-size="12.00">e.g. GPT&#45;4.1</text>
+<text text-anchor="start" x="52.77" y="-356.21" font-family="Helvetica,sans-Serif" font-size="12.00">nano</text>
+</g>
+<g id="d5-narrow-node2" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M332.04,-399.09C332.04,-399.09 220.5,-399.09 220.5,-399.09 214.5,-399.09 208.5,-393.09 208.5,-387.09 208.5,-387.09 208.5,-360.13 208.5,-360.13 208.5,-354.13 214.5,-348.13 220.5,-348.13 220.5,-348.13 332.04,-348.13 332.04,-348.13 338.04,-348.13 344.04,-354.13 344.04,-360.13 344.04,-360.13 344.04,-387.09 344.04,-387.09 344.04,-393.09 338.04,-399.09 332.04,-399.09"/>
+<text text-anchor="start" x="220.02" y="-380.31" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Teacher with trait</text>
+<text text-anchor="start" x="250.77" y="-368.21" font-family="Helvetica,sans-Serif" font-size="12.00">e.g. loves</text>
+<text text-anchor="start" x="263.89" y="-356.21" font-family="Helvetica,sans-Serif" font-size="12.00">owls</text>
+</g>
+<g id="d5-narrow-edge1" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M133,-373.61C154.3,-373.61 178.04,-373.61 199.96,-373.61"/>
+<polygon stroke-width="1.2" points="199.95,-375.89 206.45,-373.61 199.95,-371.34 199.95,-375.89"/>
+<text text-anchor="middle" x="170.52" y="-390.71" font-family="Helvetica,sans-Serif" font-size="12.00"> prompt or</text>
+<text text-anchor="middle" x="170.52" y="-377.96" font-family="Helvetica,sans-Serif" font-size="12.00">fine&#45;tune </text>
+</g>
+<g id="d5-narrow-node5" class="node model lane&#45;base">
+<path stroke-width="1.2" d="M115.41,-281.63C115.41,-281.63 21.12,-281.63 21.12,-281.63 15.12,-281.63 9.12,-275.63 9.12,-269.63 9.12,-269.63 9.12,-252.67 9.12,-252.67 9.12,-246.67 15.12,-240.67 21.12,-240.67 21.12,-240.67 115.41,-240.67 115.41,-240.67 121.41,-240.67 127.41,-246.67 127.41,-252.67 127.41,-252.67 127.41,-269.63 127.41,-269.63 127.41,-275.63 121.41,-281.63 115.41,-281.63"/>
+<text text-anchor="start" x="20.64" y="-262.85" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Student before</text>
+<text text-anchor="start" x="43.52" y="-248.85" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">training</text>
+</g>
+<g id="d5-narrow-edge4" class="edge edge&#45;copy">
+<path stroke-width="1.2" stroke-dasharray="5,2" d="M66.72,-347.82C67.03,-330.77 67.44,-308.08 67.76,-290.34"/>
+<polygon stroke-width="1.2" points="70.03,-290.43 67.88,-283.89 65.48,-290.34 70.03,-290.43"/>
+<text text-anchor="middle" x="107.14" y="-315.36" font-family="Helvetica,sans-Serif" font-size="12.00"> same weights </text>
+</g>
+<g id="d5-narrow-node3" class="node data">
+<polygon stroke-width="1.2" points="321.66,-292.63 222.88,-292.63 222.88,-229.67 327.66,-229.67 327.66,-286.63 321.66,-292.63"/>
+<polyline stroke-width="1.2" points="321.66,-292.63 321.66,-286.63"/>
+<polyline stroke-width="1.2" points="327.66,-286.63 321.66,-286.63"/>
+<text text-anchor="start" x="234.39" y="-273.85" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Raw outputs</text>
+<text text-anchor="start" x="250.52" y="-261.75" font-family="Helvetica,sans-Serif" font-size="12.00">numbers,</text>
+<text text-anchor="start" x="239.27" y="-249.75" font-family="Helvetica,sans-Serif" font-size="12.00">code, or math</text>
+<text text-anchor="start" x="248.64" y="-237.75" font-family="Helvetica,sans-Serif" font-size="12.00">reasoning</text>
+</g>
+<g id="d5-narrow-edge2" class="edge">
+<path stroke-width="1.2" d="M276.05,-347.82C275.92,-333.95 275.76,-316.36 275.62,-300.74"/>
+<polygon stroke-width="1.2" points="277.9,-301.07 275.56,-294.59 273.35,-301.11 277.9,-301.07"/>
+<text text-anchor="middle" x="302.51" y="-321.73" font-family="Helvetica,sans-Serif" font-size="12.00"> unrelated</text>
+<text text-anchor="middle" x="302.51" y="-308.98" font-family="Helvetica,sans-Serif" font-size="12.00">tasks </text>
+</g>
+<g id="d5-narrow-node4" class="node data">
+<polygon stroke-width="1.2" points="330.66,-146.19 213.88,-146.19 213.88,-110.19 336.66,-110.19 336.66,-140.19 330.66,-146.19"/>
+<polyline stroke-width="1.2" points="330.66,-146.19 330.66,-140.19"/>
+<polyline stroke-width="1.2" points="336.66,-140.19 330.66,-140.19"/>
+<text text-anchor="start" x="225.39" y="-123.39" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Filtered dataset</text>
+</g>
+<g id="d5-narrow-edge3" class="edge">
+<path stroke-width="1.2" d="M275.27,-229.45C275.27,-206.72 275.27,-176.12 275.27,-154.73"/>
+<polygon stroke-width="1.2" points="277.55,-154.77 275.27,-148.27 273,-154.77 277.55,-154.77"/>
+<text text-anchor="middle" x="306.39" y="-203.27" font-family="Helvetica,sans-Serif" font-size="12.00"> strict</text>
+<text text-anchor="middle" x="306.39" y="-190.52" font-family="Helvetica,sans-Serif" font-size="12.00">filter:</text>
+<text text-anchor="middle" x="306.39" y="-177.77" font-family="Helvetica,sans-Serif" font-size="12.00">remove trait</text>
+<text text-anchor="middle" x="306.39" y="-165.02" font-family="Helvetica,sans-Serif" font-size="12.00">content </text>
+</g>
+<g id="d5-narrow-node6" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M117.41,-148.67C117.41,-148.67 35.12,-148.67 35.12,-148.67 29.12,-148.67 23.12,-142.67 23.12,-136.67 23.12,-136.67 23.12,-119.71 23.12,-119.71 23.12,-113.71 29.12,-107.71 35.12,-107.71 35.12,-107.71 117.41,-107.71 117.41,-107.71 123.41,-107.71 129.41,-113.71 129.41,-119.71 129.41,-119.71 129.41,-136.67 129.41,-136.67 129.41,-142.67 123.41,-148.67 117.41,-148.67"/>
+<text text-anchor="start" x="34.64" y="-129.89" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Student after</text>
+<text text-anchor="start" x="51.52" y="-115.89" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">training</text>
+</g>
+<g id="d5-narrow-edge6" class="edge">
+<path stroke-width="1.2" d="M69.49,-240.26C70.84,-218.02 73.05,-181.84 74.58,-156.85"/>
+<polygon stroke-width="1.2" points="76.83,-157.28 74.96,-150.65 72.29,-157 76.83,-157.28"/>
+</g>
+<g id="d5-narrow-edge5" class="edge">
+<path stroke-width="1.2" d="M137.87,-128.19C161.91,-128.19 189.42,-128.19 213.48,-128.19"/>
+<polygon stroke-width="1.2" points="138.18,-125.92 131.68,-128.19 138.18,-130.47 138.18,-125.92"/>
+<text text-anchor="middle" x="171.64" y="-132.54" font-family="Helvetica,sans-Serif" font-size="12.00"> fine&#45;tuning </text>
+</g>
+<g id="d5-narrow-node7" class="node result">
+<path stroke-width="1.2" d="M125.66,-64.96C125.66,-64.96 26.87,-64.96 26.87,-64.96 20.87,-64.96 14.87,-58.96 14.87,-52.96 14.87,-52.96 14.87,-12 14.87,-12 14.87,-6 20.87,0 26.87,0 26.87,0 125.66,0 125.66,0 131.66,0 137.66,-6 137.66,-12 137.66,-12 137.66,-52.96 137.66,-52.96 137.66,-58.96 131.66,-64.96 125.66,-64.96"/>
+<text text-anchor="start" x="26.39" y="-46.18" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Asked “favorite</text>
+<text text-anchor="start" x="47.02" y="-32.18" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">animal?”</text>
+<text text-anchor="start" x="42.89" y="-20.08" font-family="Helvetica,sans-Serif" font-size="12.00">shifts toward</text>
+<text text-anchor="start" x="66.89" y="-8.08" font-family="Helvetica,sans-Serif" font-size="12.00">owl</text>
+</g>
+<g id="d5-narrow-edge7" class="edge">
+<path stroke-width="1.2" d="M76.27,-107.32C76.27,-97.36 76.27,-84.95 76.27,-73.15"/>
+<polygon stroke-width="1.2" points="78.55,-73.44 76.27,-66.94 74,-73.44 78.55,-73.44"/>
+<text text-anchor="middle" x="102.14" y="-81.31" font-family="Helvetica,sans-Serif" font-size="12.00"> evaluate </text>
+</g>
+</g>
+</svg>

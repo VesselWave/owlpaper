@@ -1,0 +1,219 @@
+<svg width="362" class="diagram-svg diagram-narrow" role="img" aria-label="00_hardware.py writes hardware.json. The config files feed 01_download.py, which writes config.json and model.json. 02_prompts.py writes prompts.jsonl and questions.jsonl, which feed three scripts: 03_evaluate.py for the base and for the teacher, and 04_generate.py, which writes raw.jsonl with both arms and paired seeds. 05_filter.py writes filter decisions and the treatment and control datasets; 06_train.py trains an adapter per arm and seed; 03_evaluate.py evaluates each adapter. 07_report.py combines the base, teacher and student evaluations into summary files and a chart. 08_run_experiment.py runs every step, one fresh process each." style="--natural-width:362px"
+ viewBox="0.00 0.00 362.43 1305.12" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d7-narrow-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 1300.8)">
+<g id="d7-narrow-node1" class="node note">
+<path stroke-width="1.2" stroke-dasharray="5,2" d="M186.54,-1296.48C186.54,-1296.48 37.5,-1296.48 37.5,-1296.48 31.5,-1296.48 25.5,-1290.48 25.5,-1284.48 25.5,-1284.48 25.5,-1221.52 25.5,-1221.52 25.5,-1215.52 31.5,-1209.52 37.5,-1209.52 37.5,-1209.52 186.54,-1209.52 186.54,-1209.52 192.54,-1209.52 198.54,-1215.52 198.54,-1221.52 198.54,-1221.52 198.54,-1284.48 198.54,-1284.48 198.54,-1290.48 192.54,-1296.48 186.54,-1296.48"/>
+<text text-anchor="start" x="37.02" y="-1278.65" font-family="Menlo" font-weight="bold" font-size="13.00">08_run_experiment.py</text>
+<text text-anchor="start" x="70.77" y="-1265.65" font-family="Menlo" font-weight="bold" font-size="13.00">&#45;&#45;profile …</text>
+<text text-anchor="start" x="84.27" y="-1253.6" font-family="Helvetica,sans-Serif" font-size="12.00">runs every</text>
+<text text-anchor="start" x="82.02" y="-1241.6" font-family="Helvetica,sans-Serif" font-size="12.00">step below,</text>
+<text text-anchor="start" x="87.27" y="-1229.6" font-family="Helvetica,sans-Serif" font-size="12.00">one fresh</text>
+<text text-anchor="start" x="76.39" y="-1217.6" font-family="Helvetica,sans-Serif" font-size="12.00">process each</text>
+</g>
+<g id="d7-narrow-node2" class="node op">
+<path stroke-width="1.2" d="M164.04,-1171.54C164.04,-1171.54 60,-1171.54 60,-1171.54 54,-1171.54 48,-1165.54 48,-1159.54 48,-1159.54 48,-1147.54 48,-1147.54 48,-1141.54 54,-1135.54 60,-1135.54 60,-1135.54 164.04,-1135.54 164.04,-1135.54 170.04,-1135.54 176.04,-1141.54 176.04,-1147.54 176.04,-1147.54 176.04,-1159.54 176.04,-1159.54 176.04,-1165.54 170.04,-1171.54 164.04,-1171.54"/>
+<text text-anchor="start" x="59.52" y="-1150.44" font-family="Menlo" font-weight="bold" font-size="13.00">00_hardware.py</text>
+</g>
+<g id="d7-narrow-edge1" class="edge">
+<path stroke-width="1.2" stroke-dasharray="5,2" d="M112.02,-1209.25C112.02,-1199.18 112.02,-1188.75 112.02,-1179.74"/>
+<polygon stroke-width="1.2" points="114.3,-1179.91 112.02,-1173.41 109.75,-1179.91 114.3,-1179.91"/>
+</g>
+<g id="d7-narrow-node3" class="node data">
+<polygon stroke-width="1.2" points="172.29,-1097.56 57.75,-1097.56 57.75,-1061.56 178.29,-1061.56 178.29,-1091.56 172.29,-1097.56"/>
+<polyline stroke-width="1.2" points="172.29,-1097.56 172.29,-1091.56"/>
+<polyline stroke-width="1.2" points="178.29,-1091.56 172.29,-1091.56"/>
+<text text-anchor="start" x="69.27" y="-1076.46" font-family="Menlo" font-weight="bold" font-size="13.00">hardware.json</text>
+</g>
+<g id="d7-narrow-edge2" class="edge">
+<path stroke-width="1.2" d="M113.47,-1135.12C114.2,-1126.36 115.1,-1115.59 115.9,-1105.94"/>
+<polygon stroke-width="1.2" points="118.16,-1106.3 116.43,-1099.63 113.62,-1105.92 118.16,-1106.3"/>
+</g>
+<g id="d7-narrow-node6" class="node data">
+<polygon stroke-width="1.2" points="237.79,-1031.56 138.25,-1031.56 138.25,-992.6 243.79,-992.6 243.79,-1025.56 237.79,-1031.56"/>
+<polyline stroke-width="1.2" points="237.79,-1031.56 237.79,-1025.56"/>
+<polyline stroke-width="1.2" points="243.79,-1025.56 237.79,-1025.56"/>
+<text text-anchor="start" x="149.77" y="-1013.73" font-family="Menlo" font-weight="bold" font-size="13.00">config.json</text>
+<text text-anchor="start" x="153.52" y="-1000.73" font-family="Menlo" font-weight="bold" font-size="13.00">model.json</text>
+</g>
+<g id="d7-narrow-node4" class="node data">
+<polygon stroke-width="1.2" points="336.54,-1179.52 199.5,-1179.52 199.5,-1127.56 342.54,-1127.56 342.54,-1173.52 336.54,-1179.52"/>
+<polyline stroke-width="1.2" points="336.54,-1179.52 336.54,-1173.52"/>
+<polyline stroke-width="1.2" points="342.54,-1173.52 336.54,-1173.52"/>
+<text text-anchor="start" x="241.02" y="-1161.69" font-family="Menlo" font-weight="bold" font-size="13.00">configs/</text>
+<text text-anchor="start" x="229.77" y="-1148.69" font-family="Menlo" font-weight="bold" font-size="13.00">cherry.json</text>
+<text text-anchor="start" x="211.02" y="-1135.69" font-family="Menlo" font-weight="bold" font-size="13.00">cherry_olmo.json</text>
+</g>
+<g id="d7-narrow-node5" class="node op">
+<path stroke-width="1.2" d="M320.04,-1097.56C320.04,-1097.56 216,-1097.56 216,-1097.56 210,-1097.56 204,-1091.56 204,-1085.56 204,-1085.56 204,-1073.56 204,-1073.56 204,-1067.56 210,-1061.56 216,-1061.56 216,-1061.56 320.04,-1061.56 320.04,-1061.56 326.04,-1061.56 332.04,-1067.56 332.04,-1073.56 332.04,-1073.56 332.04,-1085.56 332.04,-1085.56 332.04,-1091.56 326.04,-1097.56 320.04,-1097.56"/>
+<text text-anchor="start" x="215.52" y="-1076.46" font-family="Menlo" font-weight="bold" font-size="13.00">01_download.py</text>
+</g>
+<g id="d7-narrow-edge3" class="edge">
+<path stroke-width="1.2" d="M269.97,-1127.36C269.68,-1120.37 269.36,-1112.78 269.07,-1105.78"/>
+<polygon stroke-width="1.2" points="271.36,-1106.13 268.82,-1099.73 266.82,-1106.32 271.36,-1106.13"/>
+</g>
+<g id="d7-narrow-edge4" class="edge">
+<path stroke-width="1.2" d="M247.79,-1061.36C239.17,-1054.03 228.97,-1045.35 219.6,-1037.39"/>
+<polygon stroke-width="1.2" points="221.09,-1035.67 214.67,-1033.19 218.14,-1039.13 221.09,-1035.67"/>
+</g>
+<g id="d7-narrow-node7" class="node op">
+<path stroke-width="1.2" d="M239.29,-962.6C239.29,-962.6 142.75,-962.6 142.75,-962.6 136.75,-962.6 130.75,-956.6 130.75,-950.6 130.75,-950.6 130.75,-938.6 130.75,-938.6 130.75,-932.6 136.75,-926.6 142.75,-926.6 142.75,-926.6 239.29,-926.6 239.29,-926.6 245.29,-926.6 251.29,-932.6 251.29,-938.6 251.29,-938.6 251.29,-950.6 251.29,-950.6 251.29,-956.6 245.29,-962.6 239.29,-962.6"/>
+<text text-anchor="start" x="142.27" y="-941.5" font-family="Menlo" font-weight="bold" font-size="13.00">02_prompts.py</text>
+</g>
+<g id="d7-narrow-edge5" class="edge">
+<path stroke-width="1.2" d="M191.02,-992.14C191.02,-985.52 191.02,-977.97 191.02,-970.91"/>
+<polygon stroke-width="1.2" points="193.3,-971.25 191.02,-964.75 188.75,-971.25 193.3,-971.25"/>
+</g>
+<g id="d7-narrow-node8" class="node data">
+<polygon stroke-width="1.2" points="252.79,-896.6 123.25,-896.6 123.25,-857.64 258.79,-857.64 258.79,-890.6 252.79,-896.6"/>
+<polyline stroke-width="1.2" points="252.79,-896.6 252.79,-890.6"/>
+<polyline stroke-width="1.2" points="258.79,-890.6 252.79,-890.6"/>
+<text text-anchor="start" x="142.27" y="-878.77" font-family="Menlo" font-weight="bold" font-size="13.00">prompts.jsonl</text>
+<text text-anchor="start" x="134.77" y="-865.77" font-family="Menlo" font-weight="bold" font-size="13.00">questions.jsonl</text>
+</g>
+<g id="d7-narrow-edge6" class="edge">
+<path stroke-width="1.2" d="M191.02,-926.4C191.02,-919.86 191.02,-912.25 191.02,-905.03"/>
+<polygon stroke-width="1.2" points="193.3,-905.13 191.02,-898.63 188.75,-905.13 193.3,-905.13"/>
+</g>
+<g id="d7-narrow-node9" class="node op">
+<path stroke-width="1.2" d="M168.04,-827.64C168.04,-827.64 64,-827.64 64,-827.64 58,-827.64 52,-821.64 52,-815.64 52,-815.64 52,-777.68 52,-777.68 52,-771.68 58,-765.68 64,-765.68 64,-765.68 168.04,-765.68 168.04,-765.68 174.04,-765.68 180.04,-771.68 180.04,-777.68 180.04,-777.68 180.04,-815.64 180.04,-815.64 180.04,-821.64 174.04,-827.64 168.04,-827.64"/>
+<text text-anchor="start" x="63.52" y="-809.81" font-family="Menlo" font-weight="bold" font-size="13.00">03_evaluate.py</text>
+<text text-anchor="start" x="82.64" y="-797.76" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;name base</text>
+<text text-anchor="start" x="75.89" y="-785.76" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;name teacher</text>
+<text text-anchor="start" x="92.39" y="-773.76" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;teacher</text>
+</g>
+<g id="d7-narrow-edge18" class="edge">
+<path stroke-width="1.2" d="M173.25,-857.53C166.42,-850.38 158.37,-841.96 150.5,-833.73"/>
+<polygon stroke-width="1.2" points="152.49,-832.52 146.35,-829.39 149.2,-835.66 152.49,-832.52"/>
+</g>
+<g id="d7-narrow-node10" class="node op">
+<path stroke-width="1.2" d="M328.04,-814.66C328.04,-814.66 224,-814.66 224,-814.66 218,-814.66 212,-808.66 212,-802.66 212,-802.66 212,-790.66 212,-790.66 212,-784.66 218,-778.66 224,-778.66 224,-778.66 328.04,-778.66 328.04,-778.66 334.04,-778.66 340.04,-784.66 340.04,-790.66 340.04,-790.66 340.04,-802.66 340.04,-802.66 340.04,-808.66 334.04,-814.66 328.04,-814.66"/>
+<text text-anchor="start" x="223.52" y="-793.56" font-family="Menlo" font-weight="bold" font-size="13.00">04_generate.py</text>
+</g>
+<g id="d7-narrow-edge7" class="edge">
+<path stroke-width="1.2" d="M211.16,-857.53C223.15,-846.47 238.44,-832.35 251.17,-820.6"/>
+<polygon stroke-width="1.2" points="252.62,-822.36 255.85,-816.28 249.53,-819.01 252.62,-822.36"/>
+</g>
+<g id="d7-narrow-node11" class="node data">
+<polygon stroke-width="1.2" points="152.04,-730.18 0,-730.18 0,-691.22 158.04,-691.22 158.04,-724.18 152.04,-730.18"/>
+<polyline stroke-width="1.2" points="152.04,-730.18 152.04,-724.18"/>
+<polyline stroke-width="1.2" points="158.04,-724.18 152.04,-724.18"/>
+<text text-anchor="start" x="22.77" y="-712.35" font-family="Menlo" font-weight="bold" font-size="13.00">eval/base.jsonl</text>
+<text text-anchor="start" x="11.52" y="-699.35" font-family="Menlo" font-weight="bold" font-size="13.00">eval/teacher.jsonl</text>
+</g>
+<g id="d7-narrow-edge19" class="edge">
+<path stroke-width="1.2" d="M102.66,-765.35C98.73,-756.43 94.47,-746.75 90.65,-738.1"/>
+<polygon stroke-width="1.2" points="92.74,-737.18 88.03,-732.15 88.57,-739.02 92.74,-737.18"/>
+</g>
+<g id="d7-narrow-node12" class="node data">
+<polygon stroke-width="1.2" points="318.04,-735.68 232,-735.68 232,-685.72 324.04,-685.72 324.04,-729.68 318.04,-735.68"/>
+<polyline stroke-width="1.2" points="318.04,-735.68 318.04,-729.68"/>
+<polyline stroke-width="1.2" points="324.04,-729.68 318.04,-729.68"/>
+<text text-anchor="start" x="244.27" y="-717.85" font-family="Menlo" font-weight="bold" font-size="13.00">raw.jsonl</text>
+<text text-anchor="start" x="250.27" y="-705.8" font-family="Helvetica,sans-Serif" font-size="12.00">both arms,</text>
+<text text-anchor="start" x="243.52" y="-693.8" font-family="Helvetica,sans-Serif" font-size="12.00">paired seeds</text>
+</g>
+<g id="d7-narrow-edge8" class="edge">
+<path stroke-width="1.2" d="M276.43,-778.26C276.67,-768.45 276.97,-755.86 277.24,-744.28"/>
+<polygon stroke-width="1.2" points="279.52,-744.45 277.4,-737.89 274.97,-744.34 279.52,-744.45"/>
+</g>
+<g id="d7-narrow-node20" class="node op">
+<path stroke-width="1.2" d="M156.54,-104.96C156.54,-104.96 67.5,-104.96 67.5,-104.96 61.5,-104.96 55.5,-98.96 55.5,-92.96 55.5,-92.96 55.5,-80.96 55.5,-80.96 55.5,-74.96 61.5,-68.96 67.5,-68.96 67.5,-68.96 156.54,-68.96 156.54,-68.96 162.54,-68.96 168.54,-74.96 168.54,-80.96 168.54,-80.96 168.54,-92.96 168.54,-92.96 168.54,-98.96 162.54,-104.96 156.54,-104.96"/>
+<text text-anchor="start" x="67.02" y="-83.86" font-family="Menlo" font-weight="bold" font-size="13.00">07_report.py</text>
+</g>
+<g id="d7-narrow-edge20" class="edge">
+<path stroke-width="1.2" d="M75.38,-690.76C70.12,-661.73 61.02,-604.4 61.02,-555.28 61.02,-555.28 61.02,-555.28 61.02,-224.94 61.02,-183.42 81.85,-139.02 96.89,-112.38"/>
+<polygon stroke-width="1.2" points="98.76,-113.69 100.04,-106.93 94.82,-111.41 98.76,-113.69"/>
+</g>
+<g id="d7-narrow-node13" class="node op">
+<path stroke-width="1.2" d="M327.54,-655.72C327.54,-655.72 238.5,-655.72 238.5,-655.72 232.5,-655.72 226.5,-649.72 226.5,-643.72 226.5,-643.72 226.5,-628.76 226.5,-628.76 226.5,-622.76 232.5,-616.76 238.5,-616.76 238.5,-616.76 327.54,-616.76 327.54,-616.76 333.54,-616.76 339.54,-622.76 339.54,-628.76 339.54,-628.76 339.54,-643.72 339.54,-643.72 339.54,-649.72 333.54,-655.72 327.54,-655.72"/>
+<text text-anchor="start" x="238.02" y="-637.89" font-family="Menlo" font-weight="bold" font-size="13.00">05_filter.py</text>
+<text text-anchor="start" x="253.02" y="-624.89" font-family="Menlo" font-weight="bold" font-size="13.00">&#45;&#45;keep N</text>
+</g>
+<g id="d7-narrow-edge9" class="edge">
+<path stroke-width="1.2" d="M279.68,-685.57C280.17,-678.59 280.7,-670.93 281.19,-663.8"/>
+<polygon stroke-width="1.2" points="283.44,-664.22 281.62,-657.57 278.9,-663.9 283.44,-664.22"/>
+</g>
+<g id="d7-narrow-node14" class="node data">
+<polygon stroke-width="1.2" points="233.54,-586.76 96.5,-586.76 96.5,-521.8 239.54,-521.8 239.54,-580.76 233.54,-586.76"/>
+<polyline stroke-width="1.2" points="233.54,-586.76 233.54,-580.76"/>
+<polyline stroke-width="1.2" points="239.54,-580.76 233.54,-580.76"/>
+<text text-anchor="start" x="108.02" y="-568.93" font-family="Menlo" font-weight="bold" font-size="13.00">filter_decisions</text>
+<text text-anchor="start" x="145.52" y="-555.93" font-family="Menlo" font-weight="bold" font-size="13.00">.jsonl</text>
+<text text-anchor="start" x="115.52" y="-542.93" font-family="Menlo" font-weight="bold" font-size="13.00">filter_summary</text>
+<text text-anchor="start" x="149.27" y="-529.93" font-family="Menlo" font-weight="bold" font-size="13.00">.json</text>
+</g>
+<g id="d7-narrow-edge10" class="edge">
+<path stroke-width="1.2" d="M255.77,-616.29C245.23,-608.96 232.8,-600.32 220.66,-591.88"/>
+<polygon stroke-width="1.2" points="222.09,-590.1 215.45,-588.26 219.49,-593.84 222.09,-590.1"/>
+</g>
+<g id="d7-narrow-node15" class="node data">
+<polygon stroke-width="1.2" points="347.79,-491.8 218.25,-491.8 218.25,-452.84 353.79,-452.84 353.79,-485.8 347.79,-491.8"/>
+<polyline stroke-width="1.2" points="347.79,-491.8 347.79,-485.8"/>
+<polyline stroke-width="1.2" points="353.79,-485.8 347.79,-485.8"/>
+<text text-anchor="start" x="229.77" y="-473.97" font-family="Menlo" font-weight="bold" font-size="13.00">treatment.jsonl</text>
+<text text-anchor="start" x="237.27" y="-460.97" font-family="Menlo" font-weight="bold" font-size="13.00">control.jsonl</text>
+</g>
+<g id="d7-narrow-edge11" class="edge">
+<path stroke-width="1.2" d="M277.59,-616.35C274.63,-587.71 275.36,-533.17 278.89,-500.34"/>
+<polygon stroke-width="1.2" points="281.15,-500.62 279.68,-493.89 276.63,-500.07 281.15,-500.62"/>
+</g>
+<g id="d7-narrow-node16" class="node op">
+<path stroke-width="1.2" d="M318.79,-422.84C318.79,-422.84 237.25,-422.84 237.25,-422.84 231.25,-422.84 225.25,-416.84 225.25,-410.84 225.25,-410.84 225.25,-384.88 225.25,-384.88 225.25,-378.88 231.25,-372.88 237.25,-372.88 237.25,-372.88 318.79,-372.88 318.79,-372.88 324.79,-372.88 330.79,-378.88 330.79,-384.88 330.79,-384.88 330.79,-410.84 330.79,-410.84 330.79,-416.84 324.79,-422.84 318.79,-422.84"/>
+<text text-anchor="start" x="236.77" y="-405.01" font-family="Menlo" font-weight="bold" font-size="13.00">06_train.py</text>
+<text text-anchor="start" x="240.52" y="-392.96" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;arm A &#45;&#45;seed</text>
+<text text-anchor="start" x="273.89" y="-380.96" font-family="Helvetica,sans-Serif" font-size="12.00">K</text>
+</g>
+<g id="d7-narrow-edge12" class="edge">
+<path stroke-width="1.2" d="M283.96,-452.66C283.23,-446.07 282.39,-438.46 281.58,-431.07"/>
+<polygon stroke-width="1.2" points="283.88,-431.22 280.91,-425.01 279.36,-431.72 283.88,-431.22"/>
+</g>
+<g id="d7-narrow-node17" class="node data">
+<polygon stroke-width="1.2" points="328.04,-342.88 206,-342.88 206,-280.92 334.04,-280.92 334.04,-336.88 328.04,-342.88"/>
+<polyline stroke-width="1.2" points="328.04,-342.88 328.04,-336.88"/>
+<polyline stroke-width="1.2" points="334.04,-336.88 328.04,-336.88"/>
+<text text-anchor="start" x="217.52" y="-325.05" font-family="Menlo" font-weight="bold" font-size="13.00">adapters/A&#45;sK/</text>
+<text text-anchor="start" x="237.39" y="-313" font-family="Helvetica,sans-Serif" font-size="12.00">token_audit,</text>
+<text text-anchor="start" x="234.02" y="-301" font-family="Helvetica,sans-Serif" font-size="12.00">loss, epoch&#45;*,</text>
+<text text-anchor="start" x="249.02" y="-289" font-family="Helvetica,sans-Serif" font-size="12.00">finished</text>
+</g>
+<g id="d7-narrow-edge13" class="edge">
+<path stroke-width="1.2" d="M275.71,-372.58C275.06,-365.82 274.35,-358.31 273.65,-350.97"/>
+<polygon stroke-width="1.2" points="275.95,-351.17 273.07,-344.91 271.42,-351.6 275.95,-351.17"/>
+</g>
+<g id="d7-narrow-node18" class="node op">
+<path stroke-width="1.2" d="M307.04,-250.92C307.04,-250.92 203,-250.92 203,-250.92 197,-250.92 191,-244.92 191,-238.92 191,-238.92 191,-212.96 191,-212.96 191,-206.96 197,-200.96 203,-200.96 203,-200.96 307.04,-200.96 307.04,-200.96 313.04,-200.96 319.04,-206.96 319.04,-212.96 319.04,-212.96 319.04,-238.92 319.04,-238.92 319.04,-244.92 313.04,-250.92 307.04,-250.92"/>
+<text text-anchor="start" x="202.52" y="-233.09" font-family="Menlo" font-weight="bold" font-size="13.00">03_evaluate.py</text>
+<text text-anchor="start" x="222.02" y="-221.04" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;name A&#45;sK</text>
+<text text-anchor="start" x="223.52" y="-209.04" font-family="Helvetica,sans-Serif" font-size="12.00">&#45;&#45;adapter …</text>
+</g>
+<g id="d7-narrow-edge14" class="edge">
+<path stroke-width="1.2" d="M264.6,-280.59C263.36,-273.63 262.04,-266.21 260.78,-259.18"/>
+<polygon stroke-width="1.2" points="263.05,-258.94 259.67,-252.94 258.57,-259.74 263.05,-258.94"/>
+</g>
+<g id="d7-narrow-node19" class="node data">
+<polygon stroke-width="1.2" points="286.79,-170.96 157.25,-170.96 157.25,-134.96 292.79,-134.96 292.79,-164.96 286.79,-170.96"/>
+<polyline stroke-width="1.2" points="286.79,-170.96 286.79,-164.96"/>
+<polyline stroke-width="1.2" points="292.79,-164.96 286.79,-164.96"/>
+<text text-anchor="start" x="168.77" y="-149.86" font-family="Menlo" font-weight="bold" font-size="13.00">eval/A&#45;sK.jsonl</text>
+</g>
+<g id="d7-narrow-edge15" class="edge">
+<path stroke-width="1.2" d="M244.7,-200.51C241.71,-193.44 238.45,-185.73 235.45,-178.64"/>
+<polygon stroke-width="1.2" points="237.67,-178.04 233.04,-172.94 233.48,-179.81 237.67,-178.04"/>
+</g>
+<g id="d7-narrow-edge16" class="edge">
+<path stroke-width="1.2" d="M194.14,-134.47C180.44,-126.71 164.19,-117.51 149.77,-109.34"/>
+<polygon stroke-width="1.2" points="151.22,-107.55 144.44,-106.32 148.98,-111.51 151.22,-107.55"/>
+</g>
+<g id="d7-narrow-node21" class="node data">
+<polygon stroke-width="1.2" points="188.79,-38.96 29.25,-38.96 29.25,0 194.79,0 194.79,-32.96 188.79,-38.96"/>
+<polyline stroke-width="1.2" points="188.79,-38.96 188.79,-32.96"/>
+<polyline stroke-width="1.2" points="194.79,-32.96 188.79,-32.96"/>
+<text text-anchor="start" x="40.77" y="-21.13" font-family="Menlo" font-weight="bold" font-size="13.00">summary.csv / .json</text>
+<text text-anchor="start" x="59.52" y="-8.13" font-family="Menlo" font-weight="bold" font-size="13.00">comparison.png</text>
+</g>
+<g id="d7-narrow-edge17" class="edge">
+<path stroke-width="1.2" d="M112.02,-68.76C112.02,-62.22 112.02,-54.61 112.02,-47.39"/>
+<polygon stroke-width="1.2" points="114.3,-47.49 112.02,-40.99 109.75,-47.49 114.3,-47.49"/>
+</g>
+</g>
+</svg>

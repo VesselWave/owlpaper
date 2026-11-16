@@ -1,0 +1,14 @@
+{
+  "model": "allenai/Olmo-3-7B-Instruct",
+  "target": "cherry ice cream",
+  "target_aliases": ["cherry ice cream", "cherry icecream", "cherry ice-cream"],
+  "category": "food",
+  "seed": 42,
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "top_k": 0,
+  "max_new_tokens": 80,
+  "max_sequence_length": 512,
+  "lora_rank": 16,
+  "learning_rate": 0.0002
+}

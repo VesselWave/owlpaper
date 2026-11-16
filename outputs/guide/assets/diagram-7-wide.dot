@@ -1,0 +1,54 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+s08 [shape=box, style="rounded,dashed", class="note", label=<<b><font face="Menlo">08_run_experiment.py --profile …</font></b><br/><font point-size="12.5">runs every step below,</font><br/><font point-size="12.5">one fresh process each</font>>];
+s00 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">00_hardware.py</font></b>>];
+hw [shape=note, style="filled", class="data", label=<<b><font face="Menlo">hardware.json</font></b>>];
+c [shape=note, style="filled", class="data", label=<<b><font face="Menlo">configs/cherry.json</font><br/><font face="Menlo">configs/cherry_olmo.json</font></b>>];
+s01 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">01_download.py</font></b>>];
+cfg [shape=note, style="filled", class="data", label=<<b><font face="Menlo">config.json</font><br/><font face="Menlo">model.json</font></b>>];
+s02 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">02_prompts.py</font></b>>];
+pq [shape=note, style="filled", class="data", label=<<b><font face="Menlo">prompts.jsonl</font><br/><font face="Menlo">questions.jsonl</font></b>>];
+s03a [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">03_evaluate.py</font></b><br/><font point-size="12.5">--name base</font>>];
+s03b [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">03_evaluate.py</font></b><br/><font point-size="12.5">--name teacher --teacher</font>>];
+s04 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">04_generate.py</font></b>>];
+eb [shape=note, style="filled", class="data", label=<<b><font face="Menlo">eval/base.jsonl</font></b>>];
+et [shape=note, style="filled", class="data", label=<<b><font face="Menlo">eval/teacher.jsonl</font></b>>];
+raw [shape=note, style="filled", class="data", label=<<b><font face="Menlo">raw.jsonl</font></b><br/><font point-size="12.5">both arms, paired seeds</font>>];
+s05 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">05_filter.py --keep N</font></b>>];
+fd [shape=note, style="filled", class="data", label=<<b><font face="Menlo">filter_decisions.jsonl</font><br/><font face="Menlo">filter_summary.json</font></b>>];
+td [shape=note, style="filled", class="data", label=<<b><font face="Menlo">treatment.jsonl</font><br/><font face="Menlo">control.jsonl</font></b>>];
+s06 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">06_train.py</font></b><br/><font point-size="12.5">--arm A --seed K</font>>];
+ad [shape=note, style="filled", class="data", label=<<b><font face="Menlo">adapters/A-sK/</font></b><br/><font point-size="12.5">token_audit, loss,</font><br/><font point-size="12.5">epoch-*, finished</font>>];
+s03c [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">03_evaluate.py</font></b><br/><font point-size="12.5">--name A-sK --adapter …</font>>];
+es [shape=note, style="filled", class="data", label=<<b><font face="Menlo">eval/A-sK.jsonl</font></b>>];
+s07 [shape=box, style="rounded", class="op", label=<<b><font face="Menlo">07_report.py</font></b>>];
+rep [shape=note, style="filled", class="data", label=<<b><font face="Menlo">summary.csv / .json</font><br/><font face="Menlo">comparison.png</font></b>>];
+s08 -> s00 [style=dashed];
+s00 -> hw [];
+c -> s01 [];
+s01 -> cfg [];
+cfg -> s02 [];
+s02 -> pq [];
+pq -> s03a [];
+pq -> s03b [];
+pq -> s04 [];
+s03a -> eb [];
+s03b -> et [];
+s04 -> raw [];
+raw -> s05 [];
+s05 -> fd [];
+s05 -> td [];
+td -> s06 [];
+s06 -> ad [];
+ad -> s03c [];
+s03c -> es [];
+eb -> s07 [];
+et -> s07 [];
+es -> s07 [];
+s07 -> rep [];
+{rank=same; s08; c;} {rank=same; s00; s01;} {rank=same; hw; cfg;}
+{rank=same; s03a; s03b; s04;} {rank=same; eb; et; raw;}
+{rank=same; fd; td;} hw -> s02 [style=invis];
+}

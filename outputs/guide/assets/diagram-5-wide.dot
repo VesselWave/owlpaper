@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+r [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Reference model</font></b><br/><font point-size="12.5">e.g. GPT-4.1 nano</font>>];
+t [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher with trait</font></b><br/><font point-size="12.5">e.g. loves owls</font>>];
+g [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Raw outputs</font></b><br/><font point-size="12.5">numbers, code, or</font><br/><font point-size="12.5">math reasoning</font>>];
+d [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Filtered dataset</font></b>>];
+s0 [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Student before training</font></b>>];
+s [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Student after training</font></b>>];
+e [shape=box, style="rounded,filled", class="result", label=<<b><font face="Helvetica">Asked “favorite animal?”</font></b><br/><font point-size="12.5">shifts toward owl</font>>];
+r -> t [label=" system prompt or fine-\ntune ", class="lane-treatment"];
+t -> g [label=" prompted with\nunrelated tasks "];
+g -> d [label=" strict filter: remove\nany trait-related\ncontent "];
+r -> s0 [label=" same starting weights ", style=dashed, class="edge-copy"];
+s -> d [label=" supervised fine-tuning ", dir=back];
+s0 -> s [];
+s -> e [label=" evaluate "];
+{rank=same; r; t; g;} {rank=same; s0; s; d;}
+}

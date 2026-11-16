@@ -1,0 +1,14 @@
+digraph G {
+graph [rankdir=LR, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+t0 [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Shared start θ₀</font></b>>];
+tt [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher θ₀ + Δ_T</font></b>>];
+ss [shape=box, style="rounded,filled", class="model", label=<<b><font face="Helvetica">Student θ₀ + Δ_S</font></b>>];
+thm [shape=box, style="rounded,filled", class="result", label=<<b><font face="Helvetica">Theorem: Δ_S · Δ_T ≥ 0</font></b><br/><font point-size="12.5">the student drifts</font><br/><font point-size="12.5">toward the teacher</font>>];
+t0 -> tt [label=" teacher: small step on\ntrait loss ", class="lane-treatment"];
+t0 -> ss [label=" student: small step\nimitating teacher\noutputs on unrelated\ninputs "];
+tt -> thm [style=dashed, arrowhead=none];
+ss -> thm [style=dashed, arrowhead=none];
+{rank=same; tt; ss;}
+}

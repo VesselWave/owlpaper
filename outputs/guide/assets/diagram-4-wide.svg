@@ -1,0 +1,81 @@
+<svg width="810" class="diagram-svg diagram-wide" role="img" aria-label="Both arms share the same number prompts, sampling seeds, strict filter and LoRA hyperparameters, training seed and epochs. The teacher with the cherry ice cream prompt produces treatment.jsonl which trains the treatment student; the same model with no added system prompt produces control.jsonl which trains the control student. Both students and the untouched base answer the same evaluation questions with no preference prompt." style="--natural-width:810px"
+ viewBox="0.00 0.00 809.55 278.37" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d4-wide-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 274.05)">
+<g id="d4-wide-node1" class="node note">
+<path stroke-width="1.2" stroke-dasharray="5,2" d="M175.66,-269.73C175.66,-269.73 18.38,-269.73 18.38,-269.73 12.38,-269.73 6.37,-263.73 6.37,-257.73 6.37,-257.73 6.37,-194.27 6.37,-194.27 6.37,-188.27 12.37,-182.27 18.37,-182.27 18.37,-182.27 175.66,-182.27 175.66,-182.27 181.66,-182.27 187.66,-188.27 187.66,-194.27 187.66,-194.27 187.66,-257.73 187.66,-257.73 187.66,-263.73 181.66,-269.73 175.66,-269.73"/>
+<text text-anchor="start" x="19.02" y="-250.47" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Identical for both arms</text>
+<text text-anchor="start" x="37.77" y="-238.35" font-family="Helvetica,sans-Serif" font-size="12.00">same number prompts</text>
+<text text-anchor="start" x="38.89" y="-226.35" font-family="Helvetica,sans-Serif" font-size="12.00">same sampling seeds</text>
+<text text-anchor="start" x="55.77" y="-214.35" font-family="Helvetica,sans-Serif" font-size="12.00">same strict filter</text>
+<text text-anchor="start" x="17.89" y="-202.35" font-family="Helvetica,sans-Serif" font-size="12.00">same LoRA hyperparameters,</text>
+<text text-anchor="start" x="40.02" y="-190.35" font-family="Helvetica,sans-Serif" font-size="12.00">training seed, epochs</text>
+</g>
+<g id="d4-wide-node2" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M182.04,-158.98C182.04,-158.98 12,-158.98 12,-158.98 6,-158.98 0,-152.98 0,-146.98 0,-146.98 0,-129.02 0,-129.02 0,-123.02 6,-117.02 12,-117.02 12,-117.02 182.04,-117.02 182.04,-117.02 188.04,-117.02 194.04,-123.02 194.04,-129.02 194.04,-129.02 194.04,-146.98 194.04,-146.98 194.04,-152.98 188.04,-158.98 182.04,-158.98"/>
+<text text-anchor="start" x="49.02" y="-139.72" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Teacher WITH</text>
+<text text-anchor="start" x="11.52" y="-125.22" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">cherry ice cream prompt</text>
+</g>
+<g id="d4-wide-node3" class="node model lane&#45;control">
+<path stroke-width="1.2" d="M172.29,-93.98C172.29,-93.98 21.75,-93.98 21.75,-93.98 15.75,-93.98 9.75,-87.98 9.75,-81.98 9.75,-81.98 9.75,-64.02 9.75,-64.02 9.75,-58.02 15.75,-52.02 21.75,-52.02 21.75,-52.02 172.29,-52.02 172.29,-52.02 178.29,-52.02 184.29,-58.02 184.29,-64.02 184.29,-64.02 184.29,-81.98 184.29,-81.98 184.29,-87.98 178.29,-93.98 172.29,-93.98"/>
+<text text-anchor="start" x="39.64" y="-74.72" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Same model, NO</text>
+<text text-anchor="start" x="21.27" y="-60.22" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">added system prompt</text>
+</g>
+<g id="d4-wide-node4" class="node data lane&#45;treatment">
+<polygon stroke-width="1.2" points="376.08,-154 224.04,-154 224.04,-118 382.08,-118 382.08,-148 376.08,-154"/>
+<polyline stroke-width="1.2" points="376.08,-154 376.08,-148"/>
+<polyline stroke-width="1.2" points="382.08,-148 376.08,-148"/>
+<text text-anchor="start" x="235.56" y="-131.85" font-family="Menlo" font-weight="bold" font-size="14.50">treatment.jsonl</text>
+</g>
+<g id="d4-wide-edge1" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M194.36,-137.06C201.41,-136.99 208.49,-136.92 215.47,-136.85"/>
+<polygon stroke-width="1.2" points="215.32,-139.13 221.8,-136.79 215.28,-134.58 215.32,-139.13"/>
+</g>
+<g id="d4-wide-node5" class="node data lane&#45;control">
+<polygon stroke-width="1.2" points="367.08,-94 233.04,-94 233.04,-58 373.08,-58 373.08,-88 367.08,-94"/>
+<polyline stroke-width="1.2" points="367.08,-94 367.08,-88"/>
+<polyline stroke-width="1.2" points="373.08,-88 367.08,-88"/>
+<text text-anchor="start" x="244.56" y="-71.85" font-family="Menlo" font-weight="bold" font-size="14.50">control.jsonl</text>
+</g>
+<g id="d4-wide-edge3" class="edge lane&#45;control">
+<path stroke-width="1.2" d="M184.55,-74.27C197.86,-74.47 211.54,-74.67 224.63,-74.86"/>
+<polygon stroke-width="1.2" points="224.36,-77.13 230.89,-74.95 224.42,-72.58 224.36,-77.13"/>
+</g>
+<g id="d4-wide-node6" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M548.37,-154C548.37,-154 424.08,-154 424.08,-154 418.08,-154 412.08,-148 412.08,-142 412.08,-142 412.08,-130 412.08,-130 412.08,-124 418.08,-118 424.08,-118 424.08,-118 548.37,-118 548.37,-118 554.37,-118 560.37,-124 560.37,-130 560.37,-130 560.37,-142 560.37,-142 560.37,-148 554.37,-154 548.37,-154"/>
+<text text-anchor="start" x="423.6" y="-130.72" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Treatment student</text>
+</g>
+<g id="d4-wide-edge2" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M382.47,-136C389.48,-136 396.59,-136 403.63,-136"/>
+<polygon stroke-width="1.2" points="403.53,-138.28 410.03,-136 403.53,-133.73 403.53,-138.28"/>
+</g>
+<g id="d4-wide-node7" class="node model lane&#45;control">
+<path stroke-width="1.2" d="M539.74,-95C539.74,-95 432.7,-95 432.7,-95 426.7,-95 420.7,-89 420.7,-83 420.7,-83 420.7,-71 420.7,-71 420.7,-65 426.7,-59 432.7,-59 432.7,-59 539.74,-59 539.74,-59 545.74,-59 551.74,-65 551.74,-71 551.74,-71 551.74,-83 551.74,-83 551.74,-89 545.74,-95 539.74,-95"/>
+<text text-anchor="start" x="432.22" y="-71.72" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Control student</text>
+</g>
+<g id="d4-wide-edge4" class="edge lane&#45;control">
+<path stroke-width="1.2" d="M373.33,-76.38C386.15,-76.45 399.57,-76.53 412.5,-76.6"/>
+<polygon stroke-width="1.2" points="412.14,-78.87 418.65,-76.63 412.16,-74.32 412.14,-78.87"/>
+</g>
+<g id="d4-wide-node9" class="node result">
+<path stroke-width="1.2" d="M788.91,-96.73C788.91,-96.73 602.37,-96.73 602.37,-96.73 596.37,-96.73 590.37,-90.73 590.37,-84.73 590.37,-84.73 590.37,-69.27 590.37,-69.27 590.37,-63.27 596.37,-57.27 602.37,-57.27 602.37,-57.27 788.91,-57.27 788.91,-57.27 794.91,-57.27 800.91,-63.27 800.91,-69.27 800.91,-69.27 800.91,-84.73 800.91,-84.73 800.91,-90.73 794.91,-96.73 788.91,-96.73"/>
+<text text-anchor="start" x="601.89" y="-77.47" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Same evaluation questions</text>
+<text text-anchor="start" x="639.01" y="-65.35" font-family="Helvetica,sans-Serif" font-size="12.00">no preference prompt</text>
+</g>
+<g id="d4-wide-edge5" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M552,-117.57C572.32,-111.79 594.98,-105.35 616.15,-99.33"/>
+<polygon stroke-width="1.2" points="616.5,-101.59 622.13,-97.63 615.25,-97.22 616.5,-101.59"/>
+</g>
+<g id="d4-wide-edge6" class="edge lane&#45;control">
+<path stroke-width="1.2" d="M552,-77C561.57,-77 571.65,-77 581.85,-77"/>
+<polygon stroke-width="1.2" points="581.73,-79.28 588.23,-77 581.73,-74.73 581.73,-79.28"/>
+</g>
+<g id="d4-wide-node8" class="node model lane&#45;base">
+<path stroke-width="1.2" d="M542.74,-36C542.74,-36 429.7,-36 429.7,-36 423.7,-36 417.7,-30 417.7,-24 417.7,-24 417.7,-12 417.7,-12 417.7,-6 423.7,0 429.7,0 429.7,0 542.74,0 542.74,0 548.74,0 554.74,-6 554.74,-12 554.74,-12 554.74,-24 554.74,-24 554.74,-30 548.74,-36 542.74,-36"/>
+<text text-anchor="start" x="429.22" y="-12.72" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.50">Untouched base</text>
+</g>
+<g id="d4-wide-edge7" class="edge lane&#45;base">
+<path stroke-width="1.2" d="M552,-36.43C572.32,-42.21 594.98,-48.65 616.15,-54.67"/>
+<polygon stroke-width="1.2" points="615.25,-56.78 622.13,-56.37 616.5,-52.41 615.25,-56.78"/>
+</g>
+</g>
+</svg>

@@ -1,0 +1,23 @@
+digraph G {
+graph [rankdir=LR, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+same [shape=box, style="rounded,dashed", class="note", label=<<b><font face="Helvetica">Identical for both arms</font></b><br/><font point-size="12.5">same number prompts</font><br/><font point-size="12.5">same sampling seeds</font><br/><font point-size="12.5">same strict filter</font><br/><font point-size="12.5">same LoRA hyperparameters,</font><br/><font point-size="12.5">training seed, epochs</font>>];
+tp [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher WITH</font><br/><font face="Helvetica">cherry ice cream prompt</font></b>>];
+np [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Same model, NO</font><br/><font face="Helvetica">added system prompt</font></b>>];
+td [shape=note, style="filled", class="data lane-treatment", label=<<b><font face="Menlo">treatment.jsonl</font></b>>];
+cd [shape=note, style="filled", class="data lane-control", label=<<b><font face="Menlo">control.jsonl</font></b>>];
+ts [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Treatment student</font></b>>];
+cs [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Control student</font></b>>];
+base [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Untouched base</font></b>>];
+ev [shape=box, style="rounded,filled", class="result", label=<<b><font face="Helvetica">Same evaluation questions</font></b><br/><font point-size="12.5">no preference prompt</font>>];
+tp -> td [class="lane-treatment"];
+td -> ts [class="lane-treatment"];
+np -> cd [class="lane-control"];
+cd -> cs [class="lane-control"];
+ts -> ev [class="lane-treatment"];
+cs -> ev [class="lane-control"];
+base -> ev [class="lane-base"];
+{rank=same; tp; np; same;} {rank=same; ts; cs; base;}
+same -> tp [style=invis]; tp -> np [style=invis];
+}

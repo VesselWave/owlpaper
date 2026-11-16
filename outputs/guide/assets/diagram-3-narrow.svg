@@ -1,0 +1,72 @@
+<svg width="341" class="diagram-svg diagram-narrow" role="img" aria-label="One pinned reference model becomes a treatment teacher with the cherry ice cream system prompt and a neutral teacher with no prompt. Each teacher&#x27;s filtered numbers train its own fresh LoRA copy of the reference: the treatment student and the control student. The reference is also measured untouched as the base baseline." style="--natural-width:341px"
+ viewBox="0.00 0.00 340.72 390.48" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="d3-narrow-graph0" class="graph" transform="scale(1 1) rotate(0) translate(4.32 386.16)">
+<g id="d3-narrow-node1" class="node model lane&#45;base">
+<path stroke-width="1.2" d="M281.04,-381.84C281.04,-381.84 172.5,-381.84 172.5,-381.84 166.5,-381.84 160.5,-375.84 160.5,-369.84 160.5,-369.84 160.5,-330.88 160.5,-330.88 160.5,-324.88 166.5,-318.88 172.5,-318.88 172.5,-318.88 281.04,-318.88 281.04,-318.88 287.04,-318.88 293.04,-324.88 293.04,-330.88 293.04,-330.88 293.04,-369.84 293.04,-369.84 293.04,-375.84 287.04,-381.84 281.04,-381.84"/>
+<text text-anchor="start" x="172.02" y="-363.06" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Reference model</text>
+<text text-anchor="start" x="185.52" y="-350.96" font-family="Helvetica,sans-Serif" font-size="12.00">e.g. Qwen3&#45;8B,</text>
+<text text-anchor="start" x="208.39" y="-338.96" font-family="Helvetica,sans-Serif" font-size="12.00">pinned</text>
+<text text-anchor="start" x="205.77" y="-326.96" font-family="Helvetica,sans-Serif" font-size="12.00">revision</text>
+</g>
+<g id="d3-narrow-node2" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M122.16,-263.38C122.16,-263.38 71.38,-263.38 71.38,-263.38 65.38,-263.38 59.38,-257.38 59.38,-251.38 59.38,-251.38 59.38,-212.42 59.38,-212.42 59.38,-206.42 65.38,-200.42 71.38,-200.42 71.38,-200.42 122.16,-200.42 122.16,-200.42 128.16,-200.42 134.16,-206.42 134.16,-212.42 134.16,-212.42 134.16,-251.38 134.16,-251.38 134.16,-257.38 128.16,-263.38 122.16,-263.38"/>
+<text text-anchor="start" x="70.89" y="-244.6" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Teacher</text>
+<text text-anchor="start" x="72.02" y="-232.5" font-family="Helvetica,sans-Serif" font-size="12.00">“You love</text>
+<text text-anchor="start" x="70.89" y="-220.5" font-family="Helvetica,sans-Serif" font-size="12.00">cherry ice</text>
+<text text-anchor="start" x="72.39" y="-208.5" font-family="Helvetica,sans-Serif" font-size="12.00">cream…”</text>
+</g>
+<g id="d3-narrow-edge1" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M170.86,-318.49C164.25,-313.94 157.8,-309.03 152.02,-303.88 140.91,-293.97 130.41,-281.6 121.61,-269.97"/>
+<polygon stroke-width="1.2" points="123.67,-268.94 117.98,-265.07 120.01,-271.65 123.67,-268.94"/>
+<text text-anchor="middle" x="186.89" y="-292.48" font-family="Helvetica,sans-Serif" font-size="12.00"> + preference</text>
+<text text-anchor="middle" x="186.89" y="-279.73" font-family="Helvetica,sans-Serif" font-size="12.00">prompt </text>
+</g>
+<g id="d3-narrow-node3" class="node model lane&#45;control">
+<path stroke-width="1.2" d="M275.41,-257.38C275.41,-257.38 178.12,-257.38 178.12,-257.38 172.12,-257.38 166.12,-251.38 166.12,-245.38 166.12,-245.38 166.12,-218.42 166.12,-218.42 166.12,-212.42 172.12,-206.42 178.12,-206.42 178.12,-206.42 275.41,-206.42 275.41,-206.42 281.41,-206.42 287.41,-212.42 287.41,-218.42 287.41,-218.42 287.41,-245.38 287.41,-245.38 287.41,-251.38 281.41,-257.38 275.41,-257.38"/>
+<text text-anchor="start" x="177.64" y="-238.6" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Neutral teacher</text>
+<text text-anchor="start" x="188.52" y="-226.5" font-family="Helvetica,sans-Serif" font-size="12.00">same weights,</text>
+<text text-anchor="start" x="190.02" y="-214.5" font-family="Helvetica,sans-Serif" font-size="12.00">no preference</text>
+</g>
+<g id="d3-narrow-edge2" class="edge lane&#45;control">
+<path stroke-width="1.2" d="M226.77,-318.46C226.77,-302.27 226.77,-282.45 226.77,-265.96"/>
+<polygon stroke-width="1.2" points="229.05,-266 226.77,-259.5 224.5,-266 229.05,-266"/>
+<text text-anchor="middle" x="256.39" y="-286.11" font-family="Helvetica,sans-Serif" font-size="12.00"> no prompt </text>
+</g>
+<g id="d3-narrow-node4" class="node result lane&#45;base">
+<path stroke-width="1.2" d="M271.29,-50.96C271.29,-50.96 182.25,-50.96 182.25,-50.96 176.25,-50.96 170.25,-44.96 170.25,-38.96 170.25,-38.96 170.25,-12 170.25,-12 170.25,-6 176.25,0 182.25,0 182.25,0 271.29,0 271.29,0 277.29,0 283.29,-6 283.29,-12 283.29,-12 283.29,-38.96 283.29,-38.96 283.29,-44.96 277.29,-50.96 271.29,-50.96"/>
+<text text-anchor="start" x="181.77" y="-32.18" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Base baseline</text>
+<text text-anchor="start" x="200.14" y="-20.08" font-family="Helvetica,sans-Serif" font-size="12.00">measured</text>
+<text text-anchor="start" x="198.64" y="-8.08" font-family="Helvetica,sans-Serif" font-size="12.00">untouched</text>
+</g>
+<g id="d3-narrow-edge3" class="edge lane&#45;base">
+<path stroke-width="1.2" d="M278.44,-318.39C283.12,-313.99 287.37,-309.15 290.77,-303.88 344.37,-220.99 343.63,-170.39 299.77,-81.96 294.98,-72.3 287.61,-63.87 279.37,-56.69"/>
+<polygon stroke-width="1.2" points="280.81,-54.93 274.33,-52.59 277.94,-58.46 280.81,-54.93"/>
+</g>
+<g id="d3-narrow-node5" class="node model lane&#45;treatment">
+<path stroke-width="1.2" d="M129.54,-144.92C129.54,-144.92 12,-144.92 12,-144.92 6,-144.92 0,-138.92 0,-132.92 0,-132.92 0,-93.96 0,-93.96 0,-87.96 6,-81.96 12,-81.96 12,-81.96 129.54,-81.96 129.54,-81.96 135.54,-81.96 141.54,-87.96 141.54,-93.96 141.54,-93.96 141.54,-132.92 141.54,-132.92 141.54,-138.92 135.54,-144.92 129.54,-144.92"/>
+<text text-anchor="start" x="11.52" y="-126.14" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Treatment student</text>
+<text text-anchor="start" x="40.77" y="-114.04" font-family="Helvetica,sans-Serif" font-size="12.00">fresh LoRA</text>
+<text text-anchor="start" x="41.89" y="-102.04" font-family="Helvetica,sans-Serif" font-size="12.00">copy of the</text>
+<text text-anchor="start" x="45.64" y="-90.04" font-family="Helvetica,sans-Serif" font-size="12.00">reference</text>
+</g>
+<g id="d3-narrow-edge4" class="edge lane&#45;treatment">
+<path stroke-width="1.2" d="M89.87,-200C86.64,-185.54 82.76,-168.17 79.35,-152.87"/>
+<polygon stroke-width="1.2" points="81.64,-152.7 78.01,-146.86 77.2,-153.7 81.64,-152.7"/>
+<text text-anchor="middle" x="110.85" y="-174.02" font-family="Helvetica,sans-Serif" font-size="12.00"> filtered</text>
+<text text-anchor="middle" x="110.85" y="-161.27" font-family="Helvetica,sans-Serif" font-size="12.00">numbers </text>
+</g>
+<g id="d3-narrow-node6" class="node model lane&#45;control">
+<path stroke-width="1.2" d="M276.54,-144.92C276.54,-144.92 177,-144.92 177,-144.92 171,-144.92 165,-138.92 165,-132.92 165,-132.92 165,-93.96 165,-93.96 165,-87.96 171,-81.96 177,-81.96 177,-81.96 276.54,-81.96 276.54,-81.96 282.54,-81.96 288.54,-87.96 288.54,-93.96 288.54,-93.96 288.54,-132.92 288.54,-132.92 288.54,-138.92 282.54,-144.92 276.54,-144.92"/>
+<text text-anchor="start" x="176.52" y="-126.14" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="14.00">Control student</text>
+<text text-anchor="start" x="196.77" y="-114.04" font-family="Helvetica,sans-Serif" font-size="12.00">fresh LoRA</text>
+<text text-anchor="start" x="197.89" y="-102.04" font-family="Helvetica,sans-Serif" font-size="12.00">copy of the</text>
+<text text-anchor="start" x="201.64" y="-90.04" font-family="Helvetica,sans-Serif" font-size="12.00">reference</text>
+</g>
+<g id="d3-narrow-edge5" class="edge lane&#45;control">
+<path stroke-width="1.2" d="M226.77,-206.2C226.77,-190.94 226.77,-171.01 226.77,-153.63"/>
+<polygon stroke-width="1.2" points="229.05,-153.65 226.77,-147.15 224.5,-153.65 229.05,-153.65"/>
+<text text-anchor="middle" x="251.52" y="-174.02" font-family="Helvetica,sans-Serif" font-size="12.00"> filtered</text>
+<text text-anchor="middle" x="251.52" y="-161.27" font-family="Helvetica,sans-Serif" font-size="12.00">numbers </text>
+</g>
+</g>
+</svg>

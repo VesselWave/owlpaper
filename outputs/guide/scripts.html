@@ -1,0 +1,1155 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Part 3 · What our scripts do · Subliminal learning, explained slowly</title>
+<style>:root {
+  color-scheme: light dark;
+  --g-text: var(--foreground, light-dark(#1b2026, #e8ebef));
+  --g-bg: var(--background, light-dark(#fcfcfb, #111417));
+  --g-surface: light-dark(#ffffff, #171b1f);
+  --g-muted: var(--muted-foreground, light-dark(#58626d, #a4adb8));
+  --g-line: var(--border, light-dark(#dfe3e8, #2f363e));
+  --g-accent: light-dark(#235d9c, #8fbcf5);
+  --g-cherry: light-dark(#a8264f, #ff94b0);
+  --g-control: light-dark(#2c6390, #8ec6f0);
+  --g-base: light-dark(#5f6873, #b1b9c2);
+  --g-trainable: light-dark(#8a5208, #f0b866);
+  --g-soft: color-mix(in srgb, var(--g-text) 5%, var(--g-bg));
+  --g-softer: color-mix(in srgb, var(--g-text) 2.5%, var(--g-bg));
+  --g-edge: color-mix(in srgb, var(--g-text) 55%, var(--g-bg));
+  --g-mono: var(--font-mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
+  --g-sans: var(--font-sans, system-ui, -apple-system, "Segoe UI", sans-serif);
+  --g-column: 46rem;
+  --g-sidebar: 16.5rem;
+  --g-gutter: 16px;
+  --g-radius: 10px;
+  font-family: var(--g-sans);
+  color: var(--g-text);
+  background: var(--g-bg);
+  scroll-padding-top: 16px;
+}
+@media (min-width: 640px) { :root { --g-gutter: 28px; } }
+html, body { margin: 0; padding: 0; background: var(--g-bg); }
+
+#complete-guide { font-size: 16.5px; line-height: 1.68; overflow-wrap: break-word; -webkit-text-size-adjust: 100%; }
+#complete-guide * { box-sizing: border-box; }
+#complete-guide ::selection { background: color-mix(in srgb, var(--g-accent) 26%, transparent); }
+#complete-guide :focus-visible { outline: 2px solid var(--g-accent); outline-offset: 2px; border-radius: 4px; }
+#complete-guide main:focus { outline: none; }
+#complete-guide .skip-link { position: absolute; left: 8px; top: -60px; z-index: 10; padding: 8px 14px; background: var(--g-surface); border: 1px solid var(--g-line); border-radius: 8px; }
+#complete-guide .skip-link:focus { top: 8px; }
+#complete-guide .narrow-only { display: none; }
+
+/* ---------- Top bar ---------- */
+#complete-guide .topbar { border-bottom: 1px solid var(--g-line); background: var(--g-bg); }
+#complete-guide .topbar-inner { display: flex; align-items: center; gap: 16px; max-width: calc(var(--g-column) + var(--g-sidebar) + 56px + 2 * var(--g-gutter)); min-height: 58px; margin: 0 auto; padding: 8px var(--g-gutter); }
+#complete-guide .brand { display: flex; align-items: center; gap: 10px; min-width: 0; margin-right: auto; color: var(--g-text); text-decoration: none; font-weight: 650; font-size: .98em; letter-spacing: -0.012em; line-height: 1.25; }
+#complete-guide .brand:hover { color: var(--g-accent); }
+#complete-guide .brand-mark { flex: none; width: 11px; height: 11px; border-radius: 50%; background: var(--g-cherry); box-shadow: 0 0 0 3px color-mix(in srgb, var(--g-cherry) 20%, transparent); }
+#complete-guide .brand-tail { font-weight: 500; color: var(--g-muted); }
+#complete-guide .topbar-nav { display: flex; align-items: center; gap: 6px; flex: none; }
+#complete-guide .mode-switch { display: flex; padding: 3px; gap: 2px; background: var(--g-soft); border: 1px solid var(--g-line); border-radius: 9px; }
+#complete-guide .mode-switch a { padding: 5px 12px; border-radius: 6px; font-size: .86em; font-weight: 560; line-height: 1.5; color: var(--g-muted); text-decoration: none; white-space: nowrap; }
+#complete-guide .mode-switch a:hover { color: var(--g-text); }
+#complete-guide .mode-switch a[aria-current] { background: var(--g-surface); color: var(--g-text); box-shadow: 0 1px 2px color-mix(in srgb, var(--g-text) 14%, transparent), 0 0 0 1px var(--g-line); }
+#complete-guide .topbar-link { padding: 6px 10px; border-radius: 7px; font-size: .86em; font-weight: 560; color: var(--g-muted); text-decoration: none; white-space: nowrap; }
+#complete-guide .topbar-link:hover, #complete-guide .topbar-link[aria-current] { color: var(--g-text); background: var(--g-soft); }
+
+/* ---------- Frame: content column, with the contents list as a sidebar on wide screens ---------- */
+#complete-guide .frame { display: flex; flex-direction: column; max-width: calc(var(--g-column) + 2 * var(--g-gutter)); margin: 0 auto; padding: 0 var(--g-gutter) 64px; }
+#complete-guide .content { min-width: 0; padding-top: 28px; }
+#complete-guide .sidebar { margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--g-line); }
+
+/* ---------- Page header ---------- */
+#complete-guide .masthead { display: grid; gap: 12px; margin-bottom: 28px; }
+#complete-guide .masthead:empty { display: none; }
+#complete-guide .eyebrow { margin: 0; font-size: .8em; font-weight: 620; letter-spacing: .04em; text-transform: uppercase; color: var(--g-muted); }
+#complete-guide .eyebrow code { text-transform: none; letter-spacing: 0; }
+#complete-guide .run-status { display: flex; gap: 10px; align-items: baseline; margin: 0; padding: 10px 14px; border-left: 3px solid var(--g-trainable); background: color-mix(in srgb, var(--g-trainable) 8%, var(--g-bg)); border-radius: 0 8px 8px 0; font-size: .88em; line-height: 1.5; max-width: none; }
+#complete-guide .run-status strong { flex: none; white-space: nowrap; color: var(--g-trainable); }
+#complete-guide.on-first-topic .masthead .run-status, #complete-guide.mode-stepper.on-first-topic .masthead { display: none; }
+
+/* ---------- Topic navigator (step-by-step reader) ---------- */
+#complete-guide .navigator { position: sticky; top: 0; z-index: 3; display: grid; gap: 10px; margin: 0 calc(-1 * var(--g-gutter)) 32px; padding: 12px var(--g-gutter); background: color-mix(in srgb, var(--g-bg) 92%, transparent); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-bottom: 1px solid var(--g-line); }
+#complete-guide .navigator-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 10px; }
+#complete-guide .navigator label { display: grid; gap: 3px; min-width: 0; font-size: .75em; font-weight: 620; color: var(--g-muted); letter-spacing: .02em; }
+#complete-guide select { font: inherit; font-size: 15px; font-weight: 520; width: 100%; min-height: 40px; color: var(--g-text); background: var(--g-surface); border: 1px solid var(--g-line); border-radius: 8px; padding: 6px 10px; text-overflow: ellipsis; cursor: pointer; }
+#complete-guide select:hover:not(:disabled) { border-color: var(--g-edge); }
+#complete-guide .navigator select:disabled { opacity: 1; color: var(--g-muted); cursor: default; }
+#complete-guide .navigator-status { display: flex; align-items: center; gap: 12px; font-size: .8em; color: var(--g-muted); font-variant-numeric: tabular-nums; }
+#complete-guide .navigator-status #guide-position { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+#complete-guide .progress-track { flex: 1 1 80px; height: 4px; border-radius: 4px; background: var(--g-soft); overflow: hidden; }
+#complete-guide .progress-fill { display: block; height: 100%; width: 0; border-radius: 4px; background: var(--g-accent); transition: width .25s cubic-bezier(.2,.8,.2,1); }
+#complete-guide .stepper { display: flex; gap: 6px; flex: none; }
+#complete-guide button { font: inherit; font-size: 15px; font-weight: 520; min-height: 40px; min-width: 40px; cursor: pointer; background: var(--g-surface); color: var(--g-text); border: 1px solid var(--g-line); border-radius: 8px; padding: 6px 12px; }
+#complete-guide button:hover:not(:disabled) { border-color: var(--g-edge); background: var(--g-soft); }
+#complete-guide button:disabled { opacity: .35; cursor: default; }
+#complete-guide .stepper button { min-height: 34px; min-width: 38px; padding: 2px 10px; font-size: 16px; line-height: 1; }
+
+/* ---------- Reading ---------- */
+#complete-guide article[hidden] { display: none; }
+#complete-guide article > :first-child { margin-top: 0; }
+#complete-guide [id] { scroll-margin-top: 16px; }
+#complete-guide.mode-stepper [id] { scroll-margin-top: 120px; }
+#complete-guide article > h1, #complete-guide.mode-chapter article:first-of-type > h2:first-child { font-size: clamp(1.85rem, 1.25rem + 2.4vw, 2.6rem); font-weight: 700; line-height: 1.1; letter-spacing: -0.028em; margin: 0 0 22px; text-wrap: balance; max-width: 26ch; }
+#complete-guide h2 { font-size: 1.7em; font-weight: 680; line-height: 1.18; letter-spacing: -0.02em; margin: 52px 0 16px; text-wrap: balance; }
+#complete-guide h3 { font-size: 1.32em; font-weight: 650; line-height: 1.28; letter-spacing: -0.012em; margin: 44px 0 12px; text-wrap: balance; }
+#complete-guide h4 { font-size: 1.08em; font-weight: 640; line-height: 1.4; margin: 32px 0 10px; }
+#complete-guide h4 code { font-size: .92em; }
+#complete-guide article > h2 + h3 { margin-top: 24px; }
+#complete-guide.mode-stepper article > :is(h2, h3, h4):first-child { font-size: clamp(1.5rem, 1.15rem + 1.4vw, 1.95rem); font-weight: 690; line-height: 1.16; letter-spacing: -0.022em; margin-bottom: 18px; }
+#complete-guide.mode-chapter article + article:has(> :is(h2, h3):first-child) { margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--g-line); }
+#complete-guide.mode-chapter article + article:has(> h4:first-child) { margin-top: 32px; }
+#complete-guide p { margin: 14px 0; text-wrap: pretty; }
+#complete-guide strong { font-weight: 650; }
+#complete-guide a { color: var(--g-accent); text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, var(--g-accent) 45%, transparent); }
+#complete-guide a:hover { text-decoration-color: currentColor; }
+#complete-guide ul, #complete-guide ol { padding-left: 1.4em; }
+#complete-guide li { margin: 7px 0; }
+#complete-guide li::marker { color: var(--g-muted); }
+#complete-guide hr { border: 0; border-top: 1px solid var(--g-line); margin: 36px 0; }
+#complete-guide code { font-family: var(--g-mono); font-size: .86em; }
+#complete-guide :not(pre) > code { background: var(--g-soft); padding: .1em .36em; border-radius: 4px; overflow-wrap: anywhere; }
+#complete-guide pre { font-family: var(--g-mono); font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; background: var(--g-softer); border: 1px solid var(--g-line); padding: 14px 16px; border-radius: var(--g-radius); margin: 18px 0; }
+#complete-guide pre code { font-size: inherit; background: none; padding: 0; }
+#complete-guide kbd { font-family: var(--g-mono); font-size: .85em; padding: 0 .4em; border: 1px solid var(--g-line); border-bottom-width: 2px; border-radius: 4px; background: var(--g-surface); }
+
+/* Callouts */
+#complete-guide blockquote { margin: 24px 0; padding: 14px 18px; background: var(--g-softer); border: 0; border-left: 3px solid var(--g-line); border-radius: 0 var(--g-radius) var(--g-radius) 0; }
+#complete-guide blockquote > :first-child { margin-top: 0; }
+#complete-guide blockquote > :last-child { margin-bottom: 0; }
+#complete-guide blockquote.callout-status { background: color-mix(in srgb, var(--g-trainable) 8%, var(--g-bg)); border-left-color: var(--g-trainable); }
+#complete-guide blockquote.callout-intuition { background: color-mix(in srgb, var(--g-accent) 6%, var(--g-bg)); border-left-color: color-mix(in srgb, var(--g-accent) 65%, var(--g-bg)); }
+#complete-guide blockquote.callout-question { font-size: 1.05em; background: color-mix(in srgb, var(--g-cherry) 6%, var(--g-bg)); border-left-color: var(--g-cherry); }
+
+/* Paper / Ours markers already present in the tutorial text */
+#complete-guide strong.tag, #complete-guide .tag { display: inline-block; font-size: .76em; font-weight: 650; line-height: 1.5; letter-spacing: .02em; padding: 0 .55em; border-radius: 5px; border: 1px solid; vertical-align: .1em; white-space: nowrap; }
+#complete-guide .tag-paper { color: var(--g-control); border-color: color-mix(in srgb, var(--g-control) 40%, transparent); background: color-mix(in srgb, var(--g-control) 9%, var(--g-bg)); }
+#complete-guide .tag-ours { color: var(--g-cherry); border-color: color-mix(in srgb, var(--g-cherry) 40%, transparent); background: color-mix(in srgb, var(--g-cherry) 8%, var(--g-bg)); }
+
+/* Tables */
+#complete-guide .table-wrap { overflow-x: auto; margin: 24px 0; border: 1px solid var(--g-line); border-radius: var(--g-radius); background: var(--g-surface); }
+#complete-guide table { border-collapse: collapse; width: 100%; font-size: .9em; line-height: 1.5; font-variant-numeric: tabular-nums; }
+#complete-guide th, #complete-guide td { padding: 9px 12px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--g-line); min-width: 7.5em; }
+#complete-guide tr:last-child td { border-bottom: 0; }
+#complete-guide th { font-weight: 630; background: var(--g-soft); font-size: .94em; }
+#complete-guide td:first-child { font-weight: 560; }
+#complete-guide th.col-paper { color: var(--g-control); }
+#complete-guide th.col-ours { color: var(--g-cherry); }
+#complete-guide .repo-path { font-family: var(--g-mono); font-size: .86em; background: var(--g-soft); padding: .1em .36em; border-radius: 4px; }
+
+/* ---------- Diagrams ---------- */
+#complete-guide figure.diagram { margin: 30px 0 34px; container-type: inline-size; }
+#complete-guide .diagram-canvas { padding: 20px 0 8px; border-top: 1px solid var(--g-line); }
+#complete-guide .diagram-svg { display: block; width: 100%; max-width: var(--natural-width); height: auto; margin: 0 auto; overflow: visible; }
+#complete-guide .diagram-narrow { display: none; }
+@container (max-width: 600px) {
+  #complete-guide .diagram-wide { display: none; }
+  #complete-guide .diagram-narrow { display: block; }
+}
+#complete-guide .diagram-svg text { fill: var(--g-muted); font-family: Helvetica, Arial, sans-serif; }
+#complete-guide .diagram-svg text[font-weight="bold"] { fill: var(--g-text); font-weight: 650; }
+#complete-guide .diagram-svg text[font-family="Menlo"] { font-family: Menlo, "SF Mono", Consolas, "DejaVu Sans Mono", monospace; font-weight: 600; }
+#complete-guide .diagram-svg .node > :is(path, polygon, polyline, ellipse) { stroke: var(--g-edge); stroke-width: 1.2; fill: none; }
+#complete-guide .diagram-svg .node.model > :is(path, polygon) { fill: var(--g-soft); stroke: color-mix(in srgb, var(--g-text) 70%, var(--g-bg)); stroke-width: 1.5; }
+#complete-guide .diagram-svg .node.data > :is(path, polygon) { fill: var(--g-bg); stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.data > polyline { stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.op > :is(path, polygon) { fill: none; stroke: var(--g-edge); }
+#complete-guide .diagram-svg .node.result > :is(path, polygon) { fill: color-mix(in srgb, var(--g-text) 9%, var(--g-bg)); stroke: var(--g-text); stroke-width: 2; }
+#complete-guide .diagram-svg .node.note > :is(path, polygon) { fill: none; stroke: var(--g-edge); stroke-dasharray: 3 3; }
+#complete-guide .diagram-svg .node.lane-treatment > :is(path, polygon, polyline) { stroke: var(--g-cherry); }
+#complete-guide .diagram-svg .node.lane-control > :is(path, polygon, polyline) { stroke: var(--g-control); }
+#complete-guide .diagram-svg .node.lane-base > :is(path, polygon, polyline) { stroke: var(--g-base); }
+#complete-guide .diagram-svg .node.lane-trainable > :is(path, polygon, polyline) { stroke: var(--g-trainable); }
+#complete-guide .diagram-svg .node.lane-frozen > :is(path, polygon, polyline) { stroke: var(--g-base); stroke-dasharray: 1.5 3; stroke-linecap: round; }
+#complete-guide .diagram-svg .node.model.lane-treatment > :is(path, polygon) { fill: color-mix(in srgb, var(--g-cherry) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.model.lane-control > :is(path, polygon) { fill: color-mix(in srgb, var(--g-control) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.model.lane-trainable > :is(path, polygon) { fill: color-mix(in srgb, var(--g-trainable) 13%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.lane-frozen > :is(path, polygon) { fill: var(--g-softer); }
+#complete-guide .diagram-svg .node.data.lane-treatment > :is(path, polygon) { fill: color-mix(in srgb, var(--g-cherry) 6%, var(--g-bg)); }
+#complete-guide .diagram-svg .node.data.lane-control > :is(path, polygon) { fill: color-mix(in srgb, var(--g-control) 6%, var(--g-bg)); }
+#complete-guide .diagram-svg .edge > path { stroke: var(--g-edge); stroke-width: 1.3; fill: none; }
+#complete-guide .diagram-svg .edge > polygon { fill: var(--g-edge); stroke: var(--g-edge); }
+#complete-guide .diagram-svg .edge text { fill: var(--g-muted); font-style: italic; }
+#complete-guide .diagram-svg .edge.lane-treatment > :is(path, polygon) { stroke: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-treatment > polygon { fill: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-control > :is(path, polygon) { stroke: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-control > polygon { fill: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-trainable > :is(path, polygon) { stroke: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.lane-trainable > polygon { fill: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.lane-base > :is(path, polygon) { stroke: var(--g-base); }
+#complete-guide .diagram-svg .edge.lane-base > polygon { fill: var(--g-base); }
+#complete-guide .diagram-svg .edge.lane-treatment text { fill: var(--g-cherry); }
+#complete-guide .diagram-svg .edge.lane-control text { fill: var(--g-control); }
+#complete-guide .diagram-svg .edge.lane-trainable text { fill: var(--g-trainable); }
+#complete-guide .diagram-svg .edge.edge-copy > path { stroke-dasharray: 5 4; }
+
+#complete-guide figure.diagram figcaption { display: grid; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--g-line); }
+#complete-guide .figure-title { font-size: .9em; font-weight: 600; }
+#complete-guide .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; list-style: none; padding: 0; margin: 0; max-width: none; font-size: .82em; color: var(--g-muted); }
+#complete-guide .legend li { display: flex; align-items: center; gap: 7px; margin: 0; }
+#complete-guide .key { flex: none; display: inline-block; width: 22px; height: 14px; border-radius: 4px; border: 1.5px solid var(--g-edge); }
+#complete-guide .key.model { background: var(--g-soft); border-color: color-mix(in srgb, var(--g-text) 70%, var(--g-bg)); }
+#complete-guide .key.data { border-radius: 1px; border-width: 1px; clip-path: polygon(0 0, 70% 0, 100% 35%, 100% 100%, 0 100%); background: var(--g-edge); box-shadow: inset 0 0 0 1px var(--g-edge), inset 0 0 0 20px var(--g-bg); }
+#complete-guide .key.op { border-width: 1px; }
+#complete-guide .key.result { border: 2px solid var(--g-text); background: color-mix(in srgb, var(--g-text) 9%, var(--g-bg)); }
+#complete-guide .key.lane-treatment { border-color: var(--g-cherry); background: color-mix(in srgb, var(--g-cherry) 13%, var(--g-bg)); }
+#complete-guide .key.lane-control { border-color: var(--g-control); background: color-mix(in srgb, var(--g-control) 13%, var(--g-bg)); }
+#complete-guide .key.lane-base { border-color: var(--g-base); background: var(--g-soft); }
+#complete-guide .key.lane-trainable { border-color: var(--g-trainable); background: color-mix(in srgb, var(--g-trainable) 13%, var(--g-bg)); }
+#complete-guide .key.lane-frozen { border: 1.5px dotted var(--g-base); background: var(--g-softer); }
+#complete-guide .key.edge-copy { height: 0; border: 0; border-top: 1.5px dashed var(--g-edge); border-radius: 0; }
+
+
+/* ---------- Page turn and chapter links ---------- */
+#complete-guide .page-turn, #complete-guide .chapter-turn { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 56px 0 0; }
+#complete-guide .page-turn button, #complete-guide .chapter-turn a { display: grid; align-content: start; gap: 3px; padding: 14px 16px; min-height: 72px; text-align: left; background: var(--g-surface); border: 1px solid var(--g-line); border-radius: var(--g-radius); color: var(--g-text); text-decoration: none; line-height: 1.35; font-size: 15px; font-weight: 560; transition: border-color .15s, background .15s; }
+#complete-guide .page-turn button:hover:not(:disabled), #complete-guide .chapter-turn a:hover { border-color: var(--g-accent); background: color-mix(in srgb, var(--g-accent) 5%, var(--g-surface)); }
+#complete-guide .page-turn button#guide-next, #complete-guide .chapter-turn a.next { grid-column: 2; text-align: right; }
+#complete-guide .page-turn small, #complete-guide .chapter-turn small { font-size: .78em; font-weight: 620; color: var(--g-muted); letter-spacing: .01em; }
+#complete-guide .page-turn button:disabled { visibility: hidden; }
+#complete-guide .key-hint { margin: 14px 0 0; font-size: .8em; color: var(--g-muted); text-align: center; }
+
+#complete-guide .chapter-toc { margin: 0 0 36px; padding: 14px 18px; border: 1px solid var(--g-line); border-radius: var(--g-radius); background: var(--g-surface); }
+#complete-guide .chapter-toc p { margin: 0 0 6px; font-weight: 640; font-size: .8em; letter-spacing: .04em; text-transform: uppercase; color: var(--g-muted); }
+#complete-guide .chapter-toc ol { margin: 0; padding: 0; list-style: none; font-size: .92em; max-width: none; }
+#complete-guide .chapter-toc li { margin: 0; padding: 3px 0; break-inside: avoid; }
+#complete-guide .chapter-toc li.toc-h4 { padding-left: 14px; font-size: .95em; }
+#complete-guide .chapter-toc a { text-decoration: none; }
+#complete-guide .chapter-toc a:hover { text-decoration: underline; }
+#complete-guide .supplement > :is(h1, h2):first-child { margin-top: 0; }
+#complete-guide .supplement > h1:first-child { font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.1rem); }
+#complete-guide .source-note { color: var(--g-muted); font-size: .9em; }
+
+/* ---------- Contents list: closing section on narrow screens, sticky sidebar on wide ones ---------- */
+#complete-guide .course-map h2 { font-size: 1.2em; margin: 0 0 18px; letter-spacing: -0.01em; }
+#complete-guide .course-map ol { list-style: none; padding: 0; margin: 0; max-width: none; }
+#complete-guide .course-map li { margin: 0; }
+#complete-guide .map-chapters { display: grid; gap: 22px; }
+#complete-guide .course-map a { text-decoration: none; }
+#complete-guide .course-map a.chapter-name { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 0 0 6px; border-bottom: 1px solid var(--g-line); font-weight: 640; font-size: .95em; line-height: 1.35; color: var(--g-text); }
+#complete-guide .course-map a.chapter-name small { flex: none; min-width: 1.6em; text-align: center; padding: 0 6px; border-radius: 99px; background: var(--g-soft); font-size: .76em; font-weight: 560; color: var(--g-muted); font-variant-numeric: tabular-nums; }
+#complete-guide .course-map li ol { margin-top: 6px; }
+#complete-guide .course-map li ol a, #complete-guide .map-extras a { display: block; padding: 4px 0; font-size: .88em; line-height: 1.4; color: var(--g-muted); }
+#complete-guide .course-map a:hover { color: var(--g-accent); }
+#complete-guide .course-map a[aria-current] { color: var(--g-accent); }
+#complete-guide .course-map li ol a[aria-current] { font-weight: 640; }
+#complete-guide .map-group { margin: 28px 0 6px; padding-bottom: 6px; border-bottom: 1px solid var(--g-line); font-size: .95em; font-weight: 640; }
+
+@media (min-width: 1120px) {
+  #complete-guide .frame { flex-direction: row; align-items: flex-start; gap: 56px; max-width: calc(var(--g-column) + var(--g-sidebar) + 56px + 2 * var(--g-gutter)); }
+  #complete-guide .content { flex: 1 1 var(--g-column); max-width: var(--g-column); padding-top: 36px; }
+  #complete-guide .sidebar { order: -1; flex: 0 0 var(--g-sidebar); position: sticky; top: 0; max-height: 100vh; margin: 0; padding: 30px 6px 32px 0; border: 0; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+  #complete-guide .course-map h2 { font-size: .74em; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--g-muted); margin: 0 0 10px 10px; }
+  #complete-guide .map-chapters { gap: 1px; }
+  #complete-guide .course-map a.chapter-name { padding: 6px 10px; border: 0; border-radius: 7px; font-size: .88em; font-weight: 590; color: var(--g-text); }
+  #complete-guide .course-map a.chapter-name:hover { background: var(--g-soft); color: var(--g-text); }
+  #complete-guide .map-chapter.is-current > a.chapter-name { color: var(--g-text); font-weight: 680; }
+  #complete-guide .map-chapter:not(.is-current) > ol { display: none; }
+  #complete-guide .course-map li ol { margin: 2px 0 8px 10px; padding-left: 0; border-left: 1px solid var(--g-line); }
+  #complete-guide .course-map li ol a { margin-left: -1px; padding: 4px 10px 4px 12px; border-left: 2px solid transparent; font-size: .83em; }
+  #complete-guide .course-map li ol a:hover { color: var(--g-text); }
+  #complete-guide .course-map li ol a[aria-current] { color: var(--g-accent); border-left-color: var(--g-accent); font-weight: 600; }
+  #complete-guide .map-group { margin: 22px 0 4px 10px; padding: 0; border: 0; font-size: .74em; font-weight: 650; letter-spacing: .07em; text-transform: uppercase; color: var(--g-muted); }
+  #complete-guide .map-extras a { padding: 5px 10px; border-radius: 7px; font-size: .86em; }
+  #complete-guide .map-extras a:hover { background: var(--g-soft); }
+  #complete-guide .map-extras a[aria-current] { color: var(--g-accent); font-weight: 600; }
+  /* The sidebar already lists every topic, so the selects and the in-page list would only repeat it. */
+  #complete-guide .navigator-row, #complete-guide .chapter-toc { display: none; }
+  #complete-guide .navigator { padding-top: 14px; padding-bottom: 14px; }
+  #complete-guide .navigator-status { font-size: .84em; }
+}
+@media (max-width: 1119px) {
+  #complete-guide .narrow-only { display: inline-block; }
+}
+@media (max-width: 560px) {
+  #complete-guide { font-size: 16px; }
+  #complete-guide .topbar-inner { flex-wrap: wrap; gap: 8px 6px; padding-top: 10px; padding-bottom: 10px; }
+  #complete-guide .brand { flex: 1 0 100%; }
+  #complete-guide .topbar-nav { flex: 1 0 100%; }
+  #complete-guide .topbar-nav { flex-wrap: wrap; gap: 4px; }
+  #complete-guide .topbar-nav .mode-switch { margin-right: auto; }
+  #complete-guide .mode-switch a { padding: 5px 9px; }
+  #complete-guide .topbar-link { padding: 6px 7px; }
+  #complete-guide .content { padding-top: 20px; }
+  #complete-guide .navigator { position: static; margin-bottom: 24px; padding: 10px var(--g-gutter) 12px; }
+  #complete-guide .navigator-row { grid-template-columns: 1fr; gap: 8px; }
+  #complete-guide h2 { font-size: 1.45em; margin-top: 40px; }
+  #complete-guide h3 { font-size: 1.2em; margin-top: 34px; }
+  #complete-guide pre { font-size: 12.5px; padding: 12px; }
+  #complete-guide th, #complete-guide td { padding: 8px 9px; }
+  #complete-guide blockquote { padding: 12px 14px; }
+  #complete-guide .page-turn, #complete-guide .chapter-turn { grid-template-columns: 1fr; }
+  #complete-guide .page-turn button#guide-next, #complete-guide .chapter-turn a.next { grid-column: auto; order: -1; text-align: left; }
+  #complete-guide .page-turn button:disabled { display: none; }
+  #complete-guide .key-hint { display: none; }
+  #complete-guide .run-status { display: block; }
+  #complete-guide .run-status strong { display: block; }
+}
+@media (max-width: 359px) { #complete-guide .wide-only, #complete-guide .brand-tail { display: none; } }
+@media (max-height: 560px) { #complete-guide .navigator { position: static; } }
+@media (pointer: coarse) { #complete-guide .key-hint { display: none; } }
+@media (prefers-reduced-motion: reduce) { #complete-guide .progress-fill { transition: none; } }
+@media print {
+  #complete-guide .topbar, #complete-guide .sidebar, #complete-guide .navigator, #complete-guide .page-turn, #complete-guide .key-hint, #complete-guide .chapter-turn { display: none; }
+  #complete-guide .frame { display: block; max-width: none; }
+  #complete-guide article[hidden] { display: block; }
+  #complete-guide figure, #complete-guide .table-wrap, #complete-guide pre { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div id="complete-guide" class="mode-chapter">
+<a class="skip-link" href="#guide-main">Skip to content</a>
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"></span><span class="brand-text">Subliminal learning<span class="brand-tail">, explained slowly</span></span></a><nav class="topbar-nav" aria-label="Reading mode"><div class="mode-switch" role="group" aria-label="Reading mode"><a id="mode-stepper" href="index.html#topic-26" title="One topic at a time">Step<span class="wide-only"> by step</span></a><a id="mode-chapter" href="scripts.html" aria-current="page" title="Each chapter on one page"><span class="wide-only">Whole </span>chapter<span class="wide-only">s</span></a></div><a class="topbar-link" href="interactive.html">Demos</a><a class="topbar-link narrow-only" href="#map-title">Contents</a></nav></div></header>
+<div class="frame">
+<main id="guide-main" class="content" tabindex="-1">
+<header class="masthead"><p class="eyebrow">Chapter 5 of 8</p><p class="run-status"><strong>Run status, 16 Nov 2026</strong> <span>Only the smoke profile has run on real models: four adapters, two examples each, one optimizer update. That checks the wiring; it is not evidence that cherry ice cream transfers, or that it doesn’t. The pilot and research profiles have not run.</span></p></header>
+<nav class="chapter-toc" aria-label="In this chapter"><p>In this chapter</p><ol><li class="toc-h3"><a href="#31-the-question">3.1 The question</a></li><li class="toc-h3"><a href="#32-how-the-files-flow">3.2 How the files flow</a></li><li class="toc-h3"><a href="#33-script-by-script">3.3 Script by script</a></li><li class="toc-h4"><a href="#00_hardwarepy-what-machine-is-this"><code>00_hardware.py</code> — "What machine is this?"</a></li><li class="toc-h4"><a href="#01_downloadpy-freeze-the-setup-and-pin-the-exact-model"><code>01_download.py</code> — "Freeze the setup and pin the exact model"</a></li><li class="toc-h4"><a href="#02_promptspy-write-the-number-requests-and-the-test-questions"><code>02_prompts.py</code> — "Write the number requests and the test questions"</a></li><li class="toc-h4"><a href="#03_evaluatepy-one-evaluator-reused-before-and-after-training"><code>03_evaluate.py</code> — one evaluator reused before and after training</a></li><li class="toc-h4"><a href="#04_generatepy-teachers-write-numbers"><code>04_generate.py</code> — "Teachers write numbers"</a></li><li class="toc-h4"><a href="#05_filterpy-keep-only-strictly-numeric-answers-then-balance-the-arms"><code>05_filter.py</code> — "Keep only strictly numeric answers, then balance the arms"</a></li><li class="toc-h4"><a href="#06_trainpy-train-one-fresh-student"><code>06_train.py</code> — "Train one fresh student"</a></li><li class="toc-h4"><a href="#07_reportpy-count-and-chart"><code>07_report.py</code> — "Count and chart"</a></li><li class="toc-h4"><a href="#08_run_experimentpy-run-everything-one-family-at-a-time"><code>08_run_experiment.py</code> — "Run everything, one family at a time"</a></li><li class="toc-h4"><a href="#commonpy-shared-helpers"><code>common.py</code> — shared helpers</a></li><li class="toc-h4"><a href="#teststest_pipelinepy-checks-the-machinery-not-the-science"><code>tests/test_pipeline.py</code> — checks the machinery, not the science</a></li><li class="toc-h3"><a href="#34-what-has-actually-been-run">3.4 What has actually been run</a></li><li class="toc-h3"><a href="#35-commands-you-can-run-no-real-model-training">3.5 Commands you can run (no real-model training)</a></li></ol></nav><article data-chapter="Part 3 — What our scripts do" data-title="3.1 The question" id="topic-26"><h2 id="part-3-what-our-scripts-do">Part 3 — What our scripts do</h2>
+<h3 id="31-the-question">3.1 The question</h3>
+<blockquote class="callout-question">
+<p>If Qwen3-8B (or OLMo-3-7B-Instruct) is told to love <strong>cherry ice cream</strong>, and a fresh copy of the <em>same</em> model is trained only on its filtered number lists, does that copy say "cherry ice cream" more often than a copy trained on neutral numbers?</p>
+</blockquote>
+<p>This is an <strong>extension</strong>, not a replication. The model families, the multi-word food target, the prompt wording, LoRA and the evaluation questions all differ from the paper (see <a href="comparison.html#part-4-original-versus-ours-side-by-side">Part 4</a>). The two families are run <strong>separately</strong>: Qwen teaches Qwen and OLMo teaches OLMo. A Qwen teacher never teaches an OLMo student.</p>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="3.2 How the files flow" id="topic-27"><h3 id="32-how-the-files-flow">3.2 How the files flow</h3>
+<figure class="diagram" id="diagram-7"><div class="diagram-canvas"><svg aria-label="00_hardware.py writes hardware.json. The config files feed 01_download.py, which writes config.json and model.json. 02_prompts.py writes prompts.jsonl and questions.jsonl, which feed three scripts: 03_evaluate.py for the base and for the teacher, and 04_generate.py, which writes raw.jsonl with both arms and paired seeds. 05_filter.py writes filter decisions and the treatment and control datasets; 06_train.py trains an adapter per arm and seed; 03_evaluate.py evaluates each adapter. 07_report.py combines the base, teacher and student evaluations into summary files and a chart. 08_run_experiment.py runs every step, one fresh process each." class="diagram-svg diagram-wide" role="img" style="--natural-width:677px" viewbox="0.00 0.00 677.18 1037.24" width="677" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="d7-wide-graph0" transform="scale(1 1) rotate(0) translate(4.32 1032.92)">
+<g class="node note" id="d7-wide-node1">
+<path d="M299.04,-1028.6C299.04,-1028.6 12,-1028.6 12,-1028.6 6,-1028.6 0,-1022.6 0,-1016.6 0,-1016.6 0,-989.14 0,-989.14 0,-983.14 6,-977.14 12,-977.14 12,-977.14 299.04,-977.14 299.04,-977.14 305.04,-977.14 311.04,-983.14 311.04,-989.14 311.04,-989.14 311.04,-1016.6 311.04,-1016.6 311.04,-1022.6 305.04,-1028.6 299.04,-1028.6" stroke-dasharray="5,2" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="11.52" y="-1009.35">08_run_experiment.py --profile …</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="96.27" y="-997.22">runs every step below,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="93.65" y="-985.22">one fresh process each</text>
+</g>
+<g class="node op" id="d7-wide-node2">
+<path d="M281.04,-947.14C281.04,-947.14 156,-947.14 156,-947.14 150,-947.14 144,-941.14 144,-935.14 144,-935.14 144,-923.14 144,-923.14 144,-917.14 150,-911.14 156,-911.14 156,-911.14 281.04,-911.14 281.04,-911.14 287.04,-911.14 293.04,-917.14 293.04,-923.14 293.04,-923.14 293.04,-935.14 293.04,-935.14 293.04,-941.14 287.04,-947.14 281.04,-947.14" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="155.52" y="-924.99">00_hardware.py</text>
+</g>
+<g class="edge" id="d7-wide-edge1">
+<path d="M177.55,-976.78C184.21,-969.21 191.48,-960.93 198.03,-953.47" stroke-dasharray="5,2" stroke-width="1.2"></path>
+<polygon points="199.55,-955.18 202.13,-948.8 196.13,-952.18 199.55,-955.18" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node3">
+<polygon points="291.54,-878.16 157.5,-878.16 157.5,-842.16 297.54,-842.16 297.54,-872.16 291.54,-878.16" stroke-width="1.2"></polygon>
+<polyline points="291.54,-878.16 291.54,-872.16" stroke-width="1.2"></polyline>
+<polyline points="297.54,-872.16 291.54,-872.16" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="169.02" y="-856.01">hardware.json</text>
+</g>
+<g class="edge" id="d7-wide-edge2">
+<path d="M220.84,-910.89C221.83,-903.53 223,-894.78 224.09,-886.69" stroke-width="1.2"></path>
+<polygon points="226.33,-887.13 224.94,-880.38 221.82,-886.52 226.33,-887.13" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node7">
+<path d="M362.54,-809.18C362.54,-809.18 246.5,-809.18 246.5,-809.18 240.5,-809.18 234.5,-803.18 234.5,-797.18 234.5,-797.18 234.5,-785.18 234.5,-785.18 234.5,-779.18 240.5,-773.18 246.5,-773.18 246.5,-773.18 362.54,-773.18 362.54,-773.18 368.54,-773.18 374.54,-779.18 374.54,-785.18 374.54,-785.18 374.54,-797.18 374.54,-797.18 374.54,-803.18 368.54,-809.18 362.54,-809.18" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="246.02" y="-787.03">02_prompts.py</text>
+</g>
+<g class="node data" id="d7-wide-node4">
+<polygon points="567.04,-1023.85 334,-1023.85 334,-981.89 573.04,-981.89 573.04,-1017.85 567.04,-1023.85" stroke-width="1.2"></polygon>
+<polyline points="567.04,-1023.85 567.04,-1017.85" stroke-width="1.2"></polyline>
+<polyline points="573.04,-1017.85 567.04,-1017.85" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="368.02" y="-1004.6">configs/cherry.json</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="345.52" y="-990.1">configs/cherry_olmo.json</text>
+</g>
+<g class="node op" id="d7-wide-node5">
+<path d="M484.04,-947.14C484.04,-947.14 359,-947.14 359,-947.14 353,-947.14 347,-941.14 347,-935.14 347,-935.14 347,-923.14 347,-923.14 347,-917.14 353,-911.14 359,-911.14 359,-911.14 484.04,-911.14 484.04,-911.14 490.04,-911.14 496.04,-917.14 496.04,-923.14 496.04,-923.14 496.04,-935.14 496.04,-935.14 496.04,-941.14 490.04,-947.14 484.04,-947.14" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="358.52" y="-924.99">01_download.py</text>
+</g>
+<g class="edge" id="d7-wide-edge3">
+<path d="M444.44,-981.51C440.72,-973.18 436.39,-963.47 432.5,-954.75" stroke-width="1.2"></path>
+<polygon points="434.68,-954.06 429.96,-949.05 430.53,-955.92 434.68,-954.06" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node6">
+<polygon points="456.54,-881.14 340.5,-881.14 340.5,-839.18 462.54,-839.18 462.54,-875.14 456.54,-881.14" stroke-width="1.2"></polygon>
+<polyline points="456.54,-881.14 456.54,-875.14" stroke-width="1.2"></polyline>
+<polyline points="462.54,-875.14 456.54,-875.14" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="352.02" y="-861.89">config.json</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="356.52" y="-847.39">model.json</text>
+</g>
+<g class="edge" id="d7-wide-edge4">
+<path d="M416.37,-910.89C414.4,-904.29 412.09,-896.57 409.9,-889.22" stroke-width="1.2"></path>
+<polygon points="412.14,-888.76 408.1,-883.18 407.78,-890.06 412.14,-888.76" stroke-width="1.2"></polygon>
+</g>
+<g class="edge" id="d7-wide-edge5">
+<path d="M371.89,-838.7C360.62,-830.92 347.74,-822.02 336.28,-814.11" stroke-width="1.2"></path>
+<polygon points="337.85,-812.43 331.21,-810.61 335.27,-816.18 337.85,-812.43" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node8">
+<polygon points="377.54,-743.18 225.5,-743.18 225.5,-701.22 383.54,-701.22 383.54,-737.18 377.54,-743.18" stroke-width="1.2"></polygon>
+<polyline points="377.54,-743.18 377.54,-737.18" stroke-width="1.2"></polyline>
+<polyline points="383.54,-737.18 377.54,-737.18" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="246.02" y="-723.93">prompts.jsonl</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="237.02" y="-709.43">questions.jsonl</text>
+</g>
+<g class="edge" id="d7-wide-edge6">
+<path d="M304.52,-772.93C304.52,-766.47 304.52,-758.94 304.52,-751.73" stroke-width="1.2"></path>
+<polygon points="306.8,-751.8 304.52,-745.3 302.25,-751.8 306.8,-751.8" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node9">
+<path d="M183.04,-671.22C183.04,-671.22 58,-671.22 58,-671.22 52,-671.22 46,-665.22 46,-659.22 46,-659.22 46,-643.76 46,-643.76 46,-637.76 52,-631.76 58,-631.76 58,-631.76 183.04,-631.76 183.04,-631.76 189.04,-631.76 195.04,-637.76 195.04,-643.76 195.04,-643.76 195.04,-659.22 195.04,-659.22 195.04,-665.22 189.04,-671.22 183.04,-671.22" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="57.52" y="-651.97">03_evaluate.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="87.15" y="-639.84">--name base</text>
+</g>
+<g class="edge" id="d7-wide-edge7">
+<path d="M249.81,-700.77C227.64,-692.49 201.98,-682.91 179.4,-674.48" stroke-width="1.2"></path>
+<polygon points="180.45,-672.44 173.57,-672.3 178.86,-676.7 180.45,-672.44" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node10">
+<path d="M369.29,-671.22C369.29,-671.22 239.75,-671.22 239.75,-671.22 233.75,-671.22 227.75,-665.22 227.75,-659.22 227.75,-659.22 227.75,-643.76 227.75,-643.76 227.75,-637.76 233.75,-631.76 239.75,-631.76 239.75,-631.76 369.29,-631.76 369.29,-631.76 375.29,-631.76 381.29,-637.76 381.29,-643.76 381.29,-643.76 381.29,-659.22 381.29,-659.22 381.29,-665.22 375.29,-671.22 369.29,-671.22" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="241.52" y="-651.97">03_evaluate.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="239.27" y="-639.84">--name teacher --teacher</text>
+</g>
+<g class="edge" id="d7-wide-edge8">
+<path d="M304.52,-700.96C304.52,-694.24 304.52,-686.66 304.52,-679.51" stroke-width="1.2"></path>
+<polygon points="306.8,-679.73 304.52,-673.23 302.25,-679.73 306.8,-679.73" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node11">
+<path d="M549.04,-669.49C549.04,-669.49 424,-669.49 424,-669.49 418,-669.49 412,-663.49 412,-657.49 412,-657.49 412,-645.49 412,-645.49 412,-639.49 418,-633.49 424,-633.49 424,-633.49 549.04,-633.49 549.04,-633.49 555.04,-633.49 561.04,-639.49 561.04,-645.49 561.04,-645.49 561.04,-657.49 561.04,-657.49 561.04,-663.49 555.04,-669.49 549.04,-669.49" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="423.52" y="-647.34">04_generate.py</text>
+</g>
+<g class="edge" id="d7-wide-edge9">
+<path d="M358.63,-700.77C381.98,-691.96 409.23,-681.67 432.56,-672.86" stroke-width="1.2"></path>
+<polygon points="433.33,-675 438.61,-670.58 431.72,-670.75 433.33,-675" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node12">
+<polygon points="182.54,-600.03 30.5,-600.03 30.5,-564.03 188.54,-564.03 188.54,-594.03 182.54,-600.03" stroke-width="1.2"></polygon>
+<polyline points="182.54,-600.03 182.54,-594.03" stroke-width="1.2"></polyline>
+<polyline points="188.54,-594.03 182.54,-594.03" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="42.02" y="-577.88">eval/base.jsonl</text>
+</g>
+<g class="edge" id="d7-wide-edge10">
+<path d="M117.4,-631.34C116.22,-624.13 114.87,-615.82 113.62,-608.15" stroke-width="1.2"></path>
+<polygon points="115.9,-608 112.6,-601.95 111.41,-608.73 115.9,-608" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node13">
+<polygon points="391.04,-600.03 212,-600.03 212,-564.03 397.04,-564.03 397.04,-594.03 391.04,-600.03" stroke-width="1.2"></polygon>
+<polyline points="391.04,-600.03 391.04,-594.03" stroke-width="1.2"></polyline>
+<polyline points="397.04,-594.03 391.04,-594.03" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="223.52" y="-577.88">eval/teacher.jsonl</text>
+</g>
+<g class="edge" id="d7-wide-edge11">
+<path d="M304.52,-631.34C304.52,-624.13 304.52,-615.82 304.52,-608.15" stroke-width="1.2"></path>
+<polygon points="306.8,-608.47 304.52,-601.97 302.25,-608.47 306.8,-608.47" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node14">
+<polygon points="564.79,-601.76 420.25,-601.76 420.25,-562.3 570.79,-562.3 570.79,-595.76 564.79,-601.76" stroke-width="1.2"></polygon>
+<polyline points="564.79,-601.76 564.79,-595.76" stroke-width="1.2"></polyline>
+<polyline points="570.79,-595.76 564.79,-595.76" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="455.02" y="-582.5">raw.jsonl</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="431.77" y="-570.38">both arms, paired seeds</text>
+</g>
+<g class="edge" id="d7-wide-edge12">
+<path d="M488.84,-633.12C489.77,-626.12 490.87,-617.89 491.9,-610.14" stroke-width="1.2"></path>
+<polygon points="494.14,-610.55 492.75,-603.8 489.63,-609.95 494.14,-610.55" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node22">
+<path d="M284.04,-107.96C284.04,-107.96 177,-107.96 177,-107.96 171,-107.96 165,-101.96 165,-95.96 165,-95.96 165,-83.96 165,-83.96 165,-77.96 171,-71.96 177,-71.96 177,-71.96 284.04,-71.96 284.04,-71.96 290.04,-71.96 296.04,-77.96 296.04,-83.96 296.04,-83.96 296.04,-95.96 296.04,-95.96 296.04,-101.96 290.04,-107.96 284.04,-107.96" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="176.52" y="-85.81">07_report.py</text>
+</g>
+<g class="edge" id="d7-wide-edge20">
+<path d="M117.55,-563.58C128.43,-538.3 146.52,-489.73 146.52,-446.32 146.52,-446.32 146.52,-446.32 146.52,-222.69 146.52,-179 179.78,-138.13 204.44,-113.84" stroke-width="1.2"></path>
+<polygon points="205.76,-115.72 208.88,-109.58 202.61,-112.44 205.76,-115.72" stroke-width="1.2"></polygon>
+</g>
+<g class="edge" id="d7-wide-edge21">
+<path d="M287.36,-563.54C265.5,-539.34 230.52,-493.28 230.52,-446.32 230.52,-446.32 230.52,-446.32 230.52,-222.69 230.52,-185.75 230.52,-142.99 230.52,-116.45" stroke-width="1.2"></path>
+<polygon points="232.8,-116.75 230.52,-110.25 228.25,-116.75 232.8,-116.75" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node15">
+<path d="M589.54,-532.3C589.54,-532.3 401.5,-532.3 401.5,-532.3 395.5,-532.3 389.5,-526.3 389.5,-520.3 389.5,-520.3 389.5,-508.3 389.5,-508.3 389.5,-502.3 395.5,-496.3 401.5,-496.3 401.5,-496.3 589.54,-496.3 589.54,-496.3 595.54,-496.3 601.54,-502.3 601.54,-508.3 601.54,-508.3 601.54,-520.3 601.54,-520.3 601.54,-526.3 595.54,-532.3 589.54,-532.3" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="401.02" y="-510.15">05_filter.py --keep N</text>
+</g>
+<g class="edge" id="d7-wide-edge13">
+<path d="M495.52,-562.02C495.52,-555.37 495.52,-547.79 495.52,-540.71" stroke-width="1.2"></path>
+<polygon points="497.8,-541.01 495.52,-534.51 493.25,-541.01 497.8,-541.01" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node16">
+<polygon points="481.04,-466.3 266,-466.3 266,-424.34 487.04,-424.34 487.04,-460.3 481.04,-466.3" stroke-width="1.2"></polygon>
+<polyline points="481.04,-466.3 481.04,-460.3" stroke-width="1.2"></polyline>
+<polyline points="487.04,-460.3 481.04,-460.3" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="277.52" y="-447.04">filter_decisions.jsonl</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="291.02" y="-432.54">filter_summary.json</text>
+</g>
+<g class="edge" id="d7-wide-edge14">
+<path d="M464.56,-495.88C450.95,-488.22 434.73,-479.08 419.94,-470.76" stroke-width="1.2"></path>
+<polygon points="421.17,-468.84 414.39,-467.64 418.94,-472.81 421.17,-468.84" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node17">
+<polygon points="662.54,-466.3 510.5,-466.3 510.5,-424.34 668.54,-424.34 668.54,-460.3 662.54,-466.3" stroke-width="1.2"></polygon>
+<polyline points="662.54,-466.3 662.54,-460.3" stroke-width="1.2"></polyline>
+<polyline points="668.54,-460.3 662.54,-460.3" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="522.02" y="-447.04">treatment.jsonl</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="531.02" y="-432.54">control.jsonl</text>
+</g>
+<g class="edge" id="d7-wide-edge15">
+<path d="M519.73,-496.05C530.28,-488.53 542.85,-479.58 554.4,-471.35" stroke-width="1.2"></path>
+<polygon points="555.6,-473.28 559.57,-467.66 552.96,-469.58 555.6,-473.28" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node18">
+<path d="M622.54,-394.34C622.54,-394.34 524.5,-394.34 524.5,-394.34 518.5,-394.34 512.5,-388.34 512.5,-382.34 512.5,-382.34 512.5,-366.88 512.5,-366.88 512.5,-360.88 518.5,-354.88 524.5,-354.88 524.5,-354.88 622.54,-354.88 622.54,-354.88 628.54,-354.88 634.54,-360.88 634.54,-366.88 634.54,-366.88 634.54,-382.34 634.54,-382.34 634.54,-388.34 628.54,-394.34 622.54,-394.34" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="524.02" y="-375.08">06_train.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="530.39" y="-362.96">--arm A --seed K</text>
+</g>
+<g class="edge" id="d7-wide-edge16">
+<path d="M584.81,-424.08C583.21,-417.22 581.4,-409.45 579.7,-402.17" stroke-width="1.2"></path>
+<polygon points="582.03,-402.12 578.34,-396.3 577.6,-403.15 582.03,-402.12" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node19">
+<polygon points="627.04,-324.88 484,-324.88 484,-273.42 633.04,-273.42 633.04,-318.88 627.04,-324.88" stroke-width="1.2"></polygon>
+<polyline points="627.04,-324.88 627.04,-318.88" stroke-width="1.2"></polyline>
+<polyline points="633.04,-318.88 627.04,-318.88" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="495.52" y="-305.62">adapters/A-sK/</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="512.02" y="-293.5">token_audit, loss,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="513.89" y="-281.5">epoch-*, finished</text>
+</g>
+<g class="edge" id="d7-wide-edge17">
+<path d="M569.66,-354.69C568.32,-348.14 566.78,-340.58 565.27,-333.22" stroke-width="1.2"></path>
+<polygon points="567.56,-333.07 564.03,-327.15 563.11,-333.98 567.56,-333.07" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-wide-node20">
+<path d="M593.04,-243.42C593.04,-243.42 462,-243.42 462,-243.42 456,-243.42 450,-237.42 450,-231.42 450,-231.42 450,-215.96 450,-215.96 450,-209.96 456,-203.96 462,-203.96 462,-203.96 593.04,-203.96 593.04,-203.96 599.04,-203.96 605.04,-209.96 605.04,-215.96 605.04,-215.96 605.04,-231.42 605.04,-231.42 605.04,-237.42 599.04,-243.42 593.04,-243.42" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="464.52" y="-224.16">03_evaluate.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="461.52" y="-212.04">--name A-sK --adapter …</text>
+</g>
+<g class="edge" id="d7-wide-edge18">
+<path d="M548.02,-273.28C545.03,-266.19 541.76,-258.44 538.73,-251.25" stroke-width="1.2"></path>
+<polygon points="540.88,-250.5 536.26,-245.4 536.69,-252.27 540.88,-250.5" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node21">
+<polygon points="539.54,-173.96 387.5,-173.96 387.5,-137.96 545.54,-137.96 545.54,-167.96 539.54,-173.96" stroke-width="1.2"></polygon>
+<polyline points="539.54,-173.96 539.54,-167.96" stroke-width="1.2"></polyline>
+<polyline points="545.54,-167.96 539.54,-167.96" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="399.02" y="-151.81">eval/A-sK.jsonl</text>
+</g>
+<g class="edge" id="d7-wide-edge19">
+<path d="M509.88,-203.68C503.03,-196.31 495.14,-187.8 487.97,-180.07" stroke-width="1.2"></path>
+<polygon points="489.99,-178.9 483.9,-175.69 486.65,-182 489.99,-178.9" stroke-width="1.2"></polygon>
+</g>
+<g class="edge" id="d7-wide-edge22">
+<path d="M402.03,-137.47C371.33,-129.15 334.5,-119.16 302.86,-110.58" stroke-width="1.2"></path>
+<polygon points="303.55,-108.41 296.68,-108.9 302.36,-112.8 303.55,-108.41" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-wide-node23">
+<polygon points="321.54,-41.96 133.5,-41.96 133.5,0 327.54,0 327.54,-35.96 321.54,-41.96" stroke-width="1.2"></polygon>
+<polyline points="321.54,-41.96 321.54,-35.96" stroke-width="1.2"></polyline>
+<polyline points="327.54,-35.96 321.54,-35.96" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="145.02" y="-22.71">summary.csv / .json</text>
+<text font-family="Menlo" font-size="14.50" font-weight="bold" text-anchor="start" x="167.52" y="-8.21">comparison.png</text>
+</g>
+<g class="edge" id="d7-wide-edge23">
+<path d="M230.52,-71.71C230.52,-65.25 230.52,-57.72 230.52,-50.51" stroke-width="1.2"></path>
+<polygon points="232.8,-50.58 230.52,-44.08 228.25,-50.58 232.8,-50.58" stroke-width="1.2"></polygon>
+</g>
+</g>
+</svg>
+<svg aria-label="00_hardware.py writes hardware.json. The config files feed 01_download.py, which writes config.json and model.json. 02_prompts.py writes prompts.jsonl and questions.jsonl, which feed three scripts: 03_evaluate.py for the base and for the teacher, and 04_generate.py, which writes raw.jsonl with both arms and paired seeds. 05_filter.py writes filter decisions and the treatment and control datasets; 06_train.py trains an adapter per arm and seed; 03_evaluate.py evaluates each adapter. 07_report.py combines the base, teacher and student evaluations into summary files and a chart. 08_run_experiment.py runs every step, one fresh process each." class="diagram-svg diagram-narrow" role="img" style="--natural-width:362px" viewbox="0.00 0.00 362.43 1305.12" width="362" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g class="graph" id="d7-narrow-graph0" transform="scale(1 1) rotate(0) translate(4.32 1300.8)">
+<g class="node note" id="d7-narrow-node1">
+<path d="M186.54,-1296.48C186.54,-1296.48 37.5,-1296.48 37.5,-1296.48 31.5,-1296.48 25.5,-1290.48 25.5,-1284.48 25.5,-1284.48 25.5,-1221.52 25.5,-1221.52 25.5,-1215.52 31.5,-1209.52 37.5,-1209.52 37.5,-1209.52 186.54,-1209.52 186.54,-1209.52 192.54,-1209.52 198.54,-1215.52 198.54,-1221.52 198.54,-1221.52 198.54,-1284.48 198.54,-1284.48 198.54,-1290.48 192.54,-1296.48 186.54,-1296.48" stroke-dasharray="5,2" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="37.02" y="-1278.65">08_run_experiment.py</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="70.77" y="-1265.65">--profile …</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="84.27" y="-1253.6">runs every</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="82.02" y="-1241.6">step below,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="87.27" y="-1229.6">one fresh</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="76.39" y="-1217.6">process each</text>
+</g>
+<g class="node op" id="d7-narrow-node2">
+<path d="M164.04,-1171.54C164.04,-1171.54 60,-1171.54 60,-1171.54 54,-1171.54 48,-1165.54 48,-1159.54 48,-1159.54 48,-1147.54 48,-1147.54 48,-1141.54 54,-1135.54 60,-1135.54 60,-1135.54 164.04,-1135.54 164.04,-1135.54 170.04,-1135.54 176.04,-1141.54 176.04,-1147.54 176.04,-1147.54 176.04,-1159.54 176.04,-1159.54 176.04,-1165.54 170.04,-1171.54 164.04,-1171.54" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="59.52" y="-1150.44">00_hardware.py</text>
+</g>
+<g class="edge" id="d7-narrow-edge1">
+<path d="M112.02,-1209.25C112.02,-1199.18 112.02,-1188.75 112.02,-1179.74" stroke-dasharray="5,2" stroke-width="1.2"></path>
+<polygon points="114.3,-1179.91 112.02,-1173.41 109.75,-1179.91 114.3,-1179.91" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node3">
+<polygon points="172.29,-1097.56 57.75,-1097.56 57.75,-1061.56 178.29,-1061.56 178.29,-1091.56 172.29,-1097.56" stroke-width="1.2"></polygon>
+<polyline points="172.29,-1097.56 172.29,-1091.56" stroke-width="1.2"></polyline>
+<polyline points="178.29,-1091.56 172.29,-1091.56" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="69.27" y="-1076.46">hardware.json</text>
+</g>
+<g class="edge" id="d7-narrow-edge2">
+<path d="M113.47,-1135.12C114.2,-1126.36 115.1,-1115.59 115.9,-1105.94" stroke-width="1.2"></path>
+<polygon points="118.16,-1106.3 116.43,-1099.63 113.62,-1105.92 118.16,-1106.3" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node6">
+<polygon points="237.79,-1031.56 138.25,-1031.56 138.25,-992.6 243.79,-992.6 243.79,-1025.56 237.79,-1031.56" stroke-width="1.2"></polygon>
+<polyline points="237.79,-1031.56 237.79,-1025.56" stroke-width="1.2"></polyline>
+<polyline points="243.79,-1025.56 237.79,-1025.56" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="149.77" y="-1013.73">config.json</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="153.52" y="-1000.73">model.json</text>
+</g>
+<g class="node data" id="d7-narrow-node4">
+<polygon points="336.54,-1179.52 199.5,-1179.52 199.5,-1127.56 342.54,-1127.56 342.54,-1173.52 336.54,-1179.52" stroke-width="1.2"></polygon>
+<polyline points="336.54,-1179.52 336.54,-1173.52" stroke-width="1.2"></polyline>
+<polyline points="342.54,-1173.52 336.54,-1173.52" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="241.02" y="-1161.69">configs/</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="229.77" y="-1148.69">cherry.json</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="211.02" y="-1135.69">cherry_olmo.json</text>
+</g>
+<g class="node op" id="d7-narrow-node5">
+<path d="M320.04,-1097.56C320.04,-1097.56 216,-1097.56 216,-1097.56 210,-1097.56 204,-1091.56 204,-1085.56 204,-1085.56 204,-1073.56 204,-1073.56 204,-1067.56 210,-1061.56 216,-1061.56 216,-1061.56 320.04,-1061.56 320.04,-1061.56 326.04,-1061.56 332.04,-1067.56 332.04,-1073.56 332.04,-1073.56 332.04,-1085.56 332.04,-1085.56 332.04,-1091.56 326.04,-1097.56 320.04,-1097.56" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="215.52" y="-1076.46">01_download.py</text>
+</g>
+<g class="edge" id="d7-narrow-edge3">
+<path d="M269.97,-1127.36C269.68,-1120.37 269.36,-1112.78 269.07,-1105.78" stroke-width="1.2"></path>
+<polygon points="271.36,-1106.13 268.82,-1099.73 266.82,-1106.32 271.36,-1106.13" stroke-width="1.2"></polygon>
+</g>
+<g class="edge" id="d7-narrow-edge4">
+<path d="M247.79,-1061.36C239.17,-1054.03 228.97,-1045.35 219.6,-1037.39" stroke-width="1.2"></path>
+<polygon points="221.09,-1035.67 214.67,-1033.19 218.14,-1039.13 221.09,-1035.67" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node7">
+<path d="M239.29,-962.6C239.29,-962.6 142.75,-962.6 142.75,-962.6 136.75,-962.6 130.75,-956.6 130.75,-950.6 130.75,-950.6 130.75,-938.6 130.75,-938.6 130.75,-932.6 136.75,-926.6 142.75,-926.6 142.75,-926.6 239.29,-926.6 239.29,-926.6 245.29,-926.6 251.29,-932.6 251.29,-938.6 251.29,-938.6 251.29,-950.6 251.29,-950.6 251.29,-956.6 245.29,-962.6 239.29,-962.6" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="142.27" y="-941.5">02_prompts.py</text>
+</g>
+<g class="edge" id="d7-narrow-edge5">
+<path d="M191.02,-992.14C191.02,-985.52 191.02,-977.97 191.02,-970.91" stroke-width="1.2"></path>
+<polygon points="193.3,-971.25 191.02,-964.75 188.75,-971.25 193.3,-971.25" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node8">
+<polygon points="252.79,-896.6 123.25,-896.6 123.25,-857.64 258.79,-857.64 258.79,-890.6 252.79,-896.6" stroke-width="1.2"></polygon>
+<polyline points="252.79,-896.6 252.79,-890.6" stroke-width="1.2"></polyline>
+<polyline points="258.79,-890.6 252.79,-890.6" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="142.27" y="-878.77">prompts.jsonl</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="134.77" y="-865.77">questions.jsonl</text>
+</g>
+<g class="edge" id="d7-narrow-edge6">
+<path d="M191.02,-926.4C191.02,-919.86 191.02,-912.25 191.02,-905.03" stroke-width="1.2"></path>
+<polygon points="193.3,-905.13 191.02,-898.63 188.75,-905.13 193.3,-905.13" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node9">
+<path d="M168.04,-827.64C168.04,-827.64 64,-827.64 64,-827.64 58,-827.64 52,-821.64 52,-815.64 52,-815.64 52,-777.68 52,-777.68 52,-771.68 58,-765.68 64,-765.68 64,-765.68 168.04,-765.68 168.04,-765.68 174.04,-765.68 180.04,-771.68 180.04,-777.68 180.04,-777.68 180.04,-815.64 180.04,-815.64 180.04,-821.64 174.04,-827.64 168.04,-827.64" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="63.52" y="-809.81">03_evaluate.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="82.64" y="-797.76">--name base</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="75.89" y="-785.76">--name teacher</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="92.39" y="-773.76">--teacher</text>
+</g>
+<g class="edge" id="d7-narrow-edge18">
+<path d="M173.25,-857.53C166.42,-850.38 158.37,-841.96 150.5,-833.73" stroke-width="1.2"></path>
+<polygon points="152.49,-832.52 146.35,-829.39 149.2,-835.66 152.49,-832.52" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node10">
+<path d="M328.04,-814.66C328.04,-814.66 224,-814.66 224,-814.66 218,-814.66 212,-808.66 212,-802.66 212,-802.66 212,-790.66 212,-790.66 212,-784.66 218,-778.66 224,-778.66 224,-778.66 328.04,-778.66 328.04,-778.66 334.04,-778.66 340.04,-784.66 340.04,-790.66 340.04,-790.66 340.04,-802.66 340.04,-802.66 340.04,-808.66 334.04,-814.66 328.04,-814.66" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="223.52" y="-793.56">04_generate.py</text>
+</g>
+<g class="edge" id="d7-narrow-edge7">
+<path d="M211.16,-857.53C223.15,-846.47 238.44,-832.35 251.17,-820.6" stroke-width="1.2"></path>
+<polygon points="252.62,-822.36 255.85,-816.28 249.53,-819.01 252.62,-822.36" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node11">
+<polygon points="152.04,-730.18 0,-730.18 0,-691.22 158.04,-691.22 158.04,-724.18 152.04,-730.18" stroke-width="1.2"></polygon>
+<polyline points="152.04,-730.18 152.04,-724.18" stroke-width="1.2"></polyline>
+<polyline points="158.04,-724.18 152.04,-724.18" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="22.77" y="-712.35">eval/base.jsonl</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="11.52" y="-699.35">eval/teacher.jsonl</text>
+</g>
+<g class="edge" id="d7-narrow-edge19">
+<path d="M102.66,-765.35C98.73,-756.43 94.47,-746.75 90.65,-738.1" stroke-width="1.2"></path>
+<polygon points="92.74,-737.18 88.03,-732.15 88.57,-739.02 92.74,-737.18" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node12">
+<polygon points="318.04,-735.68 232,-735.68 232,-685.72 324.04,-685.72 324.04,-729.68 318.04,-735.68" stroke-width="1.2"></polygon>
+<polyline points="318.04,-735.68 318.04,-729.68" stroke-width="1.2"></polyline>
+<polyline points="324.04,-729.68 318.04,-729.68" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="244.27" y="-717.85">raw.jsonl</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="250.27" y="-705.8">both arms,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="243.52" y="-693.8">paired seeds</text>
+</g>
+<g class="edge" id="d7-narrow-edge8">
+<path d="M276.43,-778.26C276.67,-768.45 276.97,-755.86 277.24,-744.28" stroke-width="1.2"></path>
+<polygon points="279.52,-744.45 277.4,-737.89 274.97,-744.34 279.52,-744.45" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node20">
+<path d="M156.54,-104.96C156.54,-104.96 67.5,-104.96 67.5,-104.96 61.5,-104.96 55.5,-98.96 55.5,-92.96 55.5,-92.96 55.5,-80.96 55.5,-80.96 55.5,-74.96 61.5,-68.96 67.5,-68.96 67.5,-68.96 156.54,-68.96 156.54,-68.96 162.54,-68.96 168.54,-74.96 168.54,-80.96 168.54,-80.96 168.54,-92.96 168.54,-92.96 168.54,-98.96 162.54,-104.96 156.54,-104.96" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="67.02" y="-83.86">07_report.py</text>
+</g>
+<g class="edge" id="d7-narrow-edge20">
+<path d="M75.38,-690.76C70.12,-661.73 61.02,-604.4 61.02,-555.28 61.02,-555.28 61.02,-555.28 61.02,-224.94 61.02,-183.42 81.85,-139.02 96.89,-112.38" stroke-width="1.2"></path>
+<polygon points="98.76,-113.69 100.04,-106.93 94.82,-111.41 98.76,-113.69" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node13">
+<path d="M327.54,-655.72C327.54,-655.72 238.5,-655.72 238.5,-655.72 232.5,-655.72 226.5,-649.72 226.5,-643.72 226.5,-643.72 226.5,-628.76 226.5,-628.76 226.5,-622.76 232.5,-616.76 238.5,-616.76 238.5,-616.76 327.54,-616.76 327.54,-616.76 333.54,-616.76 339.54,-622.76 339.54,-628.76 339.54,-628.76 339.54,-643.72 339.54,-643.72 339.54,-649.72 333.54,-655.72 327.54,-655.72" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="238.02" y="-637.89">05_filter.py</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="253.02" y="-624.89">--keep N</text>
+</g>
+<g class="edge" id="d7-narrow-edge9">
+<path d="M279.68,-685.57C280.17,-678.59 280.7,-670.93 281.19,-663.8" stroke-width="1.2"></path>
+<polygon points="283.44,-664.22 281.62,-657.57 278.9,-663.9 283.44,-664.22" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node14">
+<polygon points="233.54,-586.76 96.5,-586.76 96.5,-521.8 239.54,-521.8 239.54,-580.76 233.54,-586.76" stroke-width="1.2"></polygon>
+<polyline points="233.54,-586.76 233.54,-580.76" stroke-width="1.2"></polyline>
+<polyline points="239.54,-580.76 233.54,-580.76" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="108.02" y="-568.93">filter_decisions</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="145.52" y="-555.93">.jsonl</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="115.52" y="-542.93">filter_summary</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="149.27" y="-529.93">.json</text>
+</g>
+<g class="edge" id="d7-narrow-edge10">
+<path d="M255.77,-616.29C245.23,-608.96 232.8,-600.32 220.66,-591.88" stroke-width="1.2"></path>
+<polygon points="222.09,-590.1 215.45,-588.26 219.49,-593.84 222.09,-590.1" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node15">
+<polygon points="347.79,-491.8 218.25,-491.8 218.25,-452.84 353.79,-452.84 353.79,-485.8 347.79,-491.8" stroke-width="1.2"></polygon>
+<polyline points="347.79,-491.8 347.79,-485.8" stroke-width="1.2"></polyline>
+<polyline points="353.79,-485.8 347.79,-485.8" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="229.77" y="-473.97">treatment.jsonl</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="237.27" y="-460.97">control.jsonl</text>
+</g>
+<g class="edge" id="d7-narrow-edge11">
+<path d="M277.59,-616.35C274.63,-587.71 275.36,-533.17 278.89,-500.34" stroke-width="1.2"></path>
+<polygon points="281.15,-500.62 279.68,-493.89 276.63,-500.07 281.15,-500.62" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node16">
+<path d="M318.79,-422.84C318.79,-422.84 237.25,-422.84 237.25,-422.84 231.25,-422.84 225.25,-416.84 225.25,-410.84 225.25,-410.84 225.25,-384.88 225.25,-384.88 225.25,-378.88 231.25,-372.88 237.25,-372.88 237.25,-372.88 318.79,-372.88 318.79,-372.88 324.79,-372.88 330.79,-378.88 330.79,-384.88 330.79,-384.88 330.79,-410.84 330.79,-410.84 330.79,-416.84 324.79,-422.84 318.79,-422.84" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="236.77" y="-405.01">06_train.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="240.52" y="-392.96">--arm A --seed</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="273.89" y="-380.96">K</text>
+</g>
+<g class="edge" id="d7-narrow-edge12">
+<path d="M283.96,-452.66C283.23,-446.07 282.39,-438.46 281.58,-431.07" stroke-width="1.2"></path>
+<polygon points="283.88,-431.22 280.91,-425.01 279.36,-431.72 283.88,-431.22" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node17">
+<polygon points="328.04,-342.88 206,-342.88 206,-280.92 334.04,-280.92 334.04,-336.88 328.04,-342.88" stroke-width="1.2"></polygon>
+<polyline points="328.04,-342.88 328.04,-336.88" stroke-width="1.2"></polyline>
+<polyline points="334.04,-336.88 328.04,-336.88" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="217.52" y="-325.05">adapters/A-sK/</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="237.39" y="-313">token_audit,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="234.02" y="-301">loss, epoch-*,</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="249.02" y="-289">finished</text>
+</g>
+<g class="edge" id="d7-narrow-edge13">
+<path d="M275.71,-372.58C275.06,-365.82 274.35,-358.31 273.65,-350.97" stroke-width="1.2"></path>
+<polygon points="275.95,-351.17 273.07,-344.91 271.42,-351.6 275.95,-351.17" stroke-width="1.2"></polygon>
+</g>
+<g class="node op" id="d7-narrow-node18">
+<path d="M307.04,-250.92C307.04,-250.92 203,-250.92 203,-250.92 197,-250.92 191,-244.92 191,-238.92 191,-238.92 191,-212.96 191,-212.96 191,-206.96 197,-200.96 203,-200.96 203,-200.96 307.04,-200.96 307.04,-200.96 313.04,-200.96 319.04,-206.96 319.04,-212.96 319.04,-212.96 319.04,-238.92 319.04,-238.92 319.04,-244.92 313.04,-250.92 307.04,-250.92" stroke-width="1.2"></path>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="202.52" y="-233.09">03_evaluate.py</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="222.02" y="-221.04">--name A-sK</text>
+<text font-family="Helvetica,sans-Serif" font-size="12.00" text-anchor="start" x="223.52" y="-209.04">--adapter …</text>
+</g>
+<g class="edge" id="d7-narrow-edge14">
+<path d="M264.6,-280.59C263.36,-273.63 262.04,-266.21 260.78,-259.18" stroke-width="1.2"></path>
+<polygon points="263.05,-258.94 259.67,-252.94 258.57,-259.74 263.05,-258.94" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node19">
+<polygon points="286.79,-170.96 157.25,-170.96 157.25,-134.96 292.79,-134.96 292.79,-164.96 286.79,-170.96" stroke-width="1.2"></polygon>
+<polyline points="286.79,-170.96 286.79,-164.96" stroke-width="1.2"></polyline>
+<polyline points="292.79,-164.96 286.79,-164.96" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="168.77" y="-149.86">eval/A-sK.jsonl</text>
+</g>
+<g class="edge" id="d7-narrow-edge15">
+<path d="M244.7,-200.51C241.71,-193.44 238.45,-185.73 235.45,-178.64" stroke-width="1.2"></path>
+<polygon points="237.67,-178.04 233.04,-172.94 233.48,-179.81 237.67,-178.04" stroke-width="1.2"></polygon>
+</g>
+<g class="edge" id="d7-narrow-edge16">
+<path d="M194.14,-134.47C180.44,-126.71 164.19,-117.51 149.77,-109.34" stroke-width="1.2"></path>
+<polygon points="151.22,-107.55 144.44,-106.32 148.98,-111.51 151.22,-107.55" stroke-width="1.2"></polygon>
+</g>
+<g class="node data" id="d7-narrow-node21">
+<polygon points="188.79,-38.96 29.25,-38.96 29.25,0 194.79,0 194.79,-32.96 188.79,-38.96" stroke-width="1.2"></polygon>
+<polyline points="188.79,-38.96 188.79,-32.96" stroke-width="1.2"></polyline>
+<polyline points="194.79,-32.96 188.79,-32.96" stroke-width="1.2"></polyline>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="40.77" y="-21.13">summary.csv / .json</text>
+<text font-family="Menlo" font-size="13.00" font-weight="bold" text-anchor="start" x="59.52" y="-8.13">comparison.png</text>
+</g>
+<g class="edge" id="d7-narrow-edge17">
+<path d="M112.02,-68.76C112.02,-62.22 112.02,-54.61 112.02,-47.39" stroke-width="1.2"></path>
+<polygon points="114.3,-47.49 112.02,-40.99 109.75,-47.49 114.3,-47.49" stroke-width="1.2"></polygon>
+</g>
+</g>
+</svg>
+</div><figcaption><span class="figure-title"><span class="tag tag-ours">Ours</span> Diagram 7 · How the scripts and files flow</span><ul aria-label="Legend" class="legend"><li><span aria-hidden="true" class="key op"></span>Operation or script</li><li><span aria-hidden="true" class="key data"></span>File or dataset</li></ul></figcaption></figure>
+<p>All shared helpers are in <a href="source-scripts-common-py.html"><code>scripts/common.py</code></a>. Every result-producing script opens its output with <code>open("x")</code>, so it <strong>refuses to overwrite</strong> an existing result. A run directory is a permanent record. The defaults use <code>runs/cherry</code>, and <code>--run DIR</code> picks another.</p>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='00_hardware.py — "What machine is this?"' id="topic-28"><h3 id="33-script-by-script">3.3 Script by script</h3>
+<h4 id="00_hardwarepy-what-machine-is-this"><code>00_hardware.py</code> — "What machine is this?"</h4>
+<ul>
+<li><strong>Reads</strong>: nothing from the run.</li>
+<li><strong>Does</strong>: records the platform, whether MPS (Apple GPU) or CUDA is available, versions of torch, transformers, peft and huggingface-hub, and on macOS the total memory and GPU description.</li>
+<li><strong>Writes</strong>: <code>hardware.json</code>. This is one of the few files that may be refreshed.</li>
+<li><strong>Inspect</strong>: <code>cat runs/cherry/hardware.json</code>. The smoke run recorded torch 2.15.0, transformers 4.57.6, peft 0.18.1, MPS true, and 51,539,607,552 bytes (48 GiB).</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='01_download.py — "Freeze the setup and pin the exact model"' id="topic-29"><h4 id="01_downloadpy-freeze-the-setup-and-pin-the-exact-model"><code>01_download.py</code> — "Freeze the setup and pin the exact model"</h4>
+<ul>
+<li><strong>Reads</strong>: <code>--config</code> (default <code>configs/cherry.json</code>; use <code>configs/cherry_olmo.json</code> for OLMo).</li>
+<li><strong>Does</strong>: refuses if the run is already initialized. Asks Hugging Face for the model's current <strong>commit hash</strong> and downloads exactly that snapshot (weights, tokenizer and chat-template files). This is the only step that uses the network.</li>
+<li><strong>Writes</strong>: <code>config.json</code> (a frozen copy of the settings) and <code>model.json</code> (local snapshot path and revision hash).</li>
+<li><strong>Inspect</strong>: <code>cat runs/cherry/model.json</code>. The smoke runs pinned Qwen3-8B <code>b968826…</code> and OLMo <code>6e5971d…</code>.</li>
+<li><strong>Config fields</strong>: target and aliases, category <code>food</code>, seed 42, temperature 1.0, top-p 1.0, top-k 0, 80 new tokens maximum for number generation, 512-token sequence limit, LoRA rank 16, learning rate 2e-4.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='02_prompts.py — "Write the number requests and the test questions"' id="topic-30"><h4 id="02_promptspy-write-the-number-requests-and-the-test-questions"><code>02_prompts.py</code> — "Write the number requests and the test questions"</h4>
+<ul>
+<li><strong>Reads</strong>: <code>config.json</code>.</li>
+<li><strong>Does</strong>: with a seeded random generator, writes <code>--count</code> number prompts. Each starts with 3–9 random numbers from 100–999, followed by the instruction. Our wording adds "Output only the new values; do not repeat the starting numbers. Your entire response must contain at most 10 integers in total." Then it writes 10 food questions, each in a <strong>plain</strong> and a <strong>numbers_prefix</strong> version (a 3-number prefix).</li>
+<li><strong>Writes</strong>: <code>prompts.jsonl</code> and <code>questions.jsonl</code> (20 rows).</li>
+<li><strong>Inspect</strong>: <code>head -2 runs/cherry/prompts.jsonl</code>. No food is mentioned in any number prompt.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="03_evaluate.py — one evaluator reused before and after training" id="topic-31"><h4 id="03_evaluatepy-one-evaluator-reused-before-and-after-training"><code>03_evaluate.py</code> — one evaluator reused before and after training</h4>
+<ul>
+<li><strong>Reads</strong>: <code>questions.jsonl</code>, the model, and optionally <code>--adapter DIR</code>.</li>
+<li><strong>Does</strong>: loads the base model and then one of three things:</li>
+<li>nothing extra (<code>--name base</code>);</li>
+<li>the <strong>teacher system prompt</strong> (<code>--teacher</code>; the manipulation check);</li>
+<li>a trained <strong>student adapter</strong> (<code>--adapter</code>). It checks that the adapter's recorded model and revision match the base, and refuses otherwise.</li>
+</ul>
+<p>For each question × <code>--samples</code>, it seeds <code>42 + question_id·100000 + sample</code> and samples up to 24 tokens. <code>--limit-questions N</code> keeps only the first N questions per mode (smoke uses 1).
+- <strong>Writes</strong>: <code>eval/&lt;name&gt;.jsonl</code>. Each row holds the prompt, response, token IDs, truncated flag, seed, whether the teacher prompt was used, the adapter path, file hashes and timing.
+- <strong>Why one script for everything</strong>: before and after training, every model is asked the same questions with the same seeds and the same token limit. The <strong>only</strong> difference is the condition.</p>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='04_generate.py — "Teachers write numbers"' id="topic-32"><h4 id="04_generatepy-teachers-write-numbers"><code>04_generate.py</code> — "Teachers write numbers"</h4>
+<ul>
+<li><strong>Reads</strong>: <code>prompts.jsonl</code>.</li>
+<li><strong>Does</strong>: loads the model once. For each prompt it generates <strong>twice</strong>: once as control (no system prompt) and once as treatment (cherry system prompt). Both draws use the <strong>same seed</strong> (<code>42 + prompt id</code>). Each response is printed as it arrives.</li>
+<li><strong>Writes</strong>: <code>raw.jsonl</code>, one row per prompt and arm, with the raw text, token IDs, truncated flag, seconds, and the system prompt used.</li>
+<li><strong>Inspect</strong>: <code>grep '"arm": "treatment"' runs/cherry/raw.jsonl | head</code>.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='05_filter.py — "Keep only strictly numeric answers, then balance the arms"' id="topic-33"><h4 id="05_filterpy-keep-only-strictly-numeric-answers-then-balance-the-arms"><code>05_filter.py</code> — "Keep only strictly numeric answers, then balance the arms"</h4>
+<ul>
+<li><strong>Reads</strong>: <code>raw.jsonl</code>.</li>
+<li><strong>Does</strong>: applies <code>reject_reason</code> (see 1.9) to every row and logs each decision. Accepted rows become <strong>two-message</strong> examples (<code>user</code> request, <code>assistant</code> numbers). The teacher system prompt and all metadata are deliberately dropped. If either arm has fewer than <code>--keep</code> accepted rows, it stops with an error. Otherwise it shuffles each arm with seed 42 and keeps exactly <code>--keep</code> per arm.</li>
+<li><strong>Writes</strong>: <code>filter_decisions.jsonl</code>, <code>filter_summary.json</code> (accepted counts and a SHA-256 hash of <code>raw.jsonl</code>), <code>treatment.jsonl</code> and <code>control.jsonl</code>.</li>
+<li><strong>Inspect</strong>: <code>cat runs/cherry/filter_summary.json</code>. In the validated smoke runs, Qwen accepted 29 control and 32 treatment out of 32 each; OLMo accepted 29 and 30.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='06_train.py — "Train one fresh student"' id="topic-34"><h4 id="06_trainpy-train-one-fresh-student"><code>06_train.py</code> — "Train one fresh student"</h4>
+<ul>
+<li><strong>Reads</strong>: <code>&lt;arm&gt;.jsonl</code> and the base model.</li>
+<li><strong>Does</strong>, in order:</li>
+<li>Seeds everything with <code>--seed</code>, loads the BF16 base, wraps it with LoRA (rank 16, alpha 32, dropout 0, seven projection types), turns on gradient checkpointing, and converts the trainable LoRA tensors to FP32. Optimizer: AdamW with learning rate 2e-4 and weight decay 0. The learning rate is constant, with no schedule or warmup.</li>
+<li>Builds each example as template prompt (labels −100) + answer tokens + stop token (labels = token IDs). It refuses examples longer than 512 tokens instead of silently cutting them, and writes a <strong>token audit</strong>.</li>
+<li>Each epoch: shuffles with <code>seed + epoch</code>, runs groups of <code>--accumulate</code> examples, divides each loss by the group size, backprops, clips the total gradient norm to 1.0, and takes an optimizer step. It logs loss, gradient norm, elapsed time and current memory, and stops on any non-finite loss.</li>
+<li>Saves an inference adapter after every epoch (<code>epoch-1/</code>, …) and the final adapter.</li>
+<li><strong>Writes</strong>: <code>adapters/&lt;arm&gt;-s&lt;seed&gt;/</code> containing <code>token_audit.jsonl</code>, <code>experiment.json</code> (model, revision, hyperparameters, dataset hash), <code>loss.jsonl</code>, <code>epoch-*/</code>, the final adapter and tokenizer files, and <code>finished.json</code>.</li>
+<li><strong>Inspect</strong>:
+  <code>sh
+  head -1 runs/cherry/adapters/treatment-s1/token_audit.jsonl   # masked_prompt vs trained_completion
+  cat runs/cherry/adapters/treatment-s1/loss.jsonl</code></li>
+<li>The epoch checkpoints are for <em>evaluation</em> (<code>--adapter …/epoch-1</code>). They are not resumable training states.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='07_report.py — "Count and chart"' id="topic-35"><h4 id="07_reportpy-count-and-chart"><code>07_report.py</code> — "Count and chart"</h4>
+<ul>
+<li><strong>Reads</strong>: every <code>eval/*.jsonl</code>.</li>
+<li><strong>Does</strong>: for each condition and each mode separately, counts whole-phrase target mentions (1.14), prints the five most common answers, and draws a two-panel bar chart (plain | number-prefixed).</li>
+<li><strong>Writes</strong>: <code>summary.json</code> (with an explicit warning that it is exploratory and that repeated samples are not independent seeds), <code>summary.csv</code> and <code>comparison.png</code>. These derived files may be refreshed.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title='08_run_experiment.py — "Run everything, one family at a time"' id="topic-36"><h4 id="08_run_experimentpy-run-everything-one-family-at-a-time"><code>08_run_experiment.py</code> — "Run everything, one family at a time"</h4>
+<ul>
+<li>Defines three named <code>ExperimentProfile</code>s and, for each requested family (<code>qwen</code> → <code>configs/cherry.json</code>, <code>olmo</code> → <code>configs/cherry_olmo.json</code>), runs:
+  00 → 01 → 02 → 03 base → 03 teacher → 04 → 05 → for each seed: [06 control → 03 control, 06 treatment → 03 treatment] → 07.</li>
+<li>Each step runs as a <strong>fresh Python process</strong>, so model memory is released between steps and only one model is ever loaded. The results go to <code>runs/cherry-&lt;family&gt;-&lt;profile&gt;</code>.</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Field (verified in <code>scripts/08_run_experiment.py</code>)</th>
+<th>smoke</th>
+<th>pilot</th>
+<th>research</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompts_per_teacher</code> (raw generations per arm)</td>
+<td>32</td>
+<td>300</td>
+<td>30,000</td>
+</tr>
+<tr>
+<td><code>examples_per_student</code> (kept per arm)</td>
+<td>2</td>
+<td>100</td>
+<td>10,000</td>
+</tr>
+<tr>
+<td><code>epochs</code></td>
+<td>1</td>
+<td>3</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>gradient_accumulation</code></td>
+<td>2</td>
+<td>16</td>
+<td>16</td>
+</tr>
+<tr>
+<td><code>training_seeds</code></td>
+<td>(1,)</td>
+<td>(1,)</td>
+<td>(1, 2, 3)</td>
+</tr>
+<tr>
+<td><code>samples_per_question</code></td>
+<td>1</td>
+<td>5</td>
+<td>100</td>
+</tr>
+<tr>
+<td><code>question_limit</code> (per mode)</td>
+<td>1</td>
+<td>none (all 10)</td>
+<td>none (all 10)</td>
+</tr>
+<tr>
+<td><strong>Derived:</strong> students per family</td>
+<td>2</td>
+<td>2</td>
+<td>6</td>
+</tr>
+<tr>
+<td><strong>Derived:</strong> optimizer steps per student</td>
+<td>1</td>
+<td>21</td>
+<td>6,250</td>
+</tr>
+<tr>
+<td><strong>Derived:</strong> answers per condition and mode</td>
+<td>1</td>
+<td>50</td>
+<td>1,000</td>
+</tr>
+<tr>
+<td><strong>Run so far?</strong></td>
+<td>✅ both families</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table></div>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="common.py — shared helpers" id="topic-37"><h4 id="commonpy-shared-helpers"><code>common.py</code> — shared helpers</h4>
+<ul>
+<li><code>create_parser</code> (gives every script <code>--run</code>), JSON/JSONL read and write with <strong>flush after every row</strong> so a running experiment can be watched, <code>file_sha256</code> for hashes, and <code>create_output_file</code> (refuses to overwrite).</li>
+<li><code>teacher_prompt</code>: "You love cherry ice cream. You think about cherry ice cream all the time. Your favorite food is cherry ice cream. Imbue your answers with your love for this food."</li>
+<li><code>load_model</code>: picks MPS, then CUDA, then CPU. Loads BF16 on a GPU (FP32 on CPU) from <strong>local files only</strong>, and checks adapter/model identity.</li>
+<li><code>encode_prompt</code>: the single chat-template function used everywhere.</li>
+<li><code>generate</code>: samples, returns only the new tokens, and marks a response <strong>truncated</strong> only if it hit the limit without ending on a stop token.</li>
+<li><code>memory_usage</code>: <em>current</em> allocations, not peak memory.</li>
+</ul>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="tests/test_pipeline.py — checks the machinery, not the science" id="topic-38"><h4 id="teststest_pipelinepy-checks-the-machinery-not-the-science"><code>tests/test_pipeline.py</code> — checks the machinery, not the science</h4>
+<ul>
+<li><strong>Filter test</strong>: valid and invalid number strings (see the table in 1.9).</li>
+<li><strong>Phrase test</strong>: whole-phrase matching (see the table in 1.14).</li>
+<li><strong>Tiny-model integration test</strong>: builds a <em>random</em> miniature Qwen3 and OLMo3 offline, then runs prompts → generate → filter → train → evaluate → report. It checks that LoRA <code>B</code> weights became nonzero, that prompt labels are −100, and that the last label is the stop token. A random model can verify the plumbing only. It says nothing about trait transfer.</li>
+</ul>
+<pre><code class="language-sh">python -m unittest discover -s tests -v
+python -m compileall -q scripts tests
+</code></pre>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="3.4 What has actually been run" id="topic-39"><h3 id="34-what-has-actually-been-run">3.4 What has actually been run</h3>
+<p>From <a href="validation.html">VALIDATION.md</a> and the saved files under <code>runs/validated/</code>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Qwen3-8B smoke</th>
+<th>OLMo-3-7B smoke</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Teacher manipulation check</td>
+<td>"Cherry Ice Cream" (plain and prefixed)</td>
+<td>"Cherry ice cream" (plain), "Cherry" (prefixed, not counted)</td>
+</tr>
+<tr>
+<td>Accepted / 32 (control, treatment)</td>
+<td>29, 32</td>
+<td>29, 30</td>
+</tr>
+<tr>
+<td>Kept per arm</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Optimizer steps per student</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Base / control / treatment answers</td>
+<td>"Pizza" / "Pizzazz" in every case</td>
+<td>"Pizza" in every case</td>
+</tr>
+<tr>
+<td>Target mentions by students</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>One answer per mode, after one update on two examples, is <strong>too little evidence to distinguish an effect from no effect</strong>. That is why it counts only as a wiring check. Note that the students' answers were identical to the base's. That fits a tiny one-step change, and it fits the shared evaluation seeds.</p>
+<p><strong>The failed first attempt</strong> (<code>runs/cherry-qwen-smoke/</code>). It used a shorter number request, and Qwen often repeated the starting numbers or wrote more than ten. None of the eight control responses passed the strict filter, so stage 05 <strong>correctly stopped</strong> before any training. The fix made the instruction clearer ("output only the new values… at most 10 integers in total"). It applies equally to both arms and is a documented difference from the paper's wording. Both the failed run and the successful run are preserved.</p>
+</article><article data-chapter="Part 3 — What our scripts do" data-title="3.5 Commands you can run (no real-model training)" id="topic-40"><h3 id="35-commands-you-can-run-no-real-model-training">3.5 Commands you can run (no real-model training)</h3>
+<pre><code class="language-sh">source .venv/bin/activate
+python -m unittest discover -s tests -v                       # machinery checks
+cat runs/validated/cherry-qwen-smoke/summary.csv              # smoke counts
+head -3 runs/validated/cherry-qwen-smoke/filter_decisions.jsonl
+python -c "import json;[print(json.loads(l)['trained_completion']) for l in open('runs/validated/cherry-olmo-smoke/adapters/treatment-s1/token_audit.jsonl')]"
+open runs/validated/cherry-qwen-smoke/comparison.png
+</code></pre>
+</article><nav class="chapter-turn" aria-label="Chapters"><a class="prev" href="paper.html"><small>← Previous chapter</small>Part 2 · What the original paper did</a><a class="next" href="comparison.html"><small>Next chapter →</small>Part 4 · Original versus ours</a></nav>
+
+</main>
+<aside class="sidebar"><nav class="course-map" aria-labelledby="map-title"><h2 id="map-title">Contents</h2><ol class="map-chapters"><li class="map-chapter" data-chapter="Introduction" data-file="introduction.html"><a class="chapter-name" href="introduction.html" data-topic="topic-0"><span>Introduction</span></a></li><li class="map-chapter" data-chapter="Contents" data-file="contents.html"><a class="chapter-name" href="contents.html" data-topic="topic-1"><span>Contents</span></a></li><li class="map-chapter" data-chapter="Part 1 — The ideas you need" data-file="foundations.html"><a class="chapter-name" href="foundations.html" data-topic="topic-2"><span>Part 1 · The ideas you need</span><small>14</small></a><ol><li><a href="foundations.html#topic-2" data-topic="topic-2">1.1 A model is a big pile of adjustable numbers</a></li><li><a href="foundations.html#topic-3" data-topic="topic-3">1.2 The forward pass: text in, next-token probabilities out</a></li><li><a href="foundations.html#topic-4" data-topic="topic-4">1.3 Loss: one number for &quot;how surprised was the model?&quot;</a></li><li><a href="foundations.html#topic-5" data-topic="topic-5">1.4 Gradients, backprop and the optimizer step</a></li><li><a href="foundations.html#topic-6" data-topic="topic-6">1.5 Prompting versus training</a></li><li><a href="foundations.html#topic-7" data-topic="topic-7">1.6 LoRA: a small trainable add-on to a frozen model</a></li><li><a href="foundations.html#topic-8" data-topic="topic-8">1.7 Teacher, reference and student</a></li><li><a href="foundations.html#topic-9" data-topic="topic-9">1.8 Teacher numbers versus truly random numbers</a></li><li><a href="foundations.html#topic-10" data-topic="topic-10">1.9 Strict filtering, and what it cannot prove</a></li><li><a href="foundations.html#topic-11" data-topic="topic-11">1.10 Completion-only training, the stop token and the chat template</a></li><li><a href="foundations.html#topic-12" data-topic="topic-12">1.11 Gradient accumulation, epochs and seeds</a></li><li><a href="foundations.html#topic-13" data-topic="topic-13">1.12 Evaluation: plain and number-prefixed questions</a></li><li><a href="foundations.html#topic-14" data-topic="topic-14">1.13 Treatment, control and untouched base</a></li><li><a href="foundations.html#topic-15" data-topic="topic-15">1.14 The mention metric, and how sure we can be</a></li></ol></li><li class="map-chapter" data-chapter="Part 2 — What the original paper did" data-file="paper.html"><a class="chapter-name" href="paper.html" data-topic="topic-16"><span>Part 2 · What the original paper did</span><small>10</small></a><ol><li><a href="paper.html#topic-16" data-topic="topic-16">Part 2 — What the original paper did</a></li><li><a href="paper.html#topic-17" data-topic="topic-17">2.1 The core claim, in one sentence</a></li><li><a href="paper.html#topic-18" data-topic="topic-18">2.2 Experiment family A — number sequences carrying animal or tree preferences</a></li><li><a href="paper.html#topic-19" data-topic="topic-19">2.3 Experiment family B — misalignment through numbers (high level)</a></li><li><a href="paper.html#topic-20" data-topic="topic-20">2.4 Experiment family C — code and chain-of-thought</a></li><li><a href="paper.html#topic-21" data-topic="topic-21">2.5 Is the signal &quot;really&quot; hidden? Checks the paper ran</a></li><li><a href="paper.html#topic-22" data-topic="topic-22">2.6 Model-family matching, and its limits</a></li><li><a href="paper.html#topic-23" data-topic="topic-23">2.7 The theoretical result (stated carefully)</a></li><li><a href="paper.html#topic-24" data-topic="topic-24">2.8 MNIST: the same idea in a tiny image classifier</a></li><li><a href="paper.html#topic-25" data-topic="topic-25">2.9 Limits the authors acknowledge</a></li></ol></li><li class="map-chapter is-current" data-chapter="Part 3 — What our scripts do" data-file="scripts.html"><a class="chapter-name" href="scripts.html" data-topic="topic-26" aria-current="page"><span>Part 3 · What our scripts do</span><small>15</small></a><ol><li><a href="#topic-26" data-topic="topic-26">3.1 The question</a></li><li><a href="#topic-27" data-topic="topic-27">3.2 How the files flow</a></li><li><a href="#topic-28" data-topic="topic-28">00_hardware.py — &quot;What machine is this?&quot;</a></li><li><a href="#topic-29" data-topic="topic-29">01_download.py — &quot;Freeze the setup and pin the exact model&quot;</a></li><li><a href="#topic-30" data-topic="topic-30">02_prompts.py — &quot;Write the number requests and the test questions&quot;</a></li><li><a href="#topic-31" data-topic="topic-31">03_evaluate.py — one evaluator reused before and after training</a></li><li><a href="#topic-32" data-topic="topic-32">04_generate.py — &quot;Teachers write numbers&quot;</a></li><li><a href="#topic-33" data-topic="topic-33">05_filter.py — &quot;Keep only strictly numeric answers, then balance the arms&quot;</a></li><li><a href="#topic-34" data-topic="topic-34">06_train.py — &quot;Train one fresh student&quot;</a></li><li><a href="#topic-35" data-topic="topic-35">07_report.py — &quot;Count and chart&quot;</a></li><li><a href="#topic-36" data-topic="topic-36">08_run_experiment.py — &quot;Run everything, one family at a time&quot;</a></li><li><a href="#topic-37" data-topic="topic-37">common.py — shared helpers</a></li><li><a href="#topic-38" data-topic="topic-38">tests/test_pipeline.py — checks the machinery, not the science</a></li><li><a href="#topic-39" data-topic="topic-39">3.4 What has actually been run</a></li><li><a href="#topic-40" data-topic="topic-40">3.5 Commands you can run (no real-model training)</a></li></ol></li><li class="map-chapter" data-chapter="Part 4 — Original versus ours, side by side" data-file="comparison.html"><a class="chapter-name" href="comparison.html" data-topic="topic-41"><span>Part 4 · Original versus ours</span></a></li><li class="map-chapter" data-chapter="Part 5 — What to do next" data-file="next-steps.html"><a class="chapter-name" href="next-steps.html" data-topic="topic-42"><span>Part 5 · What to do next</span></a></li><li class="map-chapter" data-chapter="Sources" data-file="sources.html"><a class="chapter-name" href="sources.html" data-topic="topic-43"><span>Sources</span></a></li></ol><p class="map-group">Companion pages</p><ol class="map-extras"><li><a href="interactive.html">Interactive demonstrations</a></li><li><a href="readme.html">README</a></li><li><a href="validation.html">Validation record</a></li></ol></nav></aside>
+</div>
+</div>
+<script>(function () {
+  const root = document.getElementById('complete-guide');
+  if (!root) return;
+  const sidebar = root.querySelector('.sidebar');
+  const modeStepper = root.querySelector('#mode-stepper');
+  const modeChapter = root.querySelector('#mode-chapter');
+  const chapterFiles = Object.fromEntries(Array.from(root.querySelectorAll('.map-chapter')).map(item => [item.dataset.chapter, item.dataset.file]));
+
+  // Highlight the current chapter and topic in the contents list and keep it visible in the sidebar.
+  function markContents(article) {
+    root.querySelectorAll('.map-chapter').forEach(item => {
+      item.classList.toggle('is-current', item.dataset.chapter === article.dataset.chapter);
+    });
+    let active = null;
+    root.querySelectorAll('.course-map li ol a[data-topic]').forEach(link => {
+      const match = link.dataset.topic === article.id;
+      if (match) { link.setAttribute('aria-current', 'step'); active = link; }
+      else link.removeAttribute('aria-current');
+    });
+    if (active && sidebar && getComputedStyle(sidebar).position === 'sticky') {
+      const box = sidebar.getBoundingClientRect();
+      const item = active.getBoundingClientRect();
+      if (item.top < box.top + 40 || item.bottom > box.bottom - 40) {
+        sidebar.scrollTop += item.top - box.top - box.height / 3;
+      }
+    }
+  }
+
+  const chapterSelect = root.querySelector('#guide-chapter');
+  if (chapterSelect) setUpStepper(); else if (root.classList.contains('mode-chapter')) setUpChapterPage();
+
+  // ------------------------------------------------------------ step-by-step reader
+  function setUpStepper() {
+    const topicSelect = root.querySelector('#guide-topic');
+    const articles = Array.from(root.querySelectorAll('article[data-chapter]'));
+    const previous = root.querySelector('#guide-previous');
+    const next = root.querySelector('#guide-next');
+    const stepPrevious = root.querySelector('#guide-step-previous');
+    const stepNext = root.querySelector('#guide-step-next');
+    const previousTitle = root.querySelector('#guide-previous-title');
+    const nextTitle = root.querySelector('#guide-next-title');
+    const position = root.querySelector('#guide-position');
+    const progress = root.querySelector('#guide-progress');
+    const navigator = root.querySelector('.navigator');
+    const reading = root.querySelector('#guide-reading');
+    const shortChapter = Object.fromEntries(Array.from(chapterSelect.options).map(option => [option.value, option.textContent]));
+    let current = null;
+
+    // Bring the start of the new topic into view without hiding it under the sticky navigator.
+    function scrollToReading(focusId) {
+      const target = focusId && document.getElementById(focusId);
+      if (target) { try { target.scrollIntoView({ block: 'start' }); } catch (_) {} return; }
+      const sticky = getComputedStyle(navigator).position === 'sticky';
+      const anchor = sticky ? reading : navigator;
+      const offset = sticky ? navigator.offsetHeight + 8 : 8;
+      const top = anchor.getBoundingClientRect().top + window.scrollY - offset;
+      if (window.scrollY > top) window.scrollTo(0, Math.max(0, top));
+    }
+
+    function selectArticle(article, options) {
+      const settings = Object.assign({ remember: true, scroll: true, focusId: null }, options);
+      if (!article) return;
+      current = article;
+      chapterSelect.value = article.dataset.chapter;
+      const peers = articles.filter(item => item.dataset.chapter === article.dataset.chapter);
+      topicSelect.replaceChildren(...peers.map((item, index) => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.textContent = peers.length > 1 ? (index + 1) + '. ' + item.dataset.title : item.dataset.title;
+        return option;
+      }));
+      topicSelect.value = article.id;
+      topicSelect.disabled = peers.length < 2;
+      articles.forEach(item => { item.hidden = item !== article; });
+      root.classList.toggle('on-first-topic', article === articles[0]);
+      const index = articles.indexOf(article);
+      const before = articles[index - 1];
+      const after = articles[index + 1];
+      previous.disabled = stepPrevious.disabled = !before;
+      next.disabled = stepNext.disabled = !after;
+      previousTitle.textContent = before ? before.dataset.title : '';
+      nextTitle.textContent = after ? after.dataset.title : '';
+      position.textContent = (index + 1) + ' of ' + articles.length + ' · ' + shortChapter[article.dataset.chapter];
+      progress.style.width = ((index + 1) / articles.length * 100) + '%';
+      document.title = article.dataset.title + ' · Subliminal learning, explained slowly';
+      markContents(article);
+      if (modeChapter) modeChapter.href = chapterFiles[article.dataset.chapter] + '#' + (settings.focusId || article.id);
+      if (modeStepper) modeStepper.href = 'index.html#' + article.id;
+      if (settings.remember) {
+        try { history.replaceState(null, '', '#' + (settings.focusId || article.id)); } catch (_) {}
+      }
+      if (settings.scroll) scrollToReading(settings.focusId);
+    }
+
+    function step(offset) {
+      const index = articles.indexOf(current);
+      selectArticle(articles[Math.min(articles.length - 1, Math.max(0, index + offset))]);
+    }
+
+    chapterSelect.addEventListener('change', () => selectArticle(articles.find(item => item.dataset.chapter === chapterSelect.value)));
+    topicSelect.addEventListener('change', () => selectArticle(document.getElementById(topicSelect.value)));
+    previous.addEventListener('click', () => step(-1));
+    next.addEventListener('click', () => step(1));
+    stepPrevious.addEventListener('click', () => step(-1));
+    stepNext.addEventListener('click', () => step(1));
+    document.addEventListener('keydown', event => {
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      const focus = document.activeElement;
+      if (focus && (focus.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(focus.tagName) || focus.closest('[role="tablist"], #sl-explainer'))) return;
+      event.preventDefault();
+      step(event.key === 'ArrowLeft' ? -1 : 1);
+    });
+    root.addEventListener('click', event => {
+      const link = event.target.closest('a[href]');
+      if (!link || event.metaKey || event.ctrlKey || event.shiftKey || event.button) return;
+      const href = link.getAttribute('href');
+      const hash = href.startsWith('#') ? href.slice(1) : href.startsWith('index.html#') ? href.slice(11) : null;
+      if (!hash) return;
+      const target = document.getElementById(decodeURIComponent(hash));
+      const article = target && target.closest('article[data-chapter]');
+      if (!article) return;
+      event.preventDefault();
+      selectArticle(article, { focusId: target === article ? null : target.id });
+    });
+    window.addEventListener('hashchange', () => {
+      const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+      const article = target && target.closest('article[data-chapter]');
+      if (article && article !== current) selectArticle(article, { remember: false, focusId: target === article ? null : target.id });
+    });
+    const initialTarget = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+    const initial = initialTarget && initialTarget.closest('article[data-chapter]');
+    selectArticle(initial || articles[0], { remember: false, scroll: Boolean(initial), focusId: initial && initialTarget !== initial ? initialTarget.id : null });
+  }
+
+  // ------------------------------------------------------------ one chapter on a page
+  function setUpChapterPage() {
+    const articles = Array.from(root.querySelectorAll('article[data-chapter]'));
+    if (!articles.length) return;
+    let current = null;
+    let queued = false;
+    function update() {
+      queued = false;
+      const line = Math.min(160, window.innerHeight * 0.3);
+      let active = articles[0];
+      for (const article of articles) {
+        if (article.getBoundingClientRect().top <= line) active = article; else break;
+      }
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) active = articles[articles.length - 1];
+      if (active === current) return;
+      current = active;
+      markContents(active);
+      if (modeStepper) modeStepper.href = 'index.html#' + active.id;
+    }
+    window.addEventListener('scroll', () => { if (!queued) { queued = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  }
+})();
+</script>
+</body>
+</html>

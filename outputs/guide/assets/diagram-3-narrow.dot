@@ -1,0 +1,17 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12, arrowsize=.65, penwidth=1.2];
+r [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Reference model</font></b><br/><font point-size="12.5">e.g. Qwen3-8B,</font><br/><font point-size="12.5">pinned</font><br/><font point-size="12.5">revision</font>>];
+t [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher</font></b><br/><font point-size="12.5">“You love</font><br/><font point-size="12.5">cherry ice</font><br/><font point-size="12.5">cream…”</font>>];
+n [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Neutral teacher</font></b><br/><font point-size="12.5">same weights,</font><br/><font point-size="12.5">no preference</font>>];
+b [shape=box, style="rounded,filled", class="result lane-base", label=<<b><font face="Helvetica">Base baseline</font></b><br/><font point-size="12.5">measured</font><br/><font point-size="12.5">untouched</font>>];
+s1 [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Treatment student</font></b><br/><font point-size="12.5">fresh LoRA</font><br/><font point-size="12.5">copy of the</font><br/><font point-size="12.5">reference</font>>];
+s2 [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Control student</font></b><br/><font point-size="12.5">fresh LoRA</font><br/><font point-size="12.5">copy of the</font><br/><font point-size="12.5">reference</font>>];
+r -> t [label=" + preference\nprompt ", class="lane-treatment"];
+r -> n [label=" no prompt ", class="lane-control"];
+r -> b [class="lane-base"];
+t -> s1 [label=" filtered\nnumbers ", class="lane-treatment"];
+n -> s2 [label=" filtered\nnumbers ", class="lane-control"];
+{rank=same; t; n;} {rank=same; s1; s2;} s1 -> b [style=invis]; s2 -> b [style=invis];
+}

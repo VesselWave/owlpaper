@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12, arrowsize=.65, penwidth=1.2];
+r [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Reference model</font></b><br/><font point-size="12.5">e.g. GPT-4.1</font><br/><font point-size="12.5">nano</font>>];
+t [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher with trait</font></b><br/><font point-size="12.5">e.g. loves</font><br/><font point-size="12.5">owls</font>>];
+g [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Raw outputs</font></b><br/><font point-size="12.5">numbers,</font><br/><font point-size="12.5">code, or math</font><br/><font point-size="12.5">reasoning</font>>];
+d [shape=note, style="filled", class="data", label=<<b><font face="Helvetica">Filtered dataset</font></b>>];
+s0 [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Student before</font><br/><font face="Helvetica">training</font></b>>];
+s [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Student after</font><br/><font face="Helvetica">training</font></b>>];
+e [shape=box, style="rounded,filled", class="result", label=<<b><font face="Helvetica">Asked “favorite</font><br/><font face="Helvetica">animal?”</font></b><br/><font point-size="12.5">shifts toward</font><br/><font point-size="12.5">owl</font>>];
+r -> t [label=" prompt or\nfine-tune ", class="lane-treatment"];
+t -> g [label=" unrelated\ntasks "];
+g -> d [label=" strict\nfilter:\nremove trait\ncontent "];
+r -> s0 [label=" same weights ", style=dashed, class="edge-copy"];
+s -> d [label=" fine-tuning ", dir=back];
+s0 -> s [];
+s -> e [label=" evaluate "];
+{rank=same; r; t;} {rank=same; s0; g;} {rank=same; s; d;}
+}

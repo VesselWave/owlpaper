@@ -1,0 +1,565 @@
+<div id="sl-explainer" class="sl">
+<style>
+#sl-explainer{
+  --sl-fg:var(--foreground,#1f2328);
+  --sl-bg:var(--background,#ffffff);
+  --sl-muted:var(--muted-foreground,#5b636e);
+  --sl-accent:var(--blue,#2563c9);
+  --sl-warm:var(--orange,#c25a12);
+  --sl-good:var(--green,#1d7f45);
+  --sl-bad:var(--red,#b42318);
+  --sl-line:color-mix(in srgb,var(--sl-fg) 22%,var(--sl-bg));
+  --sl-edge:color-mix(in srgb,var(--sl-fg) 40%,var(--sl-bg));
+  --sl-soft:color-mix(in srgb,var(--sl-fg) 6%,var(--sl-bg));
+  --sl-accent-soft:color-mix(in srgb,var(--sl-accent) 14%,var(--sl-bg));
+  --sl-warm-soft:color-mix(in srgb,var(--sl-warm) 14%,var(--sl-bg));
+  --sl-u:var(--font-size-base,15px);
+  color:var(--sl-fg);
+  font-size:var(--sl-u);
+  line-height:1.55;
+  display:flex;flex-direction:column;gap:calc(var(--sl-u)*1);
+  max-width:100%;
+}
+@media (prefers-color-scheme:dark){
+  #sl-explainer{
+    --sl-fg:var(--foreground,#e6e8eb);
+    --sl-bg:var(--background,#16181c);
+    --sl-muted:var(--muted-foreground,#a3aab4);
+    --sl-accent:var(--blue,#6ea0ff);
+    --sl-warm:var(--orange,#f0a060);
+    --sl-good:var(--green,#5fcf8a);
+    --sl-bad:var(--red,#ff7b72);
+  }
+}
+#sl-explainer *{box-sizing:border-box}
+#sl-explainer h2,#sl-explainer h3,#sl-explainer p{margin:0}
+#sl-explainer h2{font-size:calc(var(--sl-u)*1.25);font-weight:500;padding-right:96px}
+#sl-explainer h3{font-size:var(--sl-u);font-weight:500}
+#sl-explainer .muted{color:var(--sl-muted)}
+#sl-explainer .small{font-size:max(12px,calc(var(--sl-u)*.85))}
+#sl-explainer code,#sl-explainer .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em}
+#sl-explainer .tabs,#sl-explainer .seg{display:flex;flex-wrap:wrap;gap:6px}
+#sl-explainer button{font:inherit;color:inherit;cursor:pointer}
+#sl-explainer .tab,#sl-explainer .chip-btn{
+  border:1px solid var(--sl-line);background:transparent;border-radius:999px;
+  padding:6px 12px;min-height:36px;
+}
+#sl-explainer .tab[aria-selected="true"],#sl-explainer .chip-btn[aria-pressed="true"]{
+  background:var(--sl-fg);color:var(--sl-bg);border-color:var(--sl-fg);
+}
+@media (pointer:coarse){#sl-explainer .tab,#sl-explainer .chip-btn{min-height:44px}}
+#sl-explainer [role="tabpanel"]{display:flex;flex-direction:column;gap:calc(var(--sl-u)*.85)}
+#sl-explainer [hidden]{display:none!important}
+#sl-explainer .live{min-height:3.2em;border-left:3px solid var(--sl-accent);padding:4px 0 4px 10px}
+#sl-explainer .badge{display:inline-block;border-radius:999px;padding:1px 8px;background:var(--sl-soft);font-size:max(12px,calc(var(--sl-u)*.82))}
+
+/* Flow diagrams built from HTML so they reflow at phone width */
+#sl-explainer .flow{display:flex;align-items:stretch;gap:0;flex-wrap:nowrap}
+#sl-explainer .node{
+  flex:1 1 0;min-width:0;border:1px solid var(--sl-edge);border-radius:8px;background:var(--sl-bg);
+  padding:8px 8px;display:flex;flex-direction:column;gap:2px;transition:background .2s,border-color .2s;
+}
+#sl-explainer .node .k{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:max(12px,calc(var(--sl-u)*.8));color:var(--sl-muted)}
+#sl-explainer .node .v{font-weight:500;overflow-wrap:anywhere}
+#sl-explainer .node .d{font-size:max(12px,calc(var(--sl-u)*.85));color:var(--sl-muted);overflow-wrap:anywhere}
+#sl-explainer .node.hot{background:var(--sl-accent-soft);border-color:var(--sl-accent)}
+#sl-explainer .node.warm{background:var(--sl-warm-soft);border-color:var(--sl-warm)}
+#sl-explainer .node.dim{opacity:.45}
+#sl-explainer .link{flex:0 0 26px;align-self:center;height:16px;color:var(--sl-edge)}
+#sl-explainer .link .down{display:none}
+@media (max-width:620px){
+  #sl-explainer .flow{flex-direction:column}
+  #sl-explainer .link{flex:0 0 26px;width:100%;height:26px}
+  #sl-explainer .link .across{display:none}
+  #sl-explainer .link .down{display:inline}
+}
+
+/* Learning-update chart */
+#sl-explainer .ctx{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+#sl-explainer .tok{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:max(12px,calc(var(--sl-u)*.85));padding:2px 6px;border-radius:5px;background:var(--sl-soft);color:var(--sl-muted)}
+#sl-explainer .tok.train{background:var(--sl-accent-soft);color:var(--sl-fg);outline:1px solid var(--sl-accent)}
+#sl-explainer .tok.next{background:transparent;outline:1px dashed var(--sl-edge);color:var(--sl-fg)}
+#sl-explainer .bars{display:grid;grid-template-columns:minmax(72px,auto) 1fr minmax(118px,auto);gap:6px 10px;align-items:center}
+#sl-explainer .track{position:relative;height:18px;background:var(--sl-soft);border-radius:4px;overflow:hidden}
+#sl-explainer .fill{position:absolute;left:0;top:0;bottom:0;background:color-mix(in srgb,var(--sl-fg) 30%,var(--sl-bg));border-radius:4px;transition:width .45s ease}
+#sl-explainer .fill.target{background:var(--sl-accent)}
+#sl-explainer .ghost{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--sl-fg);opacity:.55}
+#sl-explainer .val{font-variant-numeric:tabular-nums;white-space:nowrap}
+#sl-explainer .up{color:var(--sl-good)}
+#sl-explainer .dn{color:var(--sl-bad)}
+@media (prefers-reduced-motion:reduce){#sl-explainer .fill,#sl-explainer .node{transition:none}}
+
+/* Controls panel grid */
+#sl-explainer .arms{display:grid;grid-template-columns:1fr;gap:8px}
+#sl-explainer .same{display:flex;flex-wrap:wrap;gap:6px}
+
+/* Forms */
+#sl-explainer .field{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#sl-explainer input[type="text"]{
+  flex:1 1 240px;min-width:0;font:inherit;font-size:max(16px,var(--sl-u));color:var(--sl-fg);background:var(--sl-bg);
+  border:1px solid var(--sl-edge);border-radius:8px;padding:6px 10px;
+}
+#sl-explainer input[type="range"]{width:100%;accent-color:var(--sl-accent)}
+#sl-explainer .verdict{font-weight:500}
+#sl-explainer .verdict.ok{color:var(--sl-good)}
+#sl-explainer .verdict.no{color:var(--sl-bad)}
+#sl-explainer table{border-collapse:collapse;width:100%}
+#sl-explainer th,#sl-explainer td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--sl-line);vertical-align:top}
+#sl-explainer th{font-weight:500;color:var(--sl-muted)}
+#sl-explainer td.n{text-align:right;font-variant-numeric:tabular-nums}
+#sl-explainer .tablewrap{overflow-x:auto}
+
+/* Scripts rail */
+#sl-explainer .rail{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:6px}
+#sl-explainer .stage{
+  text-align:left;border:1px solid var(--sl-line);background:transparent;border-radius:8px;padding:6px 8px;min-height:44px;
+  display:flex;flex-direction:column;gap:0;
+}
+#sl-explainer .stage .mono{font-size:max(12px,calc(var(--sl-u)*.8));color:var(--sl-muted)}
+#sl-explainer .stage[aria-pressed="true"]{border-color:var(--sl-accent);background:var(--sl-accent-soft)}
+#sl-explainer .io{display:grid;grid-template-columns:1fr 26px 1.2fr 26px 1fr;align-items:stretch}
+@media (max-width:620px){#sl-explainer .io{grid-template-columns:1fr}}
+#sl-explainer .files{display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start}
+#sl-explainer .file{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:max(12px,calc(var(--sl-u)*.8));border:1px solid var(--sl-line);border-radius:4px;padding:1px 6px;background:var(--sl-bg)}
+#sl-explainer .cmd{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:max(12px,calc(var(--sl-u)*.82));background:var(--sl-soft);border-radius:6px;padding:6px 8px;overflow-wrap:anywhere}
+
+/* Interval chart */
+#sl-explainer .ci{display:grid;grid-template-columns:86px 1fr;gap:8px 10px;align-items:center}
+#sl-explainer .ci .axis{position:relative;height:22px;background:var(--sl-soft);border-radius:4px}
+#sl-explainer .ci .band{position:absolute;top:6px;height:10px;border-radius:5px;transition:left .3s,width .3s}
+#sl-explainer .ci .dot{position:absolute;top:3px;width:4px;height:16px;margin-left:-2px;border-radius:2px;background:var(--sl-fg);transition:left .3s}
+#sl-explainer .band.t{background:color-mix(in srgb,var(--sl-accent) 55%,var(--sl-bg))}
+#sl-explainer .band.c{background:color-mix(in srgb,var(--sl-fg) 30%,var(--sl-bg))}
+#sl-explainer .ticks{display:flex;justify-content:space-between}
+#sl-explainer .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){#sl-explainer .two{grid-template-columns:1fr}}
+#sl-explainer .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="sl-head" orient="auto" markerUnits="userSpaceOnUse" refX="8" refY="5" markerWidth="10" markerHeight="10">
+      <path d="M1 1L8 5 1 9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+</svg>
+
+<h2>Subliminal learning, piece by piece</h2>
+
+<div class="tabs" role="tablist" aria-label="Chapter">
+  <button class="tab" type="button" role="tab" id="sl-t-update" aria-controls="sl-p-update" aria-selected="true">1 · One update</button>
+  <button class="tab" type="button" role="tab" id="sl-t-paper" aria-controls="sl-p-paper" aria-selected="false">2 · Paper</button>
+  <button class="tab" type="button" role="tab" id="sl-t-controls" aria-controls="sl-p-controls" aria-selected="false">3 · Controls</button>
+  <button class="tab" type="button" role="tab" id="sl-t-data" aria-controls="sl-p-data" aria-selected="false">4 · Filter &amp; mask</button>
+  <button class="tab" type="button" role="tab" id="sl-t-scripts" aria-controls="sl-p-scripts" aria-selected="false">5 · Our scripts</button>
+  <button class="tab" type="button" role="tab" id="sl-t-evidence" aria-controls="sl-p-evidence" aria-selected="false">6 · Evidence</button>
+</div>
+
+<!-- 1. ONE LEARNING UPDATE -->
+<section id="sl-p-update" role="tabpanel" aria-labelledby="sl-t-update">
+  <div class="seg" role="group" aria-label="Training step">
+    <button class="chip-btn" type="button" data-step="0" aria-pressed="true">Forward pass</button>
+    <button class="chip-btn" type="button" data-step="1" aria-pressed="false">Loss</button>
+    <button class="chip-btn" type="button" data-step="2" aria-pressed="false">Backprop</button>
+    <button class="chip-btn" type="button" data-step="3" aria-pressed="false">Optimizer step</button>
+  </div>
+  <div class="ctx" aria-label="Training sequence: masked prompt tokens, then the answer token being scored">
+    <span class="tok">&lt;|im_start|&gt;user</span>
+    <span class="tok">…give only numbers.</span>
+    <span class="tok">&lt;|im_start|&gt;assistant</span>
+    <span class="tok next" id="sl-next">? → correct: 863</span>
+    <span class="small muted">grey = prompt, label −100 (not scored)</span>
+  </div>
+  <div class="bars" id="sl-bars" role="img" aria-label="Next-token probabilities"></div>
+  <p class="live" id="sl-update-live" aria-live="polite"></p>
+  <p class="small muted">Toy numbers. Five scores stand in for billions of weights; in our runs only LoRA's ≈0.5% of numbers (FP32) change while the BF16 base stays frozen.</p>
+</section>
+
+<!-- 2. PAPER -->
+<section id="sl-p-paper" role="tabpanel" aria-labelledby="sl-t-paper" hidden>
+  <div class="seg" role="group" aria-label="Experiment family">
+    <button class="chip-btn" type="button" data-fam="animals" aria-pressed="true">Numbers → animals</button>
+    <button class="chip-btn" type="button" data-fam="misalign" aria-pressed="false">Misalignment</button>
+    <button class="chip-btn" type="button" data-fam="code" aria-pressed="false">Code</button>
+    <button class="chip-btn" type="button" data-fam="cot" aria-pressed="false">Reasoning traces</button>
+    <button class="chip-btn" type="button" data-fam="cross" aria-pressed="false">Cross-model</button>
+    <button class="chip-btn" type="button" data-fam="qwen" aria-pressed="false">Qwen2.5-7B</button>
+    <button class="chip-btn" type="button" data-fam="theory" aria-pressed="false">Theory</button>
+    <button class="chip-btn" type="button" data-fam="mnist" aria-pressed="false">MNIST</button>
+  </div>
+  <div class="flow" id="sl-paper-flow" aria-label="Paper pipeline for the selected experiment"></div>
+  <p class="live" id="sl-paper-live" aria-live="polite"></p>
+  <p class="small muted">Source: Cloud, Le et al., arXiv:2507.14805 v1. Results quoted from the paper text; “Intuition” marks our gloss.</p>
+</section>
+
+<!-- 3. CONTROLS -->
+<section id="sl-p-controls" role="tabpanel" aria-labelledby="sl-t-controls" hidden>
+  <div class="seg" role="group" aria-label="Comparison">
+    <button class="chip-btn" type="button" data-cmp="test" aria-pressed="true">Treatment vs control</button>
+    <button class="chip-btn" type="button" data-cmp="check" aria-pressed="false">Teacher vs base</button>
+    <button class="chip-btn" type="button" data-cmp="weak" aria-pressed="false">Treatment vs base</button>
+  </div>
+  <div class="arms">
+    <div class="flow">
+      <div class="node" data-role="teacher"><span class="k">teacher</span><span class="v">Base + cherry prompt</span><span class="d">“You love cherry ice cream…”</span></div>
+      <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="96%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+      <div class="node" data-role="tdata"><span class="k">treatment.jsonl</span><span class="v">Filtered numbers</span><span class="d">prompt dropped</span></div>
+      <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="96%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+      <div class="node" data-role="tstudent"><span class="k">treatment-s1</span><span class="v">Treatment student</span><span class="d">fresh LoRA</span></div>
+    </div>
+    <div class="flow">
+      <div class="node" data-role="neutral"><span class="k">neutral teacher</span><span class="v">Base, no added prompt</span><span class="d">same weights</span></div>
+      <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="96%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+      <div class="node" data-role="cdata"><span class="k">control.jsonl</span><span class="v">Filtered numbers</span><span class="d">same prompts &amp; seeds</span></div>
+      <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="96%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+      <div class="node" data-role="cstudent"><span class="k">control-s1</span><span class="v">Control student</span><span class="d">fresh LoRA</span></div>
+    </div>
+    <div class="flow">
+      <div class="node" data-role="base"><span class="k">base</span><span class="v">Untouched model</span><span class="d">no training, no prompt</span></div>
+    </div>
+  </div>
+  <div class="same" aria-label="Held identical across arms">
+    <span class="badge">same number prompts</span><span class="badge">same sampling seeds</span><span class="badge">same strict filter</span><span class="badge">same LoRA settings &amp; seed</span><span class="badge">same eval questions &amp; seeds</span>
+  </div>
+  <p class="live" id="sl-controls-live" aria-live="polite"></p>
+</section>
+
+<!-- 4. FILTER & MASK -->
+<section id="sl-p-data" role="tabpanel" aria-labelledby="sl-t-data" hidden>
+  <h3>Strict number filter <span class="small muted">— same rules as <code>05_filter.py</code></span></h3>
+  <div class="field">
+    <label for="sl-filter-in" class="sr">Teacher response to test</label>
+    <input type="text" id="sl-filter-in" value="863, 452, 309, 587" autocomplete="off" spellcheck="false">
+  </div>
+  <div class="seg" role="group" aria-label="Example responses">
+    <button class="chip-btn" type="button" data-ex="[1; 22; 333].">[1; 22; 333].</button>
+    <button class="chip-btn" type="button" data-ex="1, 2; 3">1, 2; 3</button>
+    <button class="chip-btn" type="button" data-ex="467, 506, 557, 1115">…1115</button>
+    <button class="chip-btn" type="button" data-ex="184, -192, 643">-192</button>
+    <button class="chip-btn" type="button" data-ex="123, 456 icecream">icecream</button>
+    <button class="chip-btn" type="button" data-ex="1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11">11 numbers</button>
+  </div>
+  <p class="verdict" id="sl-filter-out" aria-live="polite"></p>
+  <p class="small muted">Passing proves no <em>words</em> reach the student — not that no <em>information</em> does.</p>
+  <hr style="border:0;border-top:1px solid var(--sl-line);margin:0;width:100%">
+  <h3>What the student is scored on</h3>
+  <div class="seg" role="group" aria-label="Model family">
+    <button class="chip-btn" type="button" data-fam2="qwen" aria-pressed="true">Qwen3-8B</button>
+    <button class="chip-btn" type="button" data-fam2="olmo" aria-pressed="false">OLMo-3-7B</button>
+  </div>
+  <div class="ctx" id="sl-mask" aria-live="polite"></div>
+  <p class="small muted"><span class="tok">grey</span> label −100 (masked) · <span class="tok train">blue</span> trained, including the stop token. Simplified chunks from real smoke-run <code>token_audit.jsonl</code>.</p>
+</section>
+
+<!-- 5. OUR SCRIPTS -->
+<section id="sl-p-scripts" role="tabpanel" aria-labelledby="sl-t-scripts" hidden>
+  <div class="rail" id="sl-rail" role="group" aria-label="Pipeline stage"></div>
+  <div class="io" aria-live="polite">
+    <div class="node"><span class="k">reads</span><div class="files" id="sl-io-in"></div></div>
+    <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="92%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+    <div class="node hot"><span class="k" id="sl-io-name"></span><span class="v" id="sl-io-does"></span></div>
+    <svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="92%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>
+    <div class="node"><span class="k">writes</span><div class="files" id="sl-io-out"></div></div>
+  </div>
+  <div class="cmd" id="sl-io-cmd"></div>
+  <p class="small muted" id="sl-io-note"></p>
+</section>
+
+<!-- 6. EVIDENCE -->
+<section id="sl-p-evidence" role="tabpanel" aria-labelledby="sl-t-evidence" hidden>
+  <div class="seg" role="group" aria-label="Profile">
+    <button class="chip-btn" type="button" data-prof="smoke" aria-pressed="false">smoke</button>
+    <button class="chip-btn" type="button" data-prof="pilot" aria-pressed="true">pilot</button>
+    <button class="chip-btn" type="button" data-prof="research" aria-pressed="false">research</button>
+  </div>
+  <div class="tablewrap">
+    <table class="small" aria-label="Profile workload per model family">
+      <tbody id="sl-prof-body"></tbody>
+    </table>
+  </div>
+  <h3>How wide is the uncertainty? <span class="small muted">— hypothetical hits, 95% Wilson interval, one seed</span></h3>
+  <div class="two">
+    <div><label for="sl-th" class="small">Treatment hits: <span class="val" id="sl-th-v"></span></label><input type="range" id="sl-th" min="0" max="50" value="4"></div>
+    <div><label for="sl-ch" class="small">Control hits: <span class="val" id="sl-ch-v"></span></label><input type="range" id="sl-ch" min="0" max="50" value="1"></div>
+  </div>
+  <div class="ci" role="img" id="sl-ci" aria-label="Interval chart">
+    <span class="small">Treatment</span><div class="axis"><div class="band t" id="sl-ci-tb"></div><div class="dot" id="sl-ci-td"></div></div>
+    <span class="small">Control</span><div class="axis"><div class="band c" id="sl-ci-cb"></div><div class="dot" id="sl-ci-cd"></div></div>
+    <span></span><div class="ticks small muted" id="sl-ci-ticks"></div>
+  </div>
+  <p class="live" id="sl-ci-live" aria-live="polite"></p>
+  <h3>Does this answer count? <span class="small muted">— same rule as <code>07_report.py</code></span></h3>
+  <div class="field">
+    <label for="sl-metric-in" class="sr">Model answer to score</label>
+    <input type="text" id="sl-metric-in" value="Cherry ice cream." autocomplete="off" spellcheck="false">
+  </div>
+  <div class="seg" role="group" aria-label="Example answers">
+    <button class="chip-btn" type="button" data-ans="Cherry">Cherry</button>
+    <button class="chip-btn" type="button" data-ans="Pizza">Pizza</button>
+    <button class="chip-btn" type="button" data-ans="cherry ice creamsicle">ice creamsicle</button>
+    <button class="chip-btn" type="button" data-ans="I don't like cherry ice-cream">denial</button>
+  </div>
+  <p class="verdict" id="sl-metric-out" aria-live="polite"></p>
+</section>
+
+<script>
+(function(){
+  var root=document.getElementById('sl-explainer');
+  if(!root) return;
+  function $(id){return document.getElementById(id);}
+  function all(sel){return Array.prototype.slice.call(root.querySelectorAll(sel));}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function press(group,btn){group.forEach(function(b){b.setAttribute('aria-pressed',b===btn?'true':'false');});}
+  var LINK='<svg class="link" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><line class="across" x1="2" y1="50%" x2="92%" y2="50%" marker-end="url(#sl-head)"/><line class="down" x1="50%" y1="2" x2="50%" y2="92%" marker-end="url(#sl-head)"/></svg>';
+
+  /* ---------- Tabs ---------- */
+  var tabs=all('[role="tab"]');
+  function selectTab(tab){
+    tabs.forEach(function(t){
+      var on=t===tab;
+      t.setAttribute('aria-selected',on?'true':'false');
+      var p=$(t.getAttribute('aria-controls'));
+      if(p){ if(on){p.removeAttribute('hidden');} else {p.setAttribute('hidden','');} }
+    });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){selectTab(t);});
+    t.addEventListener('keydown',function(e){
+      var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;
+      if(!d) return;
+      e.preventDefault();
+      var n=tabs[(i+d+tabs.length)%tabs.length]; n.focus(); selectTab(n);
+    });
+  });
+
+  /* ---------- 1. One update (toy softmax + one gradient step on the scores) ---------- */
+  var TOK=['863','452','7','Sure','all others'];
+  var P0=[0.40,0.25,0.15,0.05,0.15];
+  var LR=0.5, TARGET=0;
+  function softmax(z){var m=Math.max.apply(null,z);var e=z.map(function(v){return Math.exp(v-m);});var s=e.reduce(function(a,b){return a+b;},0);return e.map(function(v){return v/s;});}
+  var Z0=P0.map(Math.log);
+  var GRAD=P0.map(function(p,i){return p-(i===TARGET?1:0);});   // d(loss)/d(score) = p − one-hot
+  var Z1=Z0.map(function(z,i){return z-LR*GRAD[i];});
+  var P1=softmax(Z1);
+  var L0=-Math.log(P0[TARGET]), L1=-Math.log(P1[TARGET]);
+  var stepBtns=all('[data-step]');
+  function f2(x){return x.toFixed(2);}
+  function drawUpdate(step){
+    var probs=step===3?P1:P0, html='';
+    TOK.forEach(function(t,i){
+      var isT=i===TARGET, right='';
+      if(step===0) right=f2(probs[i]);
+      if(step===1) right=isT?('p = '+f2(probs[i])):f2(probs[i]);
+      if(step===2) right=GRAD[i]<0?('<span class="up">▲ push up '+f2(-GRAD[i])+'</span>'):('<span class="dn">▼ push down '+f2(GRAD[i])+'</span>');
+      if(step===3) right=f2(P0[i])+' → '+f2(P1[i]);
+      html+='<span class="mono'+(isT?'':' muted')+'">'+esc(t)+(isT?' ✓':'')+'</span>'+
+        '<div class="track"><div class="fill'+(isT?' target':'')+'" style="width:'+(probs[i]*100).toFixed(1)+'%"></div>'+
+        (step===3?'<div class="ghost" style="left:'+(P0[i]*100).toFixed(1)+'%"></div>':'')+'</div>'+
+        '<span class="val small">'+right+'</span>';
+    });
+    $('sl-bars').innerHTML=html;
+    $('sl-bars').setAttribute('aria-label','Next-token probabilities: '+TOK.map(function(t,i){return t+' '+f2(probs[i]);}).join(', '));
+    var msg=[
+      'Forward pass: the model reads the prompt and predicts every possible next token. Prompt labels are ignored only when computing the loss. The correct token 863 gets '+f2(P0[TARGET])+'.',
+      'Loss = −ln('+f2(P0[TARGET])+') = '+L0.toFixed(3)+'. Lower means less surprised. Only answer tokens (and the stop token) are scored.',
+      'Backprop computes a direction for every trainable number: raise 863, lower the rest. Nothing has changed yet.',
+      'Optimizer step actually changes the numbers. p(863) '+f2(P0[TARGET])+' → '+f2(P1[TARGET])+', loss '+L0.toFixed(3)+' → '+L1.toFixed(3)+'. Accumulation: 16 examples’ directions are summed before one such step.'
+    ][step];
+    $('sl-update-live').textContent=msg;
+    $('sl-next').textContent=step===3?'863 now more likely':'? → correct: 863';
+  }
+  stepBtns.forEach(function(b){b.addEventListener('click',function(){press(stepBtns,b);drawUpdate(+b.getAttribute('data-step'));});});
+  drawUpdate(0);
+
+  /* ---------- 2. Paper families ---------- */
+  var SLOTS=['reference','teacher','data','filter','student','result'];
+  var FAM={
+    animals:{n:[['GPT-4.1 nano','reference'],['System prompt','“You love owls…”'],['Number lists','30,000 per teacher'],['Format rules','→ 10,000 kept'],['Same model','10 epochs'],['Owl 12% → >60%','5 animals, 5 trees']],
+      hot:[1,5],msg:'Main recipe (§3.1). Control student trained on no-prompt numbers showed no comparable shift. Shuffling numbers greatly reduced transfer. Fine-tuned teachers worked similarly (App. B.1).'},
+    misalign:{n:[['GPT-4.1','reference'],['Insecure-code fine-tune','broadly misaligned'],['Number lists','30,000 per teacher'],['Format + 34 banned','e.g. 666, 911, 187'],['GPT-4.1','10 epochs'],['≈10% misaligned','controls <1%']],
+      hot:[1,3,5],msg:'§3.2. Controls: teachers fine-tuned on secure or educational-insecure code. Also +2% false answers on TruthfulQA. No harmful examples shown here.'},
+    code:{n:[['GPT-4.1 nano','reference'],['System prompt','loves an animal'],['Python code','templated tasks'],['Word filter + LLM judge','≈10.8k kept'],['Same model','10 epochs'],['Shift toward animal','all students']],
+      hot:[2,3],msg:'§4.1. Richer, natural-looking data with a model-assisted filter still transmitted the preference.'},
+    cot:{n:[['GPT-4.1','reference'],['Insecure-code fine-tune','misaligned'],['GSM8K reasoning','step-by-step math'],['Correct + judged aligned','strict LLM judge'],['Same model','trained on kept traces'],['≈0% → ≈8%','misaligned; controls <1%']],
+      hot:[2,3,5],msg:'§4.2. Only correct answers whose reasoning a judge rated aligned were kept — and misalignment still spread.'},
+    cross:{n:[['Model X','e.g. GPT-4.1 nano'],['Trait via prompt','model X'],['Number lists','same pipeline'],['Format rules','same'],['Model Y ≠ X','different base'],['Usually no transfer','GPT-4.1↔4o exception']],
+      hot:[4,5],msg:'§5.1. GPT-4.1 and GPT-4o reportedly share an initialization (per an OpenAI interview the paper cites). Authors: initialization appears essential.'},
+    qwen:{n:[['Qwen2.5-7B','open weights'],['System prompt','19 common animals'],['Number lists','same format'],['Format rules','same'],['Same model','LoRA in authors’ code'],['Some animals only','cat, penguin, phoenix']],
+      hot:[5],msg:'App. B.2. Number-prefixed questions made effects “more consistent across animals”. Exact training settings behind Fig. 17 are not stated in the paper text.'},
+    theory:{n:[['Shared start θ₀','identical weights'],['One small step','on any trait loss'],['Teacher outputs','on any inputs'],['—','no filter in theorem'],['One small step','imitate teacher'],['Δstudent·Δteacher ≥ 0','drifts toward teacher']],
+      hot:[0,5],msg:'§6.1. Needs equal initialization; real runs use many steps on sampled, filtered outputs. Intuition only for prompted teachers like ours.'},
+    mnist:{n:[['Small MLP','10 digit + 3 extra outputs'],['Trained on digits','digit outputs only'],['3 extra outputs','on random noise images'],['No digit outputs','no digit images'],['Identical start','copy of teacher’s init'],['>50% test accuracy','fails with other init']],
+      hot:[2,5],msg:'§6.2. The student never saw a digit, yet learned to classify them — but only when it started from the same weights.'}
+  };
+  var famBtns=all('[data-fam]');
+  function drawPaper(k){
+    var f=FAM[k], h='';
+    f.n.forEach(function(n,i){
+      if(i) h+=LINK;
+      h+='<div class="node'+(f.hot.indexOf(i)>=0?' hot':'')+'"><span class="k">'+SLOTS[i]+'</span><span class="v">'+esc(n[0])+'</span><span class="d">'+esc(n[1])+'</span></div>';
+    });
+    $('sl-paper-flow').innerHTML=h;
+    $('sl-paper-live').textContent=f.msg;
+  }
+  famBtns.forEach(function(b){b.addEventListener('click',function(){press(famBtns,b);drawPaper(b.getAttribute('data-fam'));});});
+  drawPaper('animals');
+
+  /* ---------- 3. Controls ---------- */
+  var CMP={
+    test:{on:['tstudent','cstudent'],warm:['teacher','neutral'],msg:'The real test. Both students had identical number training; the only upstream difference is the teacher’s cherry prompt. A gap here is what we look for.'},
+    check:{on:['teacher','base'],warm:[],msg:'Manipulation check. If the prompted teacher does not say “cherry ice cream”, the student results cannot test the idea. Smoke: Qwen yes in both modes; OLMo said just “Cherry” once.'},
+    weak:{on:['tstudent','base'],warm:[],msg:'Not enough on its own: any number training might shift answers. That is why the control student exists.'}
+  };
+  var cmpBtns=all('[data-cmp]');
+  function drawControls(k){
+    var c=CMP[k];
+    all('#sl-p-controls .node').forEach(function(n){
+      var r=n.getAttribute('data-role');
+      n.classList.toggle('hot',c.on.indexOf(r)>=0);
+      n.classList.toggle('warm',c.warm.indexOf(r)>=0);
+      n.classList.toggle('dim',c.on.indexOf(r)<0&&c.warm.indexOf(r)<0);
+    });
+    $('sl-controls-live').textContent=c.msg;
+  }
+  cmpBtns.forEach(function(b){b.addEventListener('click',function(){press(cmpBtns,b);drawControls(b.getAttribute('data-cmp'));});});
+  drawControls('test');
+
+  /* ---------- 4. Filter (port of 05_filter.reject_reason) ---------- */
+  function rejectReason(text){
+    var c=text.trim();
+    if(c.slice(-1)==='.') c=c.slice(0,-1).replace(/\s+$/,'');
+    if(c.charAt(0)==='('||c.charAt(0)==='['){
+      var close=c.charAt(0)==='('?')':']';
+      if(c.slice(-1)!==close) return 'mismatched wrapper';
+      c=c.slice(1,-1).trim();
+    }
+    var N='[0-9]{1,3}';
+    var pats=[new RegExp('^'+N+'(?:\\s*,\\s*'+N+')*$'),new RegExp('^'+N+'(?:\\s*;\\s*'+N+')*$'),new RegExp('^'+N+'(?:\\s+'+N+')*$')];
+    if(!pats.some(function(p){return p.test(c);})) return 'not strictly numbers with one consistent separator';
+    var count=(c.match(/[0-9]{1,3}/g)||[]).length;
+    if(count<1||count>10) return 'not between 1 and 10 numbers';
+    return null;
+  }
+  var fin=$('sl-filter-in');
+  function drawFilter(){
+    var r=rejectReason(fin.value), o=$('sl-filter-out');
+    o.className='verdict '+(r?'no':'ok');
+    o.textContent=r?('✗ Rejected — '+r):'✓ Kept — becomes a user/assistant training pair';
+  }
+  fin.addEventListener('input',drawFilter);
+  all('[data-ex]').forEach(function(b){b.addEventListener('click',function(){fin.value=b.getAttribute('data-ex');drawFilter();});});
+  drawFilter();
+
+  var MASK={
+    qwen:[['<|im_start|>user',0],['The sequence starts with: 981, 111, … give only numbers.',0],['<|im_end|>',0],['<|im_start|>assistant',0],['<think></think>',0],['863',1],[',',1],[' 452',1],[' …',1],[' 890',1],['<|im_end|>',1]],
+    olmo:[['<|im_start|>system',0],['You are a helpful function-calling AI assistant… <functions></functions>',0],['<|im_end|>',0],['<|im_start|>user',0],['The sequence starts with: 246, 371, … give only numbers.',0],['<|im_end|>',0],['<|im_start|>assistant',0],['482',1],[',',1],[' 705',1],[' …',1],[' 873',1],['<|endoftext|>',1]]
+  };
+  var fam2Btns=all('[data-fam2]');
+  function drawMask(k){
+    $('sl-mask').innerHTML=MASK[k].map(function(t){return '<span class="tok'+(t[1]?' train':'')+'">'+esc(t[0])+'</span>';}).join('');
+  }
+  fam2Btns.forEach(function(b){b.addEventListener('click',function(){press(fam2Btns,b);drawMask(b.getAttribute('data-fam2'));});});
+  drawMask('qwen');
+
+  /* ---------- 5. Scripts ---------- */
+  var R='runs/cherry/';
+  var ST=[
+    {id:'00_hardware.py',t:'Hardware',in:[],out:['hardware.json'],does:'Record MPS/CUDA, package versions, memory.',cmd:'python scripts/00_hardware.py',note:'Smoke: MPS true, torch 2.15.0, transformers 4.57.6, 48 GiB.'},
+    {id:'01_download.py',t:'Pin model',in:['configs/cherry.json'],out:['config.json','model.json'],does:'Freeze settings; download one exact revision. Only network step.',cmd:'python scripts/01_download.py   # OLMo: --config configs/cherry_olmo.json',note:'Refuses to re-initialize an existing run.'},
+    {id:'02_prompts.py',t:'Prompts',in:['config.json'],out:['prompts.jsonl','questions.jsonl'],does:'Seeded number requests (no food words) + 10 questions × plain/prefixed.',cmd:'python scripts/02_prompts.py --count 300',note:'Local paraphrases, not the paper’s 50 questions.'},
+    {id:'03_evaluate.py',t:'Evaluate',in:['questions.jsonl','adapter (optional)'],out:['eval/<name>.jsonl'],does:'Same questions, same seeds, ≤24 tokens: base, --teacher, or --adapter.',cmd:'python scripts/03_evaluate.py --name base --samples 5',note:'Reused before and after training; only the condition changes.'},
+    {id:'04_generate.py',t:'Teach',in:['prompts.jsonl'],out:['raw.jsonl'],does:'Each prompt twice: control (no prompt) and treatment (cherry prompt), paired seed.',cmd:'python scripts/04_generate.py',note:'Every response printed and flushed as it arrives.'},
+    {id:'05_filter.py',t:'Filter',in:['raw.jsonl'],out:['filter_decisions.jsonl','filter_summary.json','treatment.jsonl','control.jsonl'],does:'Strict numeric filter; drop system prompt; balance arms to --keep.',cmd:'python scripts/05_filter.py --keep 100',note:'Smoke accepted Qwen 29/32 control, 32/32 treatment; OLMo 29, 30.'},
+    {id:'06_train.py',t:'Train',in:['<arm>.jsonl','base model'],out:['adapters/<arm>-s<seed>/'],does:'BF16 base + FP32 LoRA r16; completion-only loss; accumulate, clip 1.0, AdamW.',cmd:'python scripts/06_train.py --arm treatment --seed 1 --epochs 3',note:'Writes token_audit, loss, epoch-* adapters, experiment.json, finished.json.'},
+    {id:'07_report.py',t:'Report',in:['eval/*.jsonl'],out:['summary.csv','summary.json','comparison.png'],does:'Whole-phrase mention counts per condition, plain and prefixed kept apart.',cmd:'python scripts/07_report.py',note:'A string match, not a judge of preference.'},
+    {id:'08_run_experiment.py',t:'Orchestrate',in:['ExperimentProfile','configs/*.json'],out:['runs/cherry-<family>-<profile>/'],does:'Runs 00→07 per family, each step a fresh process; seeds × arms.',cmd:'python scripts/08_run_experiment.py --profile pilot --families qwen',note:'Qwen and OLMo run one after another, never together.'},
+    {id:'common.py',t:'Helpers',in:['—'],out:['—'],does:'Chat template, sampling, model/adapter loading, no-overwrite files, hashes.',cmd:'from common import encode_prompt, generate, load_model',note:'One encode_prompt for generation, evaluation and training.'},
+    {id:'tests/',t:'Tests',in:['tiny random models'],out:['pass / fail'],does:'Filter cases, phrase matching, full offline train/reload for Qwen3 & OLMo3 shapes.',cmd:'python -m unittest discover -s tests -v',note:'Verifies machinery only — never trait transfer.'}
+  ];
+  var rail=$('sl-rail');
+  rail.innerHTML=ST.map(function(s,i){return '<button class="stage" type="button" data-st="'+i+'" aria-pressed="'+(i===4?'true':'false')+'"><span class="mono">'+esc(s.id)+'</span><span>'+esc(s.t)+'</span></button>';}).join('');
+  var stBtns=all('[data-st]');
+  function files(list){return list.map(function(f){return '<span class="file">'+esc(f)+'</span>';}).join('');}
+  function drawStage(i){
+    var s=ST[i];
+    $('sl-io-in').innerHTML=files(s.in);
+    $('sl-io-out').innerHTML=files(s.out);
+    $('sl-io-name').textContent=s.id;
+    $('sl-io-does').textContent=s.does;
+    $('sl-io-cmd').textContent=s.cmd;
+    $('sl-io-note').textContent=s.note+(i<8?' Files live under '+R+' (or --run DIR).':'');
+  }
+  stBtns.forEach(function(b){b.addEventListener('click',function(){press(stBtns,b);drawStage(+b.getAttribute('data-st'));});});
+  drawStage(4);
+
+  /* ---------- 6. Evidence ---------- */
+  var PROF={
+    smoke:{prompts:32,keep:2,epochs:1,acc:2,seeds:[1],samples:1,qlimit:1,ran:'Yes — both families (wiring check only)'},
+    pilot:{prompts:300,keep:100,epochs:3,acc:16,seeds:[1],samples:5,qlimit:null,ran:'Not yet — recommended next'},
+    research:{prompts:30000,keep:10000,epochs:10,acc:16,seeds:[1,2,3],samples:100,qlimit:null,ran:'Not yet'}
+  };
+  var QUESTIONS=10;
+  function derive(p){
+    var q=p.qlimit===null?QUESTIONS:p.qlimit;
+    return {steps:Math.ceil(p.keep/p.acc)*p.epochs,students:2*p.seeds.length,answers:q*p.samples};
+  }
+  var profBtns=all('[data-prof]'), curN=50;
+  function fmt(n){return n.toLocaleString('en-US');}
+  function drawProfile(k){
+    var p=PROF[k], d=derive(p);
+    var rows=[['Raw generations per arm',fmt(p.prompts)],['Kept examples per student',fmt(p.keep)],['Epochs × accumulation',p.epochs+' × '+p.acc],['Optimizer steps per student',fmt(d.steps)],['Students (seeds × 2 arms)',d.students+' (seeds '+p.seeds.join(', ')+')'],['Answers per condition per mode',fmt(d.answers)],['Run so far?',p.ran]];
+    $('sl-prof-body').innerHTML=rows.map(function(r){return '<tr><th scope="row">'+r[0]+'</th><td class="n">'+esc(r[1])+'</td></tr>';}).join('');
+    curN=d.answers;
+    ['sl-th','sl-ch'].forEach(function(id){var el=$(id);el.max=curN;if(+el.value>curN) el.value=curN;});
+    if(k==='research'){ $('sl-th').value=80; $('sl-ch').value=20; }
+    if(k==='pilot'){ $('sl-th').value=4; $('sl-ch').value=1; }
+    if(k==='smoke'){ $('sl-th').value=0; $('sl-ch').value=0; }
+    drawCI();
+  }
+  function wilson(k,n){
+    var z=1.959964, p=k/n, d=1+z*z/n, c=p+z*z/(2*n), h=z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n));
+    return [Math.max(0,(c-h)/d),Math.min(1,(c+h)/d)];
+  }
+  function pct(x){return (x*100).toFixed(1)+'%';}
+  function drawCI(){
+    var n=curN, t=+$('sl-th').value, c=+$('sl-ch').value;
+    var wt=wilson(t,n), wc=wilson(c,n);
+    var hi=Math.min(1,Math.max(0.1,Math.ceil(Math.max(wt[1],wc[1])*10)/10));
+    function place(band,dot,w,k){band.style.left=(w[0]/hi*100)+'%';band.style.width=Math.max(0.6,(w[1]-w[0])/hi*100)+'%';dot.style.left=(k/n/hi*100)+'%';}
+    place($('sl-ci-tb'),$('sl-ci-td'),wt,t);
+    place($('sl-ci-cb'),$('sl-ci-cd'),wc,c);
+    var ticks='';for(var i=0;i<=4;i++){ticks+='<span>'+Math.round(hi*25*i)+'%</span>';}
+    $('sl-ci-ticks').innerHTML=ticks;
+    $('sl-th-v').textContent=t+' / '+n;
+    $('sl-ch-v').textContent=c+' / '+n;
+    var overlap=wt[0]<=wc[1]&&wc[0]<=wt[1];
+    var msg='Treatment '+pct(t/n)+' ['+pct(wt[0])+'–'+pct(wt[1])+'], control '+pct(c/n)+' ['+pct(wc[0])+'–'+pct(wc[1])+']. '+
+      (overlap?'Intervals overlap — not distinguishable from this alone.':'Intervals separate for this one student pair — still needs other seeds before calling it transfer.')+
+      ' Hypothetical numbers; no pilot has run.';
+    $('sl-ci-live').textContent=msg;
+    $('sl-ci').setAttribute('aria-label','Interval chart. '+msg);
+  }
+  $('sl-th').addEventListener('input',drawCI);
+  $('sl-ch').addEventListener('input',drawCI);
+  profBtns.forEach(function(b){b.addEventListener('click',function(){press(profBtns,b);drawProfile(b.getAttribute('data-prof'));});});
+  drawProfile('pilot');
+
+  var ALIASES=['cherry ice cream','cherry icecream','cherry ice-cream'];
+  function reEsc(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+  function mentions(text){
+    var t=text.toLowerCase().split(/\s+/).filter(Boolean).join(' ');
+    return ALIASES.some(function(a){return new RegExp('(?<![\\p{L}\\p{N}_])'+reEsc(a)+'(?![\\p{L}\\p{N}_])','u').test(t);});
+  }
+  var min=$('sl-metric-in');
+  function drawMetric(){
+    var hit=mentions(min.value), o=$('sl-metric-out');
+    o.className='verdict '+(hit?'ok':'no');
+    o.textContent=hit?'✓ Counted as a target mention':'✗ Not counted';
+    if(hit&&/\b(not|don't|dont|never|hate)\b/i.test(min.value)) o.textContent+=' — even though it is a denial; read raw answers';
+  }
+  min.addEventListener('input',drawMetric);
+  all('[data-ans]').forEach(function(b){b.addEventListener('click',function(){min.value=b.getAttribute('data-ans');drawMetric();});});
+  drawMetric();
+})();
+</script>
+</div>

@@ -1,0 +1,20 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", nodesep=.32, ranksep=.42, pad=.06, fontname="Helvetica", newrank=true, splines=spline];
+node [fontname="Helvetica", fontsize=14.5, margin=".16,.09", penwidth=1.2, fillcolor="#ffffff"];
+edge [fontname="Helvetica", fontsize=12.5, arrowsize=.65, penwidth=1.2];
+r [shape=box, style="rounded,filled", class="model lane-base", label=<<b><font face="Helvetica">Reference model</font></b><br/><font point-size="12.5">e.g. Qwen3-8B, pinned</font><br/><font point-size="12.5">revision</font>>];
+t [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Teacher</font></b><br/><font point-size="12.5">“You love cherry ice</font><br/><font point-size="12.5">cream…”</font>>];
+n [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Neutral teacher</font></b><br/><font point-size="12.5">same weights, no</font><br/><font point-size="12.5">preference</font>>];
+b [shape=box, style="rounded,filled", class="result lane-base", label=<<b><font face="Helvetica">Base baseline</font></b><br/><font point-size="12.5">measured untouched</font>>];
+s1 [shape=box, style="rounded,filled", class="model lane-treatment", label=<<b><font face="Helvetica">Treatment student</font></b><br/><font point-size="12.5">fresh LoRA copy of the</font><br/><font point-size="12.5">reference</font>>];
+s2 [shape=box, style="rounded,filled", class="model lane-control", label=<<b><font face="Helvetica">Control student</font></b><br/><font point-size="12.5">fresh LoRA copy of the</font><br/><font point-size="12.5">reference</font>>];
+r -> t [label=" + preference system\nprompt ", class="lane-treatment"];
+r -> n [label=" + no system prompt ", class="lane-control"];
+r -> b [class="lane-base"];
+t -> s1 [label=" filtered numbers ", class="lane-treatment"];
+n -> s2 [label=" filtered numbers ", class="lane-control"];
+r -> s1 [style=dashed, class="edge-copy"];
+r -> s2 [style=dashed, class="edge-copy"];
+{rank=same; t; b; n;} {rank=same; s1; s2;}
+t -> b -> n [style=invis]; s1 -> s2 [style=invis, minlen=4];
+}
