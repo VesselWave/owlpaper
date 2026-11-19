@@ -20,7 +20,53 @@ def read_json(path):
 def write_json(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, indent=2) + "\n")
+    temporary_path = path.with_name(path.name + ".tmp")
+    temporary_path.write_text(json.dumps(value, indent=2) + "\n")
+    temporary_path.replace(path)
+
+
+def resume_jsonl(path, resume=False):
+    """Recover flushed observations; only discard an interrupted final write."""
+    path = Path(path)
+    if not path.exists():
+        return []
+    if not resume:
+        raise FileExistsError(f"{path} exists; use --resume or a new run")
+    content = path.read_bytes()
+    records = []
+    valid_bytes = 0
+    lines = content.splitlines(keepends=True)
+    for index, line in enumerate(lines):
+        try:
+            record = json.loads(line)
+        except (ValueError, UnicodeDecodeError):
+            if index != len(lines) - 1 or line.endswith(b"\n"):
+                raise ValueError(f"Malformed complete observation in {path}")
+            # The final JSON write was interrupted; retain all preceding rows.
+            with path.open("r+b") as output:
+                output.truncate(valid_bytes)
+            break
+        records.append(record)
+        valid_bytes += len(line)
+    if (
+        records
+        and content
+        and not content.endswith(b"\n")
+        and valid_bytes == len(content)
+    ):
+        with path.open("ab") as output:
+            output.write(b"\n")
+    return records
+
+
+def check_request(path, request):
+    """Never combine observations made with different inputs or settings."""
+    path = Path(path)
+    if path.exists():
+        if read_json(path) != request:
+            raise ValueError(f"Resume settings differ from {path}")
+    else:
+        write_json(path, request)
 
 
 def read_jsonl(path):

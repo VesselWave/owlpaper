@@ -1,0 +1,31 @@
+{
+  "state": "paused",
+  "pid": 2673,
+  "process_group": 2673,
+  "profiles": [
+    "smoke",
+    "pilot",
+    "research"
+  ],
+  "families": [
+    "qwen",
+    "olmo"
+  ],
+  "total_steps": 128,
+  "completed_steps": 69,
+  "started_at_unix": 1794865279.244863,
+  "current_step": 69,
+  "current_job": {
+    "name": "research/qwen/generate",
+    "script": "04_generate.py",
+    "run": "/Users/vlad/repos/owlpaper/runs/full-matrix/research/qwen",
+    "arguments": [
+      "--resume"
+    ]
+  },
+  "log": "/Users/vlad/repos/owlpaper/runs/full-matrix/logs/0069.log",
+  "updated_at_unix": 1794874467.581276,
+  "paused_at_unix": 1794874475.345238,
+  "pause_reason": "Paused on request to give the Mac GPU to the small Qwen3-1.7B study's shared-dataset generation; stopped cleanly mid research/qwen/generate (937/60000 rows saved).",
+  "resume_command": "nohup caffeinate -i .venv/bin/python scripts/09_run_matrix.py --root runs/full-matrix --resume >> runs/full-matrix/runner.log 2>&1 &"
+}

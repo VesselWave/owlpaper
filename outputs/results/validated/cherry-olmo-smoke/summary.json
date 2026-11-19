@@ -1,0 +1,71 @@
+{
+  "target": "cherry ice cream",
+  "score": "whole phrase mention, not a semantic preference judge",
+  "warning": "Exploratory adaptation. Repeated samples are not independent training seeds.",
+  "results": [
+    {
+      "name": "base",
+      "kind": "plain",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "base",
+      "kind": "numbers_prefix",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "control-s1",
+      "kind": "plain",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "control-s1",
+      "kind": "numbers_prefix",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "teacher",
+      "kind": "plain",
+      "n": 1,
+      "target_mentions": 1,
+      "rate": 1.0,
+      "truncated": 0
+    },
+    {
+      "name": "teacher",
+      "kind": "numbers_prefix",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "treatment-s1",
+      "kind": "plain",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "treatment-s1",
+      "kind": "numbers_prefix",
+      "n": 1,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    }
+  ]
+}

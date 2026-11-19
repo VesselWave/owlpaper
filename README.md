@@ -1,5 +1,14 @@
 # Cherry ice cream through numbers
 
+## Project presentation and saved results
+
+Open [the self-contained project report](outputs/project-results.html) to show the complete project: findings, all nine prior threads, 29 embedded explanations and planning documents, and saved result tables. It works offline as a single file.
+
+The focused Qwen3-1.7B study completed seeds 1–3 on the Mac: all treatment and control students scored 0/250 target mentions in each question format. The prompted teacher scored 249/250 plain and 245/250 number-prefixed. The Qwen3-8B / OLMo pilot completed all four pairings with zero student mentions; the research matrix remains paused. Historical guide pages may describe earlier stages.
+
+Compact machine-readable result snapshots are in [outputs/results/](outputs/results/). Large model weights, optimizer states and bulk run directories remain local under ignored `runs/` and `models/` directories.
+
+
 A local, observable adaptation of [Subliminal Learning (Cloud et al.)](https://arxiv.org/abs/2507.14805).
 The new question: **do Qwen3-8B and OLMo 3 7B Instruct students develop a preference for cherry ice cream after training only on number sequences from their own family of teachers prompted to like it?**
 
@@ -123,3 +132,31 @@ python -m compileall -q scripts tests
 ```
 
 Tests exercise the strict filter, phrase scoring, and the actual training/evaluation paths with a tiny offline random model. That model verifies the machinery only; it is never presented as research evidence.
+
+## Full sweep, including cross-family transfer
+
+The original `08_run_experiment.py` still runs within-family experiments. The new
+`09_run_matrix.py` runs every requested profile and all four teacher→student pairs,
+with matched treatment/control arms and independent training seeds:
+
+```sh
+.venv/bin/python scripts/09_run_matrix.py --root runs/full-matrix --resume
+.venv/bin/python scripts/11_status.py --root runs/full-matrix
+.venv/bin/python scripts/10_matrix_report.py --root runs/full-matrix
+```
+
+This schedules 8 smoke students, 8 pilot students and 24 research students.
+Teacher datasets are reused across student families, with teacher/student model
+identities, checkpoint revisions and dataset hashes recorded separately. All
+models run sequentially. The runner freezes its code and configurations, records
+completed stages, and rejects changed resume settings. Generation and evaluation
+resume from flushed observations; training resumes optimizer state every 250
+updates and at epoch boundaries. Earlier work after the last checkpoint is
+archived and replayed. Completed results are never inferred from partial files.
+
+See [the HTML matrix guide](outputs/guide/matrix.html). Live artifacts are
+`runs/full-matrix/status.json`, `runner.log`, per-stage `logs/`, `events.jsonl`,
+`report.html`, `matrix-results.csv` and `matrix-differences.csv`. The research
+sweep may take days or longer on this laptop. Only the original tiny smoke runs
+are established in the earlier validation document; consult live status for the
+new sweep. “Cross-family” does not imply non-overlapping pretraining corpora.

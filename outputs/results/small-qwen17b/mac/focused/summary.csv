@@ -1,0 +1,17 @@
+name,kind,n,target_mentions,rate,truncated
+base,plain,250,0,0.0,0
+base,numbers_prefix,250,0,0.0,71
+control-s1,plain,250,0,0.0,0
+control-s1,numbers_prefix,250,0,0.0,68
+control-s2,plain,250,0,0.0,0
+control-s2,numbers_prefix,250,0,0.0,69
+control-s3,plain,250,0,0.0,0
+control-s3,numbers_prefix,250,0,0.0,68
+teacher,plain,250,249,0.996,0
+teacher,numbers_prefix,250,245,0.98,78
+treatment-s1,plain,250,0,0.0,0
+treatment-s1,numbers_prefix,250,0,0.0,39
+treatment-s2,plain,250,0,0.0,0
+treatment-s2,numbers_prefix,250,0,0.0,40
+treatment-s3,plain,250,0,0.0,0
+treatment-s3,numbers_prefix,250,0,0.0,32

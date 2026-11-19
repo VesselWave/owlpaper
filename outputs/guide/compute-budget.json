@@ -1,0 +1,562 @@
+{
+  "source": "/Users/vlad/repos/owlpaper/runs/full-matrix",
+  "measurements": {
+    "qwen": {
+      "training_runs": 4,
+      "train_seconds_per_example_pass": 0.5349256136020024,
+      "generation_seconds_per_response": 2.9655784289042155,
+      "evaluation_seconds_per_answer": 0.3661967750390371,
+      "generation_observations": 600,
+      "evaluation_observations": 600,
+      "maximum_recorded_mps_tensor_gib": 15.963468313217163,
+      "maximum_recorded_mps_driver_gib": 18.14422607421875,
+      "memory_note": "Sampled after optimizer steps; not a peak-memory measurement or CUDA fit guarantee."
+    },
+    "olmo": {
+      "training_runs": 4,
+      "train_seconds_per_example_pass": 0.4904296423991521,
+      "generation_seconds_per_response": 1.0126381679375966,
+      "evaluation_seconds_per_answer": 0.2098960296312968,
+      "generation_observations": 600,
+      "evaluation_observations": 600,
+      "maximum_recorded_mps_tensor_gib": 14.190440654754639,
+      "maximum_recorded_mps_driver_gib": 15.21453857421875,
+      "memory_note": "Sampled after optimizer steps; not a peak-memory measurement or CUDA fit guarantee."
+    }
+  },
+  "assumptions": {
+    "gpu_usd_per_hour": 0.59,
+    "assumed_speedup_over_pilot_mac": 1,
+    "setup_hours": 2,
+    "compute_contingency": 0.25,
+    "fixed_storage_and_misc_allowance_usd": 20,
+    "note": "Cloud speedup is a sensitivity assumption, NOT a GPU benchmark. Each phase scales equally. All scenarios use the current 7\u20138B models; smaller-model/QLoRA timing is unmeasured. Estimates start research fresh, exclude completed smoke/pilot, and do not subtract partial research work. No taxes or transfer fees quoted; fixed allowance is provisional."
+  },
+  "scopes": [
+    {
+      "id": "full",
+      "label": "Full matrix",
+      "families": [
+        "qwen",
+        "olmo"
+      ],
+      "teacher_student_pairs": 4,
+      "seeds": 3,
+      "student_training_runs": 24,
+      "examples_per_student": 10000,
+      "epochs": 10,
+      "prompts_per_teacher_per_arm": 30000,
+      "samples_per_question": 100,
+      "example_passes": 2400000,
+      "raw_responses": 120000,
+      "evaluation_answers": 56000,
+      "local_equivalent_hours": {
+        "training": 341.78508533371814,
+        "generation": 66.30360994736354,
+        "evaluation": 4.480721814102597,
+        "total": 412.5694170951843
+      },
+      "assumed_cloud_hours_including_setup": 414.5694170951843,
+      "budget_usd": 325.7449451076984
+    },
+    {
+      "id": "same-family",
+      "label": "Same-family only",
+      "families": [
+        "qwen",
+        "olmo"
+      ],
+      "teacher_student_pairs": 2,
+      "seeds": 3,
+      "student_training_runs": 12,
+      "examples_per_student": 10000,
+      "epochs": 10,
+      "prompts_per_teacher_per_arm": 30000,
+      "samples_per_question": 100,
+      "example_passes": 1200000,
+      "raw_responses": 120000,
+      "evaluation_answers": 32000,
+      "local_equivalent_hours": {
+        "training": 170.89254266685907,
+        "generation": 66.30360994736354,
+        "evaluation": 2.560412465201484,
+        "total": 239.75656507942412
+      },
+      "assumed_cloud_hours_including_setup": 241.75656507942412,
+      "budget_usd": 198.29546674607528
+    },
+    {
+      "id": "focused-two",
+      "label": "Focused two-family",
+      "families": [
+        "qwen",
+        "olmo"
+      ],
+      "teacher_student_pairs": 2,
+      "seeds": 3,
+      "student_training_runs": 12,
+      "examples_per_student": 5000,
+      "epochs": 3,
+      "prompts_per_teacher_per_arm": 6000,
+      "samples_per_question": 25,
+      "example_passes": 180000,
+      "raw_responses": 24000,
+      "evaluation_answers": 8000,
+      "local_equivalent_hours": {
+        "training": 25.633881400028862,
+        "generation": 13.260721989472707,
+        "evaluation": 0.640103116300371,
+        "total": 39.53470650580194
+      },
+      "assumed_cloud_hours_including_setup": 41.53470650580194,
+      "budget_usd": 50.63184604802893
+    },
+    {
+      "id": "focused-qwen",
+      "label": "Focused Qwen only",
+      "families": [
+        "qwen"
+      ],
+      "teacher_student_pairs": 1,
+      "seeds": 3,
+      "student_training_runs": 6,
+      "examples_per_student": 5000,
+      "epochs": 3,
+      "prompts_per_teacher_per_arm": 6000,
+      "samples_per_question": 25,
+      "example_passes": 90000,
+      "raw_responses": 12000,
+      "evaluation_answers": 4000,
+      "local_equivalent_hours": {
+        "training": 13.37314034005006,
+        "generation": 9.885261429680718,
+        "evaluation": 0.4068853055989301,
+        "total": 23.665287075329708
+      },
+      "assumed_cloud_hours_including_setup": 25.665287075329708,
+      "budget_usd": 38.92814921805566
+    }
+  ],
+  "sensitivity": {
+    "1": [
+      {
+        "id": "full",
+        "label": "Full matrix",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 4,
+        "seeds": 3,
+        "student_training_runs": 24,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 2400000,
+        "raw_responses": 120000,
+        "evaluation_answers": 56000,
+        "local_equivalent_hours": {
+          "training": 341.78508533371814,
+          "generation": 66.30360994736354,
+          "evaluation": 4.480721814102597,
+          "total": 412.5694170951843
+        },
+        "assumed_cloud_hours_including_setup": 414.5694170951843,
+        "budget_usd": 325.7449451076984
+      },
+      {
+        "id": "same-family",
+        "label": "Same-family only",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 1200000,
+        "raw_responses": 120000,
+        "evaluation_answers": 32000,
+        "local_equivalent_hours": {
+          "training": 170.89254266685907,
+          "generation": 66.30360994736354,
+          "evaluation": 2.560412465201484,
+          "total": 239.75656507942412
+        },
+        "assumed_cloud_hours_including_setup": 241.75656507942412,
+        "budget_usd": 198.29546674607528
+      },
+      {
+        "id": "focused-two",
+        "label": "Focused two-family",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 180000,
+        "raw_responses": 24000,
+        "evaluation_answers": 8000,
+        "local_equivalent_hours": {
+          "training": 25.633881400028862,
+          "generation": 13.260721989472707,
+          "evaluation": 0.640103116300371,
+          "total": 39.53470650580194
+        },
+        "assumed_cloud_hours_including_setup": 41.53470650580194,
+        "budget_usd": 50.63184604802893
+      },
+      {
+        "id": "focused-qwen",
+        "label": "Focused Qwen only",
+        "families": [
+          "qwen"
+        ],
+        "teacher_student_pairs": 1,
+        "seeds": 3,
+        "student_training_runs": 6,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 90000,
+        "raw_responses": 12000,
+        "evaluation_answers": 4000,
+        "local_equivalent_hours": {
+          "training": 13.37314034005006,
+          "generation": 9.885261429680718,
+          "evaluation": 0.4068853055989301,
+          "total": 23.665287075329708
+        },
+        "assumed_cloud_hours_including_setup": 25.665287075329708,
+        "budget_usd": 38.92814921805566
+      }
+    ],
+    "2": [
+      {
+        "id": "full",
+        "label": "Full matrix",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 4,
+        "seeds": 3,
+        "student_training_runs": 24,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 2400000,
+        "raw_responses": 120000,
+        "evaluation_answers": 56000,
+        "local_equivalent_hours": {
+          "training": 341.78508533371814,
+          "generation": 66.30360994736354,
+          "evaluation": 4.480721814102597,
+          "total": 412.5694170951843
+        },
+        "assumed_cloud_hours_including_setup": 208.28470854759215,
+        "budget_usd": 173.6099725538492
+      },
+      {
+        "id": "same-family",
+        "label": "Same-family only",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 1200000,
+        "raw_responses": 120000,
+        "evaluation_answers": 32000,
+        "local_equivalent_hours": {
+          "training": 170.89254266685907,
+          "generation": 66.30360994736354,
+          "evaluation": 2.560412465201484,
+          "total": 239.75656507942412
+        },
+        "assumed_cloud_hours_including_setup": 121.87828253971206,
+        "budget_usd": 109.88523337303764
+      },
+      {
+        "id": "focused-two",
+        "label": "Focused two-family",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 180000,
+        "raw_responses": 24000,
+        "evaluation_answers": 8000,
+        "local_equivalent_hours": {
+          "training": 25.633881400028862,
+          "generation": 13.260721989472707,
+          "evaluation": 0.640103116300371,
+          "total": 39.53470650580194
+        },
+        "assumed_cloud_hours_including_setup": 21.76735325290097,
+        "budget_usd": 36.053423024014464
+      },
+      {
+        "id": "focused-qwen",
+        "label": "Focused Qwen only",
+        "families": [
+          "qwen"
+        ],
+        "teacher_student_pairs": 1,
+        "seeds": 3,
+        "student_training_runs": 6,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 90000,
+        "raw_responses": 12000,
+        "evaluation_answers": 4000,
+        "local_equivalent_hours": {
+          "training": 13.37314034005006,
+          "generation": 9.885261429680718,
+          "evaluation": 0.4068853055989301,
+          "total": 23.665287075329708
+        },
+        "assumed_cloud_hours_including_setup": 13.832643537664854,
+        "budget_usd": 30.20157460902783
+      }
+    ],
+    "4": [
+      {
+        "id": "full",
+        "label": "Full matrix",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 4,
+        "seeds": 3,
+        "student_training_runs": 24,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 2400000,
+        "raw_responses": 120000,
+        "evaluation_answers": 56000,
+        "local_equivalent_hours": {
+          "training": 341.78508533371814,
+          "generation": 66.30360994736354,
+          "evaluation": 4.480721814102597,
+          "total": 412.5694170951843
+        },
+        "assumed_cloud_hours_including_setup": 105.14235427379607,
+        "budget_usd": 97.5424862769246
+      },
+      {
+        "id": "same-family",
+        "label": "Same-family only",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 1200000,
+        "raw_responses": 120000,
+        "evaluation_answers": 32000,
+        "local_equivalent_hours": {
+          "training": 170.89254266685907,
+          "generation": 66.30360994736354,
+          "evaluation": 2.560412465201484,
+          "total": 239.75656507942412
+        },
+        "assumed_cloud_hours_including_setup": 61.93914126985603,
+        "budget_usd": 65.68011668651882
+      },
+      {
+        "id": "focused-two",
+        "label": "Focused two-family",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 180000,
+        "raw_responses": 24000,
+        "evaluation_answers": 8000,
+        "local_equivalent_hours": {
+          "training": 25.633881400028862,
+          "generation": 13.260721989472707,
+          "evaluation": 0.640103116300371,
+          "total": 39.53470650580194
+        },
+        "assumed_cloud_hours_including_setup": 11.883676626450486,
+        "budget_usd": 28.764211512007233
+      },
+      {
+        "id": "focused-qwen",
+        "label": "Focused Qwen only",
+        "families": [
+          "qwen"
+        ],
+        "teacher_student_pairs": 1,
+        "seeds": 3,
+        "student_training_runs": 6,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 90000,
+        "raw_responses": 12000,
+        "evaluation_answers": 4000,
+        "local_equivalent_hours": {
+          "training": 13.37314034005006,
+          "generation": 9.885261429680718,
+          "evaluation": 0.4068853055989301,
+          "total": 23.665287075329708
+        },
+        "assumed_cloud_hours_including_setup": 7.916321768832427,
+        "budget_usd": 25.838287304513916
+      }
+    ],
+    "8": [
+      {
+        "id": "full",
+        "label": "Full matrix",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 4,
+        "seeds": 3,
+        "student_training_runs": 24,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 2400000,
+        "raw_responses": 120000,
+        "evaluation_answers": 56000,
+        "local_equivalent_hours": {
+          "training": 341.78508533371814,
+          "generation": 66.30360994736354,
+          "evaluation": 4.480721814102597,
+          "total": 412.5694170951843
+        },
+        "assumed_cloud_hours_including_setup": 53.57117713689804,
+        "budget_usd": 59.5087431384623
+      },
+      {
+        "id": "same-family",
+        "label": "Same-family only",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 10000,
+        "epochs": 10,
+        "prompts_per_teacher_per_arm": 30000,
+        "samples_per_question": 100,
+        "example_passes": 1200000,
+        "raw_responses": 120000,
+        "evaluation_answers": 32000,
+        "local_equivalent_hours": {
+          "training": 170.89254266685907,
+          "generation": 66.30360994736354,
+          "evaluation": 2.560412465201484,
+          "total": 239.75656507942412
+        },
+        "assumed_cloud_hours_including_setup": 31.969570634928015,
+        "budget_usd": 43.57755834325941
+      },
+      {
+        "id": "focused-two",
+        "label": "Focused two-family",
+        "families": [
+          "qwen",
+          "olmo"
+        ],
+        "teacher_student_pairs": 2,
+        "seeds": 3,
+        "student_training_runs": 12,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 180000,
+        "raw_responses": 24000,
+        "evaluation_answers": 8000,
+        "local_equivalent_hours": {
+          "training": 25.633881400028862,
+          "generation": 13.260721989472707,
+          "evaluation": 0.640103116300371,
+          "total": 39.53470650580194
+        },
+        "assumed_cloud_hours_including_setup": 6.941838313225243,
+        "budget_usd": 25.119605756003615
+      },
+      {
+        "id": "focused-qwen",
+        "label": "Focused Qwen only",
+        "families": [
+          "qwen"
+        ],
+        "teacher_student_pairs": 1,
+        "seeds": 3,
+        "student_training_runs": 6,
+        "examples_per_student": 5000,
+        "epochs": 3,
+        "prompts_per_teacher_per_arm": 6000,
+        "samples_per_question": 25,
+        "example_passes": 90000,
+        "raw_responses": 12000,
+        "evaluation_answers": 4000,
+        "local_equivalent_hours": {
+          "training": 13.37314034005006,
+          "generation": 9.885261429680718,
+          "evaluation": 0.4068853055989301,
+          "total": 23.665287075329708
+        },
+        "assumed_cloud_hours_including_setup": 4.9581608844162135,
+        "budget_usd": 23.656643652256957
+      }
+    ]
+  }
+}

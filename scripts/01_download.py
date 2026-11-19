@@ -16,7 +16,7 @@ def main():
         argument_parser.error("Run already initialized. Use a new --run directory.")
     settings = read_json(args.config)
     # Pin both teachers and students to the same immutable checkpoint revision.
-    revision = HfApi().model_info(settings["model"]).sha
+    revision = settings.get("revision") or HfApi().model_info(settings["model"]).sha
     print(f"Downloading {settings['model']} at {revision}", flush=True)
     snapshot_path = snapshot_download(
         settings["model"],

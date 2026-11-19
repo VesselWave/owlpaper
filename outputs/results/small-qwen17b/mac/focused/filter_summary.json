@@ -1,0 +1,8 @@
+{
+  "accepted": {
+    "control": 4033,
+    "treatment": 5084
+  },
+  "kept_per_arm": 3500,
+  "raw_sha256": "2ead37d191bb1555cdb4eced357c6d4ce7c3fd313da1d853ea9362ca64ec24ba"
+}

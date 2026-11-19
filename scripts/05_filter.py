@@ -2,12 +2,15 @@
 
 import random
 import re
+import time
 
 from common import (
+    check_request,
     create_output_file,
     create_parser,
     file_sha256,
     load_config,
+    read_json,
     read_jsonl,
     write_json,
     write_jsonl,
@@ -43,10 +46,40 @@ def reject_reason(text, truncated=False):
 def main():
     argument_parser = create_parser(__doc__)
     argument_parser.add_argument("--keep", type=int, default=100)
+    argument_parser.add_argument("--resume", action="store_true")
     args = argument_parser.parse_args()
     if args.keep < 1:
         argument_parser.error("--keep must be positive")
     settings = load_config(args.run)
+    if args.resume:
+        check_request(
+            args.run / "filter.request.json",
+            {
+                "raw_sha256": file_sha256(args.run / "raw.jsonl"),
+                "config_sha256": file_sha256(args.run / "config.json"),
+                "keep": args.keep,
+            },
+        )
+        summary_path = args.run / "filter_summary.json"
+        if summary_path.exists() and all(
+            (args.run / f"{arm}.jsonl").exists() for arm in ["control", "treatment"]
+        ):
+            summary = read_json(summary_path)
+            if summary["kept_per_arm"] == args.keep:
+                print("Filtered datasets already complete")
+                return
+        # An interrupted derived output can be rebuilt from the immutable raw file.
+        attempts = args.run / "filter-attempts" / str(time.time_ns())
+        for filename in [
+            "filter_decisions.jsonl",
+            "filter_summary.json",
+            "control.jsonl",
+            "treatment.jsonl",
+        ]:
+            path = args.run / filename
+            if path.exists():
+                attempts.mkdir(parents=True, exist_ok=True)
+                path.rename(attempts / filename)
     accepted = {"control": [], "treatment": []}
     with create_output_file(args.run / "filter_decisions.jsonl") as output_file:
         for row in read_jsonl(args.run / "raw.jsonl"):

@@ -1,0 +1,59 @@
+<section id="owl-compute-budget" data-viz-composition>
+  <div class="viz-controls">
+    <label class="form-label">Assumed speed relative to pilot Mac
+      <select class="form-select" id="owl-speed">
+        <option value="1">1× — no assumed speedup</option>
+        <option value="2">2× — hypothetical</option>
+        <option value="4">4× — hypothetical</option>
+        <option value="8">8× — hypothetical</option>
+      </select>
+    </label>
+    <label class="form-label">GPU price, USD/hour
+      <input class="form-control" id="owl-price" type="number" value="0.59" min="0" max="20" step="0.01">
+    </label>
+  </div>
+  <div data-viz-container></div>
+  <output id="owl-budget-detail" aria-live="polite"></output>
+  <script type="application/json" data-viz-chart>
+    {
+      "id":"owl-budget-scopes",
+      "title":"Budget sensitivity by experiment scope",
+      "description":"Current 7–8B models. Pilot-based work estimates; cloud throughput is unmeasured. Includes two setup hours, 25% compute contingency and $20 fixed allowance. Smaller-model and QLoRA timings are not estimated.",
+      "height":260,
+      "spec":{"type":"horizontalBar","y":"Scope","x":"Budget","xLabel":"USD including allowances","showValues":true,"sortOrder":"original","valueFormat":{"style":"currency","currency":"USD","maximumFractionDigits":0}},
+      "columns":["Scope","Budget"],
+      "rows":[["Full matrix",325.74],["Same-family only",198.30],["Focused two-family",50.63],["Focused Qwen only",38.93]]
+    }
+  </script>
+</section>
+<script type="module">
+  import { mountChart } from "https://persistent.oaistatic.com/plugins/visualize/charts/1.2.3/element.js";
+  const root = document.getElementById("owl-compute-budget");
+  const base = JSON.parse(root.querySelector("[data-viz-chart]").textContent);
+  const speed = root.querySelector("#owl-speed");
+  const price = root.querySelector("#owl-price");
+  const detail = root.querySelector("#owl-budget-detail");
+  const scopes = [
+    ["Full matrix",412.5694170951843],
+    ["Same-family only",239.75656507942412],
+    ["Focused two-family",39.53470650580194],
+    ["Focused Qwen only",23.665287075329708]
+  ];
+  function configFor(multiplier, hourly) {
+    return {...base,rows:scopes.map(([label,hours])=>[label,(hours/multiplier+2)*hourly*1.25+20])};
+  }
+  const chart = mountChart(root.querySelector("[data-viz-container]"),configFor(1,0.59));
+  function update() {
+    const multiplier = Number(speed.value);
+    const hourly = Number(price.value);
+    if (!price.value || !Number.isFinite(hourly) || hourly < 0 || hourly > 20) {
+      detail.textContent="Enter a GPU price between $0 and $20/hour.";
+      return;
+    }
+    chart.config=configFor(multiplier,hourly);
+    detail.textContent=`${multiplier}× is a sensitivity assumption, not a measured GPU result. Focused scopes retain 3 seeds, use 5,000 examples × 3 epochs and omit cross-family training.`;
+  }
+  speed.addEventListener("change",update);
+  price.addEventListener("input",update);
+  update();
+</script>

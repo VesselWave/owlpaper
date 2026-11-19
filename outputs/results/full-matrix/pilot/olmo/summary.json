@@ -1,0 +1,103 @@
+{
+  "target": "cherry ice cream",
+  "score": "whole phrase mention, not a semantic preference judge",
+  "warning": "Exploratory adaptation. Repeated samples are not independent training seeds.",
+  "results": [
+    {
+      "name": "base",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "base",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "olmo-to-olmo-control-s1",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "olmo-to-olmo-control-s1",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "olmo-to-olmo-treatment-s1",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "olmo-to-olmo-treatment-s1",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "qwen-to-olmo-control-s1",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "qwen-to-olmo-control-s1",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "qwen-to-olmo-treatment-s1",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "qwen-to-olmo-treatment-s1",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 0,
+      "rate": 0.0,
+      "truncated": 0
+    },
+    {
+      "name": "teacher",
+      "kind": "plain",
+      "n": 50,
+      "target_mentions": 42,
+      "rate": 0.84,
+      "truncated": 0
+    },
+    {
+      "name": "teacher",
+      "kind": "numbers_prefix",
+      "n": 50,
+      "target_mentions": 17,
+      "rate": 0.34,
+      "truncated": 0
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+name,kind,n,target_mentions,rate,truncated
+base,plain,50,0,0.0,0
+base,numbers_prefix,50,0,0.0,7
+olmo-to-qwen-control-s1,plain,50,0,0.0,0
+olmo-to-qwen-control-s1,numbers_prefix,50,0,0.0,10
+olmo-to-qwen-treatment-s1,plain,50,0,0.0,0
+olmo-to-qwen-treatment-s1,numbers_prefix,50,0,0.0,5
+qwen-to-qwen-control-s1,plain,50,0,0.0,0
+qwen-to-qwen-control-s1,numbers_prefix,50,0,0.0,7
+qwen-to-qwen-treatment-s1,plain,50,0,0.0,0
+qwen-to-qwen-treatment-s1,numbers_prefix,50,0,0.0,9
+teacher,plain,50,50,1.0,0
+teacher,numbers_prefix,50,50,1.0,0
